@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Claim status --></help>
+    <label><!-- Pending Status --></label>
+    <name>Pending_Status__c</name>
+    <picklistValues>
+        <masterLabel>Advance Paid To Provider</masterLabel>
+        <translation><!-- Advance Paid To Provider --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Cash On Hold</masterLabel>
+        <translation><!-- Cash On Hold --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Claim in Process</masterLabel>
+        <translation><!-- Claim in Process --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Client Received Partial Payment</masterLabel>
+        <translation><!-- Client Received Partial Payment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Client Received Partial Payment ( Legal)</masterLabel>
+        <translation><!-- Client Received Partial Payment ( Legal) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Client Received Payment</masterLabel>
+        <translation><!-- Client Received Payment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Courtesy Write Off / Ambulance</masterLabel>
+        <translation><!-- Courtesy Write Off / Ambulance --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Credit Revenue</masterLabel>
+        <translation><!-- Credit Revenue --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Duplicate Claim / Error</masterLabel>
+        <translation><!-- Duplicate Claim / Error --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Insurance refund processed paid</masterLabel>
+        <translation><!-- Insurance refund processed paid --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>PHIR</masterLabel>
+        <translation><!-- PHIR --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Patient refund processed paid</masterLabel>
+        <translation><!-- Patient refund processed paid --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Payment Plan</masterLabel>
+        <translation><!-- Payment Plan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Payment Plan (Legal)</masterLabel>
+        <translation><!-- Payment Plan (Legal) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Payment Received</masterLabel>
+        <translation><!-- Payment Received --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Payment Received Partial</masterLabel>
+        <translation><!-- Payment Received Partial --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Payment Received Partial ( Legal)</masterLabel>
+        <translation><!-- Payment Received Partial ( Legal) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Pending Balance from Patient</masterLabel>
+        <translation><!-- Pending Balance from Patient --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Pending Balance from Patient (Legal)</masterLabel>
+        <translation><!-- Pending Balance from Patient (Legal) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Pending Payment from Insurance</masterLabel>
+        <translation><!-- Pending Payment from Insurance --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Pending Payment from Insurance (Legal)</masterLabel>
+        <translation><!-- Pending Payment from Insurance (Legal) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Pending Payment from Patient</masterLabel>
+        <translation><!-- Pending Payment from Patient --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Pending Payment from Patient (Legal)</masterLabel>
+        <translation><!-- Pending Payment from Patient (Legal) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Pending Payment from Secondary Insurance</masterLabel>
+        <translation><!-- Pending Payment from Secondary Insurance --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Probate</masterLabel>
+        <translation><!-- Probate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Refund Due Patient On HOLD</masterLabel>
+        <translation><!-- Refund Due Patient On HOLD --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Refund Processed &amp; Paid</masterLabel>
+        <translation><!-- Refund Processed &amp; Paid --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Refund Returned</masterLabel>
+        <translation><!-- Refund Returned --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Refund To Be Processed Insurance</masterLabel>
+        <translation><!-- Refund To Be Processed Insurance --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Refund To Be Processed Patient</masterLabel>
+        <translation><!-- Refund To Be Processed Patient --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Suspended</masterLabel>
+        <translation><!-- Suspended --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Uncollectible</masterLabel>
+        <translation><!-- Uncollectible --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Uncollectible / Partial Payment Received</masterLabel>
+        <translation><!-- Uncollectible / Partial Payment Received --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Wire Deposit</masterLabel>
+        <translation><!-- Wire Deposit --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Write Off / Partial Payment Received</masterLabel>
+        <translation><!-- Write Off / Partial Payment Received --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Write-Off</masterLabel>
+        <translation><!-- Write-Off --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>•	Contract Active</masterLabel>
+        <translation><!-- •	Contract Active --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>•	Contract Review</masterLabel>
+        <translation><!-- •	Contract Review --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>•	Contract Signed</masterLabel>
+        <translation><!-- •	Contract Signed --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>•	Implementation</masterLabel>
+        <translation><!-- •	Implementation --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>•	Proposal Under Review</masterLabel>
+        <translation><!-- •	Proposal Under Review --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

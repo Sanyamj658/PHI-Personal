@@ -1,0 +1,91 @@
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+
+.spinner-container {
+    position: relative;
+    min-height: 6rem;
+}
+
+.toolbar {
+    padding: 0 0 0.5rem 0;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.table-container {
+    overflow-x: auto;
+    border-radius: 0.25rem;
+}
+
+/* ── Table column widths ─────────────────────────────────────────────────── */
+
+.col-checkbox { width: 3rem; }
+.col-type     { width: 6rem; }
+.col-date     { width: 9rem; }
+.col-size     { width: 6rem; }
+.col-status   { width: 7rem; }
+
+/* ── File name cell ──────────────────────────────────────────────────────── */
+
+.file-name-cell {
+    max-width: 20rem;
+}
+
+/* ── Shared row highlight ────────────────────────────────────────────────── */
+
+.row-shared td {
+    background-color: #f0faf4 !important;
+}
+
+/* ── Stat badges ─────────────────────────────────────────────────────────── */
+
+.stat-badge {
+    background-color: #e0e5ee;
+    color: #3e3e3c;
+    border-radius: 4rem;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.badge-shared {
+    background-color: #2e844a;
+    color: #ffffff;
+    border-radius: 4rem;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.badge-selected {
+    background-color: #0176d3;
+    color: #ffffff;
+    border-radius: 4rem;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+/* ── "Shared" status badge in the Mobile column ──────────────────────────── */
+
+.badge-shared-pill {
+    --sds-c-badge-color-background: #2e844a;
+    --sds-c-badge-text-color: #ffffff;
+}
+
+/* ── File type colour pills ──────────────────────────────────────────────── */
+
+.type-pill {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.type-pill_default { background-color: #e0e5ee; color: #3e3e3c; }
+.type-pill_pdf     { background-color: #ffdfe5; color: #ba0517; }
+.type-pill_word    { background-color: #d8edff; color: #032d60; }
+.type-pill_excel   { background-color: #d6f5d8; color: #054f1a; }
+.type-pill_image   { background-color: #f4e3ff; color: #5a1ba9; }

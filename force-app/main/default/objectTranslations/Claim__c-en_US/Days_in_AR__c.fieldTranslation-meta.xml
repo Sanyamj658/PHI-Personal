@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Amount of days since the claim was sent to Insurance --></help>
+    <label><!-- # Days in AR --></label>
+    <name>Days_in_AR__c</name>
+</CustomFieldTranslation>

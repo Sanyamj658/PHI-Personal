@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Additional Permission to Admin User to Edit the Collector on Claim Payments object.</description>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Claim_Payment__c.Collector__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Admin User Permission set</label>
+</PermissionSet>

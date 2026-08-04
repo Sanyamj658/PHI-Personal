@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_Claim_Balance_Due_Calculation</fullName>
+    <active>false</active>
+    <errorConditionFormula>(AND(
+    Claim_Balance_Due__c &lt; 0,
+    Claim_Balance_Due__c &lt;&gt; (IF(ISNULL(Due_to_Patient__c), 0, Due_to_Patient__c) + IF(ISNULL(Due_to_Insurance__c), 0, Due_to_Insurance__c) + IF(ISNULL(Interest_Payment__c), 0, Interest_Payment__c))
+))</errorConditionFormula>
+    <errorMessage>Claim Balance Due must equal the sum of Due to Patient, Due to Insurance, and Interest Payment when the Claim Balance Due is not zero.</errorMessage>
+</ValidationRule>

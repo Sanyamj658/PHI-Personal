@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Due to Patient --></label>
+    <name>Due_to_Patient__c</name>
+</CustomFieldTranslation>

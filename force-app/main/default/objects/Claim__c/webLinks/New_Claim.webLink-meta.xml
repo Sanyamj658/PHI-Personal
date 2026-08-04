@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Claim</fullName>
+    <availability>online</availability>
+    <displayType>massActionButton</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>New Claim</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <requireRowSelection>false</requireRowSelection>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/62.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/62.0/apex.js&quot;)}
+
+var collectors = sforce.connection.query(&quot;SELECT Id,Collectors__c from Collector__c where Patient__c =&apos;{!Contact.Id}&apos; limit 1&quot;);
+
+var records = collectors.getArray(&quot;records&quot;);
+console.log(records);
+console.log(records.length);
+if(records &amp;&amp; records.length&gt;0){
+var collectorName = records[0].Collectors__c;
+var collectorId = records[0].Id;
+window.location.href=&apos;/a01/e?CF00NG000000Ar7Vk={!Contact.Name}&amp;CF00NG000000Ar7Vk_lkid={!Contact.Id}&amp;CF00NG000000B0Vp7={!Contact.Account_Name__c}&amp;CF00NG000000B0Vp7_lkid={!Contact.Account_Id__c}&amp;00N1L00000F4i0g=&apos;+collectorName+&apos;&amp;retURL=/{!Contact.Id}&apos;;
+}
+else{
+window.location.href=&apos;/a01/e?CF00NG000000Ar7Vk={!Contact.Name}&amp;CF00NG000000Ar7Vk_lkid={!Contact.Id}&amp;CF00NG000000B0Vp7={!Contact.Account_Name__c}&amp;CF00NG000000B0Vp7_lkid={!Contact.Account_Id__c}&amp;retURL=/{!Contact.Id}&apos;;
+}</url>
+</WebLink>

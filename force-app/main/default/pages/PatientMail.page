@@ -1,0 +1,14 @@
+<apex:page controller="PatientMailSample">
+     <apex:form >
+        <apex:panelgrid cellspacing="2" border="0" columns="2">
+            <apex:outputtext value="Email To :"></apex:outputtext>
+            <apex:inputtext value="{!emailTo}" style="width: 400px"></apex:inputtext>
+            <apex:outputtext value="Email Body :"></apex:outputtext>
+            <apex:inputtextarea value="{!emailBody}"  style="width: 900px; height: 300px"></apex:inputtextarea>
+            <apex:commandbutton value="Send" action="{!sendEmail}" rerender="statusMail"></apex:commandbutton>
+            <apex:outputpanel id="statusMail" layout="block">
+                <strong><apex:outputtext value="{!response}"></apex:outputtext></strong>
+            </apex:outputpanel>
+        </apex:panelgrid>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Reports</fullName>
+    <columns>NAME</columns>
+    <columns>Report_Name__c</columns>
+    <columns>Subject__c</columns>
+    <columns>Email__c</columns>
+    <columns>Email1__c</columns>
+    <columns>Email2__c</columns>
+    <columns>Email3__c</columns>
+    <columns>Email4__c</columns>
+    <columns>Email5__c</columns>
+    <filterScope>Everything</filterScope>
+    <label>All Reports</label>
+</ListView>

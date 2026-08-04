@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Type__c</fullName>
+    <inlineHelpText>Type of payment received or other accounting transactions ex. Legal fee, Bank Fee, Network Discounts, or Manual Adjustment.</inlineHelpText>
+    <label>Payment Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Client_Customer__c</controllingField>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Insurance Payment</fullName>
+                <default>true</default>
+                <label>Insurance Payment</label>
+            </value>
+            <value>
+                <fullName>Patient Payment</fullName>
+                <default>false</default>
+                <label>Patient Payment</label>
+            </value>
+            <value>
+                <fullName>Courtesy Payment</fullName>
+                <default>false</default>
+                <label>Courtesy Payment</label>
+            </value>
+            <value>
+                <fullName>Patient down payment NF</fullName>
+                <default>false</default>
+                <label>Patient down payment NF</label>
+            </value>
+            <value>
+                <fullName>Patient down payment WF</fullName>
+                <default>false</default>
+                <label>Patient down payment WF</label>
+            </value>
+            <value>
+                <fullName>Legal Fees</fullName>
+                <default>false</default>
+                <label>Legal Fees</label>
+            </value>
+            <value>
+                <fullName>Bank fees</fullName>
+                <default>false</default>
+                <label>Bank fees</label>
+            </value>
+            <value>
+                <fullName>Network Discounts</fullName>
+                <default>false</default>
+                <label>Network Discounts</label>
+            </value>
+            <value>
+                <fullName>Manual Adjustment</fullName>
+                <default>false</default>
+                <label>Manual Adjustment</label>
+            </value>
+            <value>
+                <fullName>Earned Fees</fullName>
+                <default>false</default>
+                <label>Earned Fees</label>
+            </value>
+            <value>
+                <fullName>Client Payment</fullName>
+                <default>false</default>
+                <label>Client Payment</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Client Payment</controllingFieldValue>
+            <valueName>Client Payment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Insurance Payment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Patient Payment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Courtesy Payment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Patient down payment NF</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Patient down payment WF</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Legal Fees</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Bank fees</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Network Discounts</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Manual Adjustment</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Payments</controllingFieldValue>
+            <valueName>Earned Fees</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>

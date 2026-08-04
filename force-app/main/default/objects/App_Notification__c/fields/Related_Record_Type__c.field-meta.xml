@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Related_Record_Type__c</fullName>
+    <description>Stores the object API name of the related record for this notification.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Enter the related record object type, such as Case or Claim__c.</inlineHelpText>
+    <label>Related Record Type</label>
+    <length>50</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

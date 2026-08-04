@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Generate_Facilities_Invoice</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <encodingKey>UTF-8</encodingKey>
+    <height>600</height>
+    <linkType>url</linkType>
+    <masterLabel>Generate  Facilities Invoice</masterLabel>
+    <openType>sidebar</openType>
+    <protected>false</protected>
+    <url>/apex/SDOC__SDCreate1?id={!Claim_Payment__c.Id}&amp;Object=Claim_Payment__c&amp;doclist=a07G000000gsahE</url>
+</WebLink>

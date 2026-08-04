@@ -1,0 +1,252 @@
+<template>
+    <lightning-card>
+        <!-- ── Card Header ─────────────────────────────────────────────── -->
+        <div slot="title" class="slds-media slds-media_center">
+            <div class="slds-media__figure">
+                <lightning-icon
+                    icon-name="doctype:attachment"
+                    size="small"
+                    class="slds-m-right_x-small">
+                </lightning-icon>
+            </div>
+            <div class="slds-media__body">
+                <h2 class="slds-card__header-title slds-text-heading_small">
+                    Document Sharing
+                </h2>
+            </div>
+        </div>
+
+        <!-- ── Loading Spinner ────────────────────────────────────────── -->
+        <template lwc:if={isLoading}>
+            <div class="spinner-container">
+                <lightning-spinner
+                    alternative-text="Loading"
+                    size="medium"
+                    variant="brand">
+                </lightning-spinner>
+            </div>
+        </template>
+
+        <div class="slds-card__body slds-card__body_inner">
+
+            <!-- ── Error State ────────────────────────────────────────── -->
+            <template lwc:if={hasError}>
+                <div class="slds-illustration slds-illustration_small slds-p-around_medium">
+                    <div class="slds-illustration__figure">
+                        <lightning-icon
+                            icon-name="utility:error"
+                            size="large"
+                            variant="error">
+                        </lightning-icon>
+                    </div>
+                    <div class="slds-illustration__body slds-m-top_medium">
+                        <p class="slds-text-color_error">{errorMessage}</p>
+                    </div>
+                </div>
+            </template>
+
+            <!-- ── Main Content ───────────────────────────────────────── -->
+            <template lwc:else>
+
+                <!-- ── Toolbar ───────────────────────────────────────── -->
+                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center
+                            slds-m-bottom_medium toolbar">
+
+                    <!-- Search -->
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-input
+                            type="search"
+                            label="Search Files"
+                            variant="label-hidden"
+                            placeholder="Search by file name..."
+                            value={searchKey}
+                            onchange={handleSearchChange}>
+                        </lightning-input>
+                    </div>
+
+                    <!-- Stats + Share button -->
+                    <div class="slds-col slds-no-flex
+                                slds-grid slds-grid_vertical-align-center
+                                slds-gutters_x-small">
+
+                        <!-- Badge: total -->
+                        <span class="slds-badge slds-m-right_x-small stat-badge">
+                            {totalFilesLabel}
+                        </span>
+
+                        <!-- Badge: already shared -->
+                        <template lwc:if={hasSharedFiles}>
+                            <span class="slds-badge badge-shared slds-m-right_x-small">
+                                {sharedFilesLabel}
+                            </span>
+                        </template>
+
+                        <!-- Badge: newly selected -->
+                        <template lwc:if={hasNewSelection}>
+                            <span class="slds-badge badge-selected slds-m-right_small">
+                                {newSelectionLabel}
+                            </span>
+                        </template>
+
+                        <!-- Share Button -->
+                        <lightning-button
+                            variant="brand"
+                            label="Share to Mobile App"
+                            icon-name="utility:share"
+                            icon-position="left"
+                            disabled={isShareDisabled}
+                            onclick={handleShare}
+                            class="slds-m-left_x-small">
+                        </lightning-button>
+                    </div>
+                </div>
+
+                <!-- ── Empty State ────────────────────────────────────── -->
+                <template lwc:if={hasNoFiles}>
+                    <div class="slds-illustration slds-illustration_small slds-p-vertical_large">
+                        <div class="slds-illustration__figure">
+                            <lightning-icon
+                                icon-name="doctype:unknown"
+                                size="large"
+                                class="slds-icon-text-default">
+                            </lightning-icon>
+                        </div>
+                        <div class="slds-illustration__body slds-m-top_medium">
+                            <h3 class="slds-text-heading_medium">No Files Found</h3>
+                            <p class="slds-text-color_weak slds-m-top_x-small">
+                                No files are attached to the linked Contact record.
+                            </p>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ── File Table ─────────────────────────────────────── -->
+                <template lwc:if={hasFiles}>
+                    <div class="table-container">
+                        <table class="slds-table slds-table_cell-buffer
+                                      slds-table_bordered slds-table_fixed-layout">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+
+                                    <!-- Select-All checkbox -->
+                                    <th scope="col" class="col-checkbox">
+                                        <div class="slds-th__action">
+                                            <lightning-input
+                                                type="checkbox"
+                                                label="Select All"
+                                                variant="label-hidden"
+                                                checked={selectAll}
+                                                indeterminate={selectAllIndeterminate}
+                                                onchange={handleSelectAll}
+                                                title="Select all unshared files">
+                                            </lightning-input>
+                                        </div>
+                                    </th>
+
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="File Name">File Name</div>
+                                    </th>
+                                    <th scope="col" class="col-type">
+                                        <div class="slds-truncate" title="File Type">Type</div>
+                                    </th>
+                                    <th scope="col" class="col-date">
+                                        <div class="slds-truncate" title="Uploaded Date">Uploaded</div>
+                                    </th>
+                                    <th scope="col" class="col-size">
+                                        <div class="slds-truncate" title="Size">Size</div>
+                                    </th>
+                                    <th scope="col" class="col-status">
+                                        <div class="slds-truncate" title="Sharing Status">Status</div>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <template for:each={filteredFiles} for:item="file">
+                                    <tr key={file.contentDocumentId} class={file.rowClass}>
+
+                                        <!-- Row checkbox -->
+                                        <td class="col-checkbox">
+                                            <lightning-input
+                                                type="checkbox"
+                                                label=""
+                                                variant="label-hidden"
+                                                checked={file.isChecked}
+                                                disabled={file.isShared}
+                                                data-id={file.contentDocumentId}
+                                                onchange={handleRowSelect}
+                                                title={file.checkboxTitle}>
+                                            </lightning-input>
+                                        </td>
+
+                                        <!-- File Name with icon -->
+                                        <td>
+                                            <div class="slds-media slds-media_small
+                                                        slds-media_center file-name-cell">
+                                                <div class="slds-media__figure">
+                                                    <lightning-icon
+                                                        icon-name={file.fileIcon}
+                                                        size="x-small">
+                                                    </lightning-icon>
+                                                </div>
+                                                <div class="slds-media__body">
+                                                    <span class="slds-truncate"
+                                                          title={file.title}>
+                                                        {file.title}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- File Type pill -->
+                                        <td class="col-type">
+                                            <span class={file.fileTypePillClass}>
+                                                {file.fileType}
+                                            </span>
+                                        </td>
+
+                                        <!-- Uploaded Date -->
+                                        <td class="col-date">
+                                            <span class="slds-truncate">{file.formattedDate}</span>
+                                        </td>
+
+                                        <!-- Size -->
+                                        <td class="col-size">
+                                            <span class="slds-truncate">{file.fileSizeFormatted}</span>
+                                        </td>
+
+                                        <!-- Sharing Status -->
+                                        <td class="col-status">
+                                            <template lwc:if={file.isShared}>
+                                                <lightning-badge
+                                                    label="Shared"
+                                                    class="badge-shared-pill">
+                                                </lightning-badge>
+                                            </template>
+                                            <template lwc:else>
+                                                <span class="slds-text-color_weak">—</span>
+                                            </template>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- ── Empty search result ───────────────────────── -->
+                    <template lwc:if={hasNoSearchResults}>
+                        <div class="slds-align_absolute-center slds-p-vertical_medium">
+                            <p class="slds-text-color_weak">
+                                No files match "<strong>{searchKey}</strong>".
+                            </p>
+                        </div>
+                    </template>
+                </template>
+
+            </template>
+            <!-- /lwc:else -->
+
+        </div>
+        <!-- /card body -->
+    </lightning-card>
+</template>

@@ -1,0 +1,151 @@
+<!-------------------------------------------------------------------------------
+
+Author          |Date       | Comments
+Atul Dobhal     |08/06/2018 | Controller to dispaly patient and claim report
+--------------------------------------------------------------------------------->
+<apex:page controller="PatientClaimReportController" sidebar="false" showheader="false" readOnly="True" lightningStylesheets="true" docType="html-5.0">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    </head>
+    
+    <apex:slds />
+    
+    <apex:form >
+    
+        <apex:actionStatus id="status">
+            <apex:facet name="start">
+                <div class="slds-spinner_container" style="position: fixed;" >
+                    <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </apex:facet>
+        </apex:actionStatus>
+        <br/>
+        <apex:outputpanel style="padding-top: 5em;">
+            <div class="slds-grid slds-wrap slds-text-align_center custom-container">
+                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                    From Date: <apex:input type="date" value="{!fromdate}"/>
+                </div>
+                <div class="slds-size_1-of-2 slds-max-small-size_1-of-1">
+                    To Date: <apex:input type="date" value="{!todate}"/>
+                </div>
+                <div class="slds-align--absolute-center">
+                    <apex:commandButton value="Show Report" action="{!showReport}" status="status"/>
+                </div>
+            </div>
+        </apex:outputpanel>
+                    <br/>
+        <apex:outputpanel rendered="{!showtable}">
+            <table id="contacttable" class="slds-table slds-table_bordered" border="2" width="100%">
+                <tr class="slds-text-title_caps">
+                    <th colspan="4">Patient</th>
+                    <th colspan="14">Claim</th>
+                </tr>
+                
+                
+                <tr class="slds-text-title_caps">
+                    <th>Patient Name</th>
+                    <th>Primary Insurance Company</th>
+                    <th>Primary Assistance Company</th>
+                    <th>Patient Activity</th>
+                    <th>Claim Number</th>
+                    <th>Medical Provider</th>
+                    <th>Collector</th>
+                    <th>Pending Status</th>
+                    <th>Date Received</th>
+                    <th>Date Sent to Insurance Company</th>
+                    <th>From DOS</th>
+                    <th>To DOS</th>
+                    <th>Days in AR</th>
+                    <th>Facility Charges</th>
+                    <th>Professional Charges</th>
+                    <th>Claim Balance</th>
+                    <th>total charges</th>
+                    <th>Claim Activity</th>
+                </tr>
+                
+                <apex:repeat value="{!limitWrapperList}" var="block">
+                    <apex:repeat value="{!block.PatientClaimWrapperCountList}" var="P">
+                        <tr>
+                            <td rowspan="{!P.claimList.size}">{!P.objPatient.Name}</td>
+                            <td rowspan="{!P.claimList.size}">{!P.objPatient.Primary_Insurance__r.Name}</td>
+                            <td rowspan="{!P.claimList.size}">{!P.objPatient.Primary_Assistance_Co__r.Name}</td>
+                            <td rowspan="{!P.claimList.size}">
+                                <table class="slds-table">
+                                    <apex:repeat value="{!P.objPatient.Events}" var="Pe">
+                                        <tr>
+                                            <td>{!Pe.Subject}</td>
+                                        </tr>
+                                        
+                                    </apex:repeat>
+                                
+                                    <apex:repeat value="{!P.objPatient.Tasks}" var="Pt">
+                                        <tr>
+                                            <td>{!Pt.Subject}</td>
+                                        </tr>
+                                        
+                                    </apex:repeat>
+                                </table>
+                            </td>
+                            
+                                <apex:variable value="{!If(P.claimList.size != null,P.claimList.size,'0')}" var="counter"/>
+                                <apex:repeat value="{!P.claimList}" var="Pc">
+                                    <apex:variable var="counter" value="{!counter - 1}"/>
+                                        <td>{!Pc.Name}</td>
+                                        <td>{!Pc.Medical_Provider__r.Name}</td>
+                                        <td>{!Pc.Collector__c}</td>
+                                        <td>{!Pc.Pending_Status__c}</td>
+                                        <td>
+                                            <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                                <apex:param value="{!Pc.Date_Received__c}"/> 
+                                            </apex:outputText>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                                <apex:param value="{!Pc.Date_Sent_to_Ins_Co__c}"/> 
+                                            </apex:outputText>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                                <apex:param value="{!Pc.From_DOS__c}"/> 
+                                            </apex:outputText>
+                                        </td>
+                                        <td>
+                                            <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                                <apex:param value="{!Pc.To_DOS__c}"/> 
+                                            </apex:outputText>
+                                        </td>
+                                        <td>{!Pc.Days_in_AR__c}</td>
+                                        <td>{!Pc.Facility_Charges__c}</td>
+                                        <td>{!Pc.Professional_Charges__c}</td>
+                                        <td>{!Pc.Claim_Balance_del__c}</td>
+                                        <td>{!Pc.Total_Charge__c}</td>
+                                        <td>
+                                            <table class="slds-table">
+                                                <apex:repeat value="{!Pc.Events}" var="Pce">
+                                                    <tr>
+                                                        <td>{!Pce.Subject}</td>
+                                                    </tr>
+                                                </apex:repeat>
+                                                <apex:repeat value="{!Pc.Tasks}" var="Pct">
+                                                    <tr>
+                                                        <td>{!Pct.Subject}</td>
+                                                    </tr>
+                                                </apex:repeat>
+                                            </table>
+                                        </td>
+                                    <apex:outputText rendered="{!(counter > 0)}" value="</tr><tr>" escape="false"/>
+                                    
+                                </apex:repeat>
+                            
+                        </tr>
+                    </apex:repeat>
+                </apex:repeat>
+            </table>
+        </apex:outputpanel> 
+    </apex:form>
+</apex:page>

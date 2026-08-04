@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Claim</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Claims</value>
+    </caseValues>
+    <layouts>
+        <layout>Claim Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Client Access Claim Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Delete Claim --></label>
+        <name>Delete_Claim</name>
+    </quickActions>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Projected Payment Date should be greater than today --></errorMessage>
+        <name>Projected_Payment_Date</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Claim Balance Due must equal the sum of Due to Patient, Due to Insurance, and Interest Payment when the Claim Balance Due is not zero. --></errorMessage>
+        <name>Validate_Claim_Balance_Due_Calculation</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Generate_Write_Off_Invoice --></label>
+        <name>Generate_Write_Off_Invoice</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- New_Claim --></label>
+        <name>New_Claim</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Update_Collector --></label>
+        <name>Update_Collector</name>
+    </webLinks>
+</CustomObjectTranslation>

@@ -1,0 +1,19 @@
+<apex:page controller="InvoiceGeneratorController" standardStylesheets="false" docType="html-5.0">
+    <apex:sectionHeader title="Invoice Generator" subtitle="Generate Invoice" 
+                        description=""/>
+    
+    <apex:includeLightning />
+    
+    <div id="invoicePage" />
+    
+    <script>            
+    $Lightning.use('c:InvoiceGeneratorApp', function() {
+        $Lightning.createComponent('c:InvoiceGeneratorComponent', 
+                                   {"contactId" : "{!JSINHTMLENCODE(selectedContactId)}", "SObjType" : "Contact"},
+                                   'invoicePage', function(cmp) {
+                                       console.log('Component is created!');
+                                   });
+    });
+    </script>
+    
+</apex:page>

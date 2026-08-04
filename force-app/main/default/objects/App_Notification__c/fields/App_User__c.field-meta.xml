@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>App_User__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Links the notification to the app user who should receive it.</description>
+    <inlineHelpText>Select the app user that this notification should be delivered to.</inlineHelpText>
+    <label>App User</label>
+    <referenceTo>App_User__c</referenceTo>
+    <relationshipLabel>Notifications</relationshipLabel>
+    <relationshipName>App_Notifications</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

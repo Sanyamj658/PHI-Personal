@@ -1,0 +1,145 @@
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+* Author: Techila Global Services Pvt Ltd. (Gaurav Agrawal)
+* VF Page Name: PatientInvoice
+* Created Date: 09-January-2017
+* Description: Page for download invoice as Excel file in the system 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<apex:page standardController="Contact" extensions="PatientInvoiceControllerX"  contentType="txt/xml#{!objContact.Name} {!TODAY()}.xls" cache="true" standardStylesheets="false">  
+
+        
+            <table>     
+                <tr></tr>                                                
+                <tr>
+                    <td> <b> {!objAccount.Name}</b> </td>
+                </tr>                           
+                <tr>
+                    <td> {!objAccount.BillingStreet}</td>                   
+                </tr>
+                <tr>
+                    <td> {!objAccount.BillingCity} {!objAccount.BillingState} {!objAccount.BillingPostalcode}</td>
+                </tr> 
+                <tr></tr> 
+                <tr></tr>                                    
+                <tr>
+                    <td></td>
+                    <td></td>                   
+                    <td><b>PATIENT STATEMENT</b></td>                 
+                </tr>
+                <tr></tr>  
+                <tr></tr>          
+                <tr>
+                    <td  style="width: 500px;"><b> TO:</b> {!objContact.Name}</td>
+                    <td></td>                   
+                    <td>PATIENT : <b>{!objContact.Name}</b></td>                
+                </tr>
+                <tr>
+                    <td>{!objContact.MailingStreet}</td>
+                    <td></td>                   
+                    <td> DOB : <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                        <apex:param value="{!contact.Date_of_Birth__c}" /> 
+                        </apex:outputText></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>{!objContact.MailingCity} {!objContact.MailingState} {!objContact.MailingPostalcode}</td>
+                    <td></td>                       
+                    <td>CLAIM No. : <b>{!ClaimList[0].Name}</b></td>               
+                </tr>          
+                <tr>             
+                    <td>{!objContact.MailingCountry}</td>
+                 </tr>
+                <tr></tr>
+                <tr></tr> 
+                <tr>    
+                    <td> <b>Pay By Credit Card at:</b></td>
+                </tr>
+                <tr>
+                    <td><a href="https://pay.instamed.com/PASSHEALTH">https://pay.instamed.com/PASSHEALTH</a></td>
+                </tr>
+                <tr></tr>
+                <tr></tr> 
+                <tr>
+                    <td><b>Submit Payment By Check To:</b></td>
+                    <td></td>               
+                    <td><b>By Wire Transfer to: BANK OF AMERICA</b></td>                    
+                </tr>
+                <tr>
+                    <td>{!objAccount.Name}</td>
+                    <td></td>                           
+                    <td style="Width:400px;">Acct. Name: Passage Health International</td>                 
+                </tr>
+                <tr>
+                    <td> Attn: International Billing Office</td>
+                    <td></td>                                   
+                    <td> Account No. : 229047101905</td>            
+                </tr>
+                <tr>
+                    <td> 5900 N ANDREWS AVE. STE 802 </td>
+                    <td></td>                   
+                    <td> ABA: 063100277</td>              
+                </tr>
+                <tr>
+                    <td> FORT LAUDERDALE FL. 33309 </td>
+                    <td></td>                   
+                    <td> Bank Address: 1745 E Sunrise Blvd</td>         
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>                           
+                    <td> Ft. Lauderdale Fl 33304 USA</td> 
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>                           
+                    <td> Swift Code from USA: BOFAUS 3 N</td>    
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>                           
+                    <td> Swift Code from Overseas: BOFAUS 6 N</td>                  
+                </tr>
+                <tr></tr>
+                <tr></tr> 
+                <tr></tr>   
+            </table>    
+                FOR BILLING INQUIRIES CALL: 1 (954) 526 9751  FAX: 1 (954) 376 6163  EMAIL: INFO@INTERNATIONALBILLINGOFFICE.COM
+                <table border="1">                       
+                        <tr>
+                            <th>DATE OF SERVICE</th>
+                            <th>DESCRIPTION</th>
+                            <th>BALANCE DUE IN USD</th>             
+                        </tr>
+                            <apex:repeat value="{!ClaimList}" var="CList">
+                                <tr>
+                                    <td><apex:outputText value="{0, date, MM'/' dd'/'  yyyy}">
+                                        <apex:param value="{!CList.From_DOS__c}" /> 
+                                        </apex:outputText>   TO 
+                                        <apex:outputText value="{0, date, MM'/' dd'/'  yyyy}">
+                                        <apex:param value="{!CList.To_DOS__c}" /> 
+                                        </apex:outputText></td>
+                                    <td>Medical or Ambulance Services</td>
+                                    <td><b>${!balanceDue}</b></td>   
+                                <tr></tr>                              
+                                </tr>
+                            </apex:repeat>
+                                <tr>                                                 
+                                </tr>
+                               <!-- <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>TOTAL CHARGES</td>
+                                    <td><b>${!totalCharge}</b></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Sum of Payments</td>
+                                    <td>${!totalPayments}</td>
+                                </tr>  -->                                                     
+                                <tr>                                                    
+                                </tr>                                                                                                
+            </table>  
+                            <tr></tr> 
+                           **Please pay before 30 days from this notice date to avoid collection activity**                                   
+</apex:page>

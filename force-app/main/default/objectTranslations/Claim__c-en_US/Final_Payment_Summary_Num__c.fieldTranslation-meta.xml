@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Payment Number for write off Invoice PDF --></help>
+    <label><!-- Final Payment Summary No --></label>
+    <name>Final_Payment_Summary_Num__c</name>
+</CustomFieldTranslation>

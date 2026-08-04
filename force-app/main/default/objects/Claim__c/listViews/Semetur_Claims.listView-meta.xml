@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Semetur_Claims</fullName>
+    <columns>NAME</columns>
+    <columns>Patient__c</columns>
+    <columns>Invoice_Number__c</columns>
+    <columns>Medical_Provider__c</columns>
+    <columns>From_DOS__c</columns>
+    <columns>To_DOS__c</columns>
+    <columns>Total_Charge__c</columns>
+    <columns>Pending_Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Medical_Provider__c</field>
+        <operation>contains</operation>
+        <value>semetur</value>
+    </filters>
+    <label>Semetur Claims</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

@@ -1,0 +1,51 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:attribute name="file" type="Object" ></aura:attribute>
+    
+    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="6">
+        <article class="slds-card ">
+            
+            <div class="cardHeader slds-grid pointer" 
+                 onclick="{!v.file.IsAttachment == true ? c.handleOnClickAttachment : c.handleOnClickFile}" 
+                 aura:id="outerDiv"
+                 name="{!v.file.Id}"
+                 title="{!v.file.Title}">
+                
+                <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <div aria-hidden="true" class="slds-icon ">
+                            
+                            <aura:if isTrue="{!v.file.ShowPreview}">
+                                <img src="{!'/clientaccess/sfc/servlet.shepherd/document/download/' + v.file.Id}"></img>
+                                
+                                <aura:set attribute="else">
+                                    <lightning:icon iconName = "{!'doctype:' + v.file.FileExtension}"></lightning:icon>
+                                </aura:set>
+                            </aura:if>
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class = "slds-truncate">
+                            <span class="link"  >
+                                {!v.file.Title}  
+                            </span>
+                        </h2>
+                        
+                        <lightning:formattedDateTime class="fontSize" value="{!v.file.CreatedDate}"></lightning:formattedDateTime>&nbsp;&nbsp;&#8226;&nbsp;
+                        <aura:if isTrue="{!v.file.IsAttachment}">  
+                            <lightning:formattedText class="fontSize" value="Attachment"></lightning:formattedText>
+                            
+                            <aura:set attribute="else">
+                                <lightning:formattedText class="fontSize" value="{!v.file.ContentSize + ' &#8226; ' + v.file.FileExtension}"></lightning:formattedText>
+                            </aura:set>
+                            
+                        </aura:if>
+                    </div>
+                </header>
+            </div>
+            
+        </article>
+    </lightning:layoutItem>
+</aura:component>

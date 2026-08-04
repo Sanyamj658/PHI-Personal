@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Collector__c</fullName>
+    <inlineHelpText>Collectors at a Claim Payment Level</inlineHelpText>
+    <label>Collector</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Admin</fullName>
+                <default>true</default>
+                <label>Admin</label>
+            </value>
+            <value>
+                <fullName>Administrator</fullName>
+                <default>false</default>
+                <label>Administrator</label>
+            </value>
+            <value>
+                <fullName>Andrea Greenblatt</fullName>
+                <default>false</default>
+                <label>Andrea Greenblatt</label>
+            </value>
+            <value>
+                <fullName>Ashton Kanhere</fullName>
+                <default>false</default>
+                <label>Ashton Kanhere</label>
+            </value>
+            <value>
+                <fullName>Edward Lacey</fullName>
+                <default>false</default>
+                <label>Edward Lacey</label>
+            </value>
+            <value>
+                <fullName>External Collection</fullName>
+                <default>false</default>
+                <label>External Collection</label>
+            </value>
+            <value>
+                <fullName>Giselle Ortez</fullName>
+                <default>false</default>
+                <label>Giselle Ortez</label>
+            </value>
+            <value>
+                <fullName>Hilal Dar</fullName>
+                <default>false</default>
+                <label>Hilal Dar</label>
+            </value>
+            <value>
+                <fullName>Joanne Sierra</fullName>
+                <default>false</default>
+                <label>Joanne Sierra</label>
+            </value>
+            <value>
+                <fullName>Jose Reyes</fullName>
+                <default>false</default>
+                <label>Jose Reyes</label>
+            </value>
+            <value>
+                <fullName>Karl Daskar</fullName>
+                <default>false</default>
+                <label>Karl Daskar</label>
+            </value>
+            <value>
+                <fullName>Marc Gelb</fullName>
+                <default>false</default>
+                <label>Marc Gelb</label>
+            </value>
+            <value>
+                <fullName>Moe Shannon</fullName>
+                <default>false</default>
+                <label>Moe Shannon</label>
+            </value>
+            <value>
+                <fullName>Mohammad Musaib</fullName>
+                <default>false</default>
+                <label>Mohammad Musaib</label>
+            </value>
+            <value>
+                <fullName>Mursaleen Nissar</fullName>
+                <default>false</default>
+                <label>Mursaleen Nissar</label>
+            </value>
+            <value>
+                <fullName>Mursalin Mir</fullName>
+                <default>false</default>
+                <label>Mursalin Mir</label>
+            </value>
+            <value>
+                <fullName>Nancy Shay</fullName>
+                <default>false</default>
+                <label>Nancy Shay</label>
+            </value>
+            <value>
+                <fullName>Peter Freeman</fullName>
+                <default>false</default>
+                <label>Peter Freeman</label>
+            </value>
+            <value>
+                <fullName>Shahid Shah</fullName>
+                <default>false</default>
+                <label>Shahid Shah</label>
+            </value>
+            <value>
+                <fullName>Sharif Mohi</fullName>
+                <default>false</default>
+                <label>Sharif Mohi</label>
+            </value>
+            <value>
+                <fullName>Steve Thomson</fullName>
+                <default>false</default>
+                <label>Steve Thomson</label>
+            </value>
+            <value>
+                <fullName>Ubaldo Young</fullName>
+                <default>false</default>
+                <label>Ubaldo Young</label>
+            </value>
+            <value>
+                <fullName>Uzaifa Qadir</fullName>
+                <default>false</default>
+                <label>Uzaifa Qadir</label>
+            </value>
+            <value>
+                <fullName>Valerie Sheregar</fullName>
+                <default>false</default>
+                <label>Valerie Sheregar</label>
+            </value>
+            <value>
+                <fullName>Vanessa Ambar</fullName>
+                <default>false</default>
+                <label>Vanessa Ambar</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

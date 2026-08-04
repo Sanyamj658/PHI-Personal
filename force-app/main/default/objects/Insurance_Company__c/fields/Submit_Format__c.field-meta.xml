@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Submit_Format__c</fullName>
+    <inlineHelpText>preferred claim submission method</inlineHelpText>
+    <label>Submit Format</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Address</fullName>
+                <color>#0B6FCE</color>
+                <default>false</default>
+                <label>Address</label>
+            </value>
+            <value>
+                <fullName>Email</fullName>
+                <color>#78C953</color>
+                <default>false</default>
+                <label>Email</label>
+            </value>
+            <value>
+                <fullName>Fax</fullName>
+                <color>#E27001</color>
+                <default>false</default>
+                <label>Fax</label>
+            </value>
+            <value>
+                <fullName>Electronically</fullName>
+                <color>#A845DC</color>
+                <default>false</default>
+                <label>Electronically</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

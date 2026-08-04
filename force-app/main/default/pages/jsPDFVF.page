@@ -1,0 +1,15 @@
+<apex:page showHeader="false">
+    <apex:includeLightning />
+    <div id="lwc-container"></div>
+    <script>
+        // Retrieve the recordId from the URL
+        var recordId = '{!$CurrentPage.parameters.id}';
+
+        $Lightning.use("c:jsPDFApplication2", function () {
+            $Lightning.createComponent("c:JsPDFRequirement", { recordId: recordId }, "lwc-container", function (cmp) {
+                // Your callback logic here, if needed.
+                console.log("Successfully LWC loaded");
+            });
+        });
+    </script>
+</apex:page>

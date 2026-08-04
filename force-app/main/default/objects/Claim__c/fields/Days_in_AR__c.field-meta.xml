@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Days_in_AR__c</fullName>
+    <description>Please note that the AR dates do not stop counting even after the claim is closed in the system and payment has been received.</description>
+    <externalId>false</externalId>
+    <formula>IF(ISNULL(DaysInAR__c), TODAY() - Date_Sent_to_Ins_Co__c, DaysInAR__c)</formula>
+    <inlineHelpText>Amount of days since the claim was sent to Insurance</inlineHelpText>
+    <label># Days in AR</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

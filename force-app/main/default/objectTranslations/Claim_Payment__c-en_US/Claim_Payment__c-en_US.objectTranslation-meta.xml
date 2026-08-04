@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Claim Payment</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Claim Payments</value>
+    </caseValues>
+    <layouts>
+        <layout>Claim Payment Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Invoice Details --></label>
+            <section>Invoice Details</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Client Access Claim Payment Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Invoice Details --></label>
+            <section>Invoice Details</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <webLinks>
+        <label><!-- Generate_Facilities_Invoice --></label>
+        <name>Generate_Facilities_Invoice</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Generate_Professional_Invoice --></label>
+        <name>Generate_Professional_Invoice</name>
+    </webLinks>
+</CustomObjectTranslation>

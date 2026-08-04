@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Firbase Config</label>
+    <protected>false</protected>
+    <values>
+        <field>Client_Email__c</field>
+        <value xsi:type="xsd:string">firebase-adminsdk-fbsvc@react-native-push-notifi-31f52.iam.gserviceaccount.com</value>
+    </values>
+    <values>
+        <field>Private_Key__c</field>
+        <value xsi:type="xsd:string">MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC0h0K5l3ceoCt9\ned0RGde0MQOoYfu1utn9KhEYNgX/TvUpPI0hvND/Zwbojch8ejC23clfjuqtGf6f\nZNPFkhu0468LzniJLfPk+yEcN4XWm/hSGFynZLXQz0mzQdF26ZCTGj1X1aB9L4/u\ny3R14+K3fzEiVTHaJ7mqn7Jhje0KyKO+9CPBiCWLvfY9nputv+h7izN5DuTn+a8P\nlP8+HnlMgpxZIIF9KbQSfCHoLWRUTq9CyDNA/nWulfk+GyufCFEkEkWzVuQmhBr9\nAKxUwJPbR+LU07BYAks1SX1Hvpa+67KPwXDqnp7qpiVDCS6oJ00Z9x0gsjPu4ojb\noMM3ADqpAgMBAAECggEAVhMN6e6Bgc0tn0CM+nvfYI9kJpM9UBs8l5xIlUog1ue/\nNb+krPrZjYUCgrwjZNJfyrj5rEG4u/sib75DyLZO1pMeoZr61rFd0gY49bq1aito\nnT/3YWq/08UZ50nRBQj9AV5n9CqrwDR+xIUmTJVwwjv3Yd7MC6+YM3W8OA5TAKn3\naByS88Ctkwske6K5aRZ1k2PG404MFBXp7BO1TXI/pcUnJClzXSpIi73FUii7UafA\nHuGtV8CedM/Q+Y2IVYqR7AtHyUSN9KY01LmVZ9fhMx6G9W5KBjaKkU6hjxPNcHff\nk/401iy6XtEOFInrUi3IRKNAsulE//zvwHrKaifF3wKBgQDeKIa5JjZtgo9bRGOc\ncf0cIZCN+okUEk3mu83tUAU1aa9WuhamrrragRsYItxRNqAaQ81GH9dWn4Wr3BA3\nyvyPMd3AjI8gMdKJE2P5UAjbUGZRPMbuWdLugnhhNMeYmkCruZJ1UddOijuplQZs\nmxuHlkKK30YXbJpvqTIQI6MP8wKBgQDQB0w7R3dguqEMYMvUmsByE+3Smz4bPUA2\ngI2ypv6E/SM7pfCnZYIqmvdJb7xcnPmK5LU+9EguWuerH9mkTCjDlW4L1p3TTqTA\nsoA1UKUVDMUMqQbu5IqdGzbWxlkmGLqTc8/eEkmTqqiNMNXPZmxD27CxhHNmQtzh\nEd7QEeRN8wKBgQCP0BpOlx8ayy70PRRivSPF5zCFyI6ecK7/U8od+vQ0PIMmGHb7\nVhddxb/9YuvOoxcHiabD427qA4Br3ZyeEYhnRjewIw2wILCSzfuk9BuXpbdmlXqN\n55X1kn5NJvaiohCFWi8mRWGk1TWENRWgjtRGdI4FCj58gXCEIjpnWjp/4wKBgHf4\n/XniiXJ7r42X9XWzmfEwlSO07GiBNps4IIA71uWTp9IqrVOdMyinHp53lkZDMZds\ntyqLb2Vsf9ctEzOxyICjmUeyimrnHBUV3OLik5JEPxBCGwGDRH2+yC2tTpSuBkwr\nqmIEYfKLpZFn7KckBqRL+ucl3/fF7+TNjZap+uUJAoGAQpLVyEpcWIwAQhyQ/rcZ\nzQOEj0CInXsD40UPgC22c9Ov7D27lzvwhdno15sYxRyjNsCk6UgTc8ZrtJ75OJgV\n8JopCe5pSkkzjt8Ig8zhCSqcOQXLjP2DYKFzkkL5rJKCflN0lyc1W5EtGOizfgcs\n2SswrOyZvqKCh5cqbjJbfBo=</value>
+    </values>
+    <values>
+        <field>Project_ID__c</field>
+        <value xsi:type="xsd:string">react-native-push-notifi-31f52</value>
+    </values>
+</CustomMetadata>

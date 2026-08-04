@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Collector__c</fullName>
+    <description>**Collectors at the claim level**</description>
+    <inlineHelpText>The Collector must be selected from patient main page. A collector is not allow to change this tab. Ask Your Administrator.</inlineHelpText>
+    <label>Collector</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>24 7</fullName>
+                <default>false</default>
+                <label>24 7</label>
+            </value>
+            <value>
+                <fullName>Admin</fullName>
+                <default>true</default>
+                <label>Admin</label>
+            </value>
+            <value>
+                <fullName>Administrator</fullName>
+                <default>false</default>
+                <label>Administrator</label>
+            </value>
+            <value>
+                <fullName>A Greenblatt</fullName>
+                <default>false</default>
+                <label>A Greenblatt</label>
+            </value>
+            <value>
+                <fullName>A Kanhere</fullName>
+                <default>false</default>
+                <label>A Kanhere</label>
+            </value>
+            <value>
+                <fullName>E Lacey</fullName>
+                <default>false</default>
+                <label>E Lacey</label>
+            </value>
+            <value>
+                <fullName>External Collection</fullName>
+                <default>false</default>
+                <label>External Collection</label>
+            </value>
+            <value>
+                <fullName>G Ortez</fullName>
+                <default>false</default>
+                <label>G Ortez</label>
+            </value>
+            <value>
+                <fullName>H Dar</fullName>
+                <default>false</default>
+                <label>H Dar</label>
+            </value>
+            <value>
+                <fullName>J Reyes</fullName>
+                <default>false</default>
+                <label>J Reyes</label>
+            </value>
+            <value>
+                <fullName>J Sierra</fullName>
+                <default>false</default>
+                <label>J Sierra</label>
+            </value>
+            <value>
+                <fullName>K Daskar</fullName>
+                <default>false</default>
+                <label>K Daskar</label>
+            </value>
+            <value>
+                <fullName>M Mir</fullName>
+                <default>false</default>
+                <label>M Mir</label>
+            </value>
+            <value>
+                <fullName>M Musaib</fullName>
+                <default>false</default>
+                <label>M Musaib</label>
+            </value>
+            <value>
+                <fullName>M Nissar</fullName>
+                <default>false</default>
+                <label>M Nissar</label>
+            </value>
+            <value>
+                <fullName>M Shannon</fullName>
+                <default>false</default>
+                <label>M Shannon</label>
+            </value>
+            <value>
+                <fullName>N Shay</fullName>
+                <default>false</default>
+                <label>N Shay</label>
+            </value>
+            <value>
+                <fullName>P Freeman</fullName>
+                <default>false</default>
+                <label>P Freeman</label>
+            </value>
+            <value>
+                <fullName>S Mohi</fullName>
+                <default>false</default>
+                <label>S Mohi</label>
+            </value>
+            <value>
+                <fullName>S Shah</fullName>
+                <default>false</default>
+                <label>S Shah</label>
+            </value>
+            <value>
+                <fullName>S Thomson</fullName>
+                <default>false</default>
+                <label>S Thomson</label>
+            </value>
+            <value>
+                <fullName>U Qadir</fullName>
+                <default>false</default>
+                <label>U Qadir</label>
+            </value>
+            <value>
+                <fullName>U Young</fullName>
+                <default>false</default>
+                <label>U Young</label>
+            </value>
+            <value>
+                <fullName>V Ambar</fullName>
+                <default>false</default>
+                <label>V Ambar</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

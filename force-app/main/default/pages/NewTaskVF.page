@@ -1,0 +1,23 @@
+<apex:page standardController="Task" recordSetVar="tasks">
+    <apex:form >
+        <apex:pageMessages />
+        <div class="slds-p-around_medium">
+            <div class="slds-card">
+                <div>
+                    <apex:pageBlock title="Create New Task">
+                        <apex:pageBlockSection columns="2">
+                            <apex:inputField value="{!Task.Subject}"/>
+                            <apex:inputField value="{!Task.Status}"/>
+                            <apex:inputField value="{!Task.Priority}"/>
+                            <apex:inputField value="{!Task.ActivityDate}"/>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockButtons >
+                            <apex:commandButton value="Save" action="{!save}" />
+                            <apex:commandButton value="Cancel" action="{!cancel}"/>
+                        </apex:pageBlockButtons>
+                    </apex:pageBlock>
+                </div>
+            </div>
+        </div>
+    </apex:form>
+</apex:page>

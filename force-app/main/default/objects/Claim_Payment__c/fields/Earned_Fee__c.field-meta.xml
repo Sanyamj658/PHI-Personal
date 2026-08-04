@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Earned_Fee__c</fullName>
+    <formula>IF(  
+    OR(
+        ISPICKVAL(Payment_Type__c, &apos;Insurance Payment&apos;),
+        ISPICKVAL(Payment_Type__c, &apos;Patient Payment&apos;),
+        ISPICKVAL(Payment_Type__c, &apos;Patient down payment WF&apos;),
+        ISPICKVAL(Payment_Type__c, &apos;Patient Refund&apos;),
+        ISPICKVAL(Payment_Type__c, &apos;Courtesy Payment&apos;)
+       ),
+(Amount__c*Claim_Number__r.Claim_Rate__c), 0.0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Earned Fee</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

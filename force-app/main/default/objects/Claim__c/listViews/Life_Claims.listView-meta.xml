@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Life_Claims</fullName>
+    <booleanFilter>1 OR 2 OR 3 OR 4</booleanFilter>
+    <columns>NAME</columns>
+    <columns>Patient__c</columns>
+    <columns>Invoice_Number__c</columns>
+    <columns>Medical_Provider__c</columns>
+    <columns>From_DOS__c</columns>
+    <columns>To_DOS__c</columns>
+    <columns>Total_Charge__c</columns>
+    <columns>Pending_Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Medical_Provider__c</field>
+        <operation>equals</operation>
+        <value>Life Support Ambulances</value>
+    </filters>
+    <filters>
+        <field>Medical_Provider__c</field>
+        <operation>equals</operation>
+        <value>Victoria Medical Cancun</value>
+    </filters>
+    <filters>
+        <field>Medical_Provider__c</field>
+        <operation>equals</operation>
+        <value>Medical Care Group S.C.</value>
+    </filters>
+    <filters>
+        <field>Medical_Provider__c</field>
+        <operation>equals</operation>
+        <value>Semetur S.A de C.V</value>
+    </filters>
+    <label>Life Claims</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

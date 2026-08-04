@@ -1,0 +1,34 @@
+<aura:component implements="force:lightningQuickActionwithoutHeader,force:hasRecordId" controller="InvoiceGeneratorController" access="global">
+    <aura:attribute name="contactId" type="String" />
+    <aura:attribute name="startDate" type="Date" />
+    <aura:attribute name="endDate" type="String" />
+    <aura:attribute name="discAmt" type="String" />
+    <aura:attribute name="discDesc" type="String" />
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    
+    <lightning:navigation aura:id="navService"/>
+    
+    <lightning:layout multipleRows="true" verticalAlign="center">
+        <lightning:layoutItem size="6" padding="around-small"> 
+            <lightning:input type="date" name="startDate" label="Enter Start Date" aura:id="startDate" onchange = "{!c.onStartDateChange}" />
+        </lightning:layoutItem>
+        <lightning:layoutItem size="6" padding="around-small">
+            <lightning:input type="date" name="endDate" label="Enter End Date" aura:id="endDate" onchange = "{!c.onEndDateChange}"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="6" padding="around-small">
+            <lightning:input name="discDesc" label="Enter Discount Description" aura:id="discDesc" onchange = "{!c.onDiscDescChange}"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="6" padding="around-small">
+            <lightning:input type="number" name="discAmt" label="Enter Discount Amount" formatter="currency" step="0.01" aura:id="discAmt" onchange = "{!c.onDiscAmtChange}"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" padding="around-small">
+            <c:customLookup objectAPIName="Attorney__c" 
+                            IconName="standard:contact" 
+                            label="Attorney Name" 
+                            selectedRecord="{!v.selectedLookUpRecord}"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="12" padding="around-small">
+            <center><lightning:button variant="brand" label="Generate Invoice" title="Generate Invoice" onclick="{! c.handleGenerateInvoice }" /></center>
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

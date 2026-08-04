@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Case__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>Required: Please select both the Patient and the Medical Provider before choosing a related active case.</description>
+    <inlineHelpText>Please select Patient and Medical Provider first before selecting a related active case.</inlineHelpText>
+    <label>Case</label>
+    <lookupFilter>
+        <active>true</active>
+        <booleanFilter>1 AND 2 AND 3</booleanFilter>
+        <errorMessage>Value does not exist or does not match filter criteria of active case related to this Patient and Medical Provider.</errorMessage>
+        <filterItems>
+            <field>Case.ContactId</field>
+            <operation>equals</operation>
+            <valueField>$Source.Patient__c</valueField>
+        </filterItems>
+        <filterItems>
+            <field>Case.AccountId</field>
+            <operation>equals</operation>
+            <valueField>$Source.Medical_Provider__c</valueField>
+        </filterItems>
+        <filterItems>
+            <field>Case.Status</field>
+            <operation>notEqual</operation>
+            <value>Closed, CaseClosed_WithClaim, CaseClosed_NoClaim</value>
+        </filterItems>
+        <infoMessage>This window will be able to select the active case of the related Patient and Medical Provider.</infoMessage>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Case</referenceTo>
+    <relationshipLabel>Claims</relationshipLabel>
+    <relationshipName>Claims</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

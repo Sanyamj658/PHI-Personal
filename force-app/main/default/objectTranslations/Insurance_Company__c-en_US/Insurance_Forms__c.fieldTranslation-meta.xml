@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Claim form must be send with each VOB to the provider if required  by Insurance. --></help>
+    <label><!-- Insurance Forms Required --></label>
+    <name>Insurance_Forms__c</name>
+    <picklistValues>
+        <masterLabel>Ask Insurance Co.</masterLabel>
+        <translation><!-- Ask Insurance Co. --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>No</masterLabel>
+        <translation><!-- No --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Yes, scroll down to Notes &amp; Attachments to find form(s)</masterLabel>
+        <translation><!-- Yes, scroll down to Notes &amp; Attachments to find form(s) --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Type of payment received or other accounting transactions ex. Legal fee, Bank Fee, Network Discounts, or Manual Adjustment. --></help>
+    <label><!-- Payment Type --></label>
+    <name>Payment_Type__c</name>
+    <picklistValues>
+        <masterLabel>Bank fees</masterLabel>
+        <translation><!-- Bank fees --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Client Payment</masterLabel>
+        <translation><!-- Client Payment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Courtesy Payment</masterLabel>
+        <translation><!-- Courtesy Payment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Earned Fees</masterLabel>
+        <translation><!-- Earned Fees --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Insurance Payment</masterLabel>
+        <translation><!-- Insurance Payment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Legal Fees</masterLabel>
+        <translation><!-- Legal Fees --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Manual Adjustment</masterLabel>
+        <translation><!-- Manual Adjustment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Network Discounts</masterLabel>
+        <translation><!-- Network Discounts --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Patient Payment</masterLabel>
+        <translation><!-- Patient Payment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Patient down payment NF</masterLabel>
+        <translation><!-- Patient down payment NF --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Patient down payment WF</masterLabel>
+        <translation><!-- Patient down payment WF --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

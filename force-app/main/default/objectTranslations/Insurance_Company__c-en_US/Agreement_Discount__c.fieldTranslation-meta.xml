@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Discounts Provided to Insurances or  Fees Charged by Collection Agency --></help>
+    <label><!-- Agreement Discount --></label>
+    <name>Agreement_Discount__c</name>
+    <picklistValues>
+        <masterLabel>ALS1 - Life $2,000</masterLabel>
+        <translation><!-- ALS1 - Life $2,000 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>ALS2 - Life $2,300</masterLabel>
+        <translation><!-- ALS2 - Life $2,300 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>AMC 10%</masterLabel>
+        <translation><!-- AMC 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>AMC 15%</masterLabel>
+        <translation><!-- AMC 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>AMC 5%</masterLabel>
+        <translation><!-- AMC 5% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>All Medical Providers 10%</masterLabel>
+        <translation><!-- All Medical Providers 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>All Medical Providers 15%</masterLabel>
+        <translation><!-- All Medical Providers 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>BLS - Life $1,000</masterLabel>
+        <translation><!-- BLS - Life $1,000 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>BLS - Life $1,400</masterLabel>
+        <translation><!-- BLS - Life $1,400 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Balboa - 10%</masterLabel>
+        <translation><!-- Balboa - 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Belize 10%</masterLabel>
+        <translation><!-- Belize 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Belize 15%</masterLabel>
+        <translation><!-- Belize 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Blue Net 10%</masterLabel>
+        <translation><!-- Blue Net 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Blue Net 15%</masterLabel>
+        <translation><!-- Blue Net 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>CCI 15% Fee UK</masterLabel>
+        <translation><!-- CCI 15% Fee UK --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>CCI 20% Fee Europe</masterLabel>
+        <translation><!-- CCI 20% Fee Europe --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>CCI 30% Fee Rest of the World</masterLabel>
+        <translation><!-- CCI 30% Fee Rest of the World --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>CSG 35% Fee Above 12 month</masterLabel>
+        <translation><!-- CSG 35% Fee Above 12 month --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Case by Case Only</masterLabel>
+        <translation><!-- Case by Case Only --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Cliscap 10%</masterLabel>
+        <translation><!-- Cliscap 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Costamed 10%</masterLabel>
+        <translation><!-- Costamed 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Costamed 15%</masterLabel>
+        <translation><!-- Costamed 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Costamed 20%</masterLabel>
+        <translation><!-- Costamed 20% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Costamed 5%</masterLabel>
+        <translation><!-- Costamed 5% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Especialidades 10%</masterLabel>
+        <translation><!-- Especialidades 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Especialidades 15%</masterLabel>
+        <translation><!-- Especialidades 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>GSC 25% Fee Below 12 month</masterLabel>
+        <translation><!-- GSC 25% Fee Below 12 month --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>HTH - Life $2,700</masterLabel>
+        <translation><!-- HTH - Life $2,700 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Hospital H+ 10%</masterLabel>
+        <translation><!-- Hospital H+ 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Hospital H+ 15%</masterLabel>
+        <translation><!-- Hospital H+ 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>IC System 20% Fee Below 12 month</masterLabel>
+        <translation><!-- IC System 20% Fee Below 12 month --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>IC System 40% Fee Above 12 month</masterLabel>
+        <translation><!-- IC System 40% Fee Above 12 month --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life - ALS1 / ALS2 2K</masterLabel>
+        <translation><!-- Life - ALS1 / ALS2 2K --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life - BLS1 $1K</masterLabel>
+        <translation><!-- Life - BLS1 $1K --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life - BLS2 $1400</masterLabel>
+        <translation><!-- Life - BLS2 $1400 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life - Desembark $2500</masterLabel>
+        <translation><!-- Life - Desembark $2500 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life - Mahahual $3500</masterLabel>
+        <translation><!-- Life - Mahahual $3500 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life - Med.Van $455</masterLabel>
+        <translation><!-- Life - Med.Van $455 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life - SCT $2200</masterLabel>
+        <translation><!-- Life - SCT $2200 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life 15%</masterLabel>
+        <translation><!-- Life 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life 18%</masterLabel>
+        <translation><!-- Life 18% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life 20%</masterLabel>
+        <translation><!-- Life 20% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life 22%</masterLabel>
+        <translation><!-- Life 22% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life 25%</masterLabel>
+        <translation><!-- Life 25% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Life 30%</masterLabel>
+        <translation><!-- Life 30% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>MH - Life $7,500</masterLabel>
+        <translation><!-- MH - Life $7,500 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Quirurgica 15%</masterLabel>
+        <translation><!-- Quirurgica 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>SCT Cancun - Life $4,500</masterLabel>
+        <translation><!-- SCT Cancun - Life $4,500 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>SCT Riviera - Life $5,500</masterLabel>
+        <translation><!-- SCT Riviera - Life $5,500 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Saint Luke 10%</masterLabel>
+        <translation><!-- Saint Luke 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Saint Luke 15%</masterLabel>
+        <translation><!-- Saint Luke 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Saint Luke 5%</masterLabel>
+        <translation><!-- Saint Luke 5% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Semetur 15 % Physician</masterLabel>
+        <translation><!-- Semetur 15 % Physician --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Semetur 15%</masterLabel>
+        <translation><!-- Semetur 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Semetur 20 % Drugs</masterLabel>
+        <translation><!-- Semetur 20 % Drugs --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Semetur 20%</masterLabel>
+        <translation><!-- Semetur 20% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Semetur 25%</masterLabel>
+        <translation><!-- Semetur 25% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Semetur 30%</masterLabel>
+        <translation><!-- Semetur 30% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Semetur 30% Physicians</masterLabel>
+        <translation><!-- Semetur 30% Physicians --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Semetur 35% Drugs</masterLabel>
+        <translation><!-- Semetur 35% Drugs --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Summit Collections -</masterLabel>
+        <translation><!-- Summit Collections - --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>TNT - Life $1,000</masterLabel>
+        <translation><!-- TNT - Life $1,000 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Transword 30% USA, 50% Rest of the World</masterLabel>
+        <translation><!-- Transword 30% USA, 50% Rest of the World --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Transworld $12 Fee Pre-collection</masterLabel>
+        <translation><!-- Transworld $12 Fee Pre-collection --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Victoria 10%</masterLabel>
+        <translation><!-- Victoria 10% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Victoria 15%</masterLabel>
+        <translation><!-- Victoria 15% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Victoria 20%</masterLabel>
+        <translation><!-- Victoria 20% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Victoria 25%</masterLabel>
+        <translation><!-- Victoria 25% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Victoria 30%</masterLabel>
+        <translation><!-- Victoria 30% --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Wood Medical - 10%</masterLabel>
+        <translation><!-- Wood Medical - 10% --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

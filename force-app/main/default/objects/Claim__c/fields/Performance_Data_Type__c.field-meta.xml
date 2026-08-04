@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Performance_Data_Type__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF( OR( ISPICKVAL( Pending_Status__c, &quot;Client Received Partial Payment ( Legal)&quot;),
+ISPICKVAL( Pending_Status__c, &quot;Payment Plan (Legal)&quot;),
+ISPICKVAL( Pending_Status__c, &quot;Payment Received Partial ( Legal)&quot;),
+ISPICKVAL( Pending_Status__c, &quot;Pending Balance from Patient (Legal)&quot;),
+ISPICKVAL( Pending_Status__c, &quot;Pending Payment from Insurance (Legal)&quot;),
+ISPICKVAL( Pending_Status__c, &quot;Pending Payment from Patient (Legal)&quot;), 
+ISPICKVAL( Pending_Status__c, &quot;Probate&quot;)) , &quot;Legal Claims&quot;,  
+(IF( OR(ISPICKVAL( Pending_Status__c , &quot;Write-Off&quot;),
+ISPICKVAL( Pending_Status__c , &quot;Write Off / Partial Payment Received&quot;),
+ISPICKVAL( Pending_Status__c , &quot;Courtesy Write Off / Ambulance&quot;)), &quot;Courtesy Write-Offs&quot;, 
+(IF( OR(ISPICKVAL( Pending_Status__c , &quot;Uncollectible&quot;),
+ISPICKVAL( Pending_Status__c , &quot;Uncollectible / Partial Payment Received&quot;)) , &quot;Bad Debt By AR Year&quot;, &quot;&quot;)))))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Performance Data Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

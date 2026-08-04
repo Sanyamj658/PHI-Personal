@@ -1,0 +1,11 @@
+<template>
+    <lightning-card title="Collector AR Days Info">
+        <template if:true={showInfo}>
+            <p class="slds-p-horizontal_small">Latest Collector: <strong>{collector}</strong></p>
+            <p class="slds-p-horizontal_small">AR Days Taken: <strong>{days}</strong> days</p>
+        </template>
+        <template if:false={showInfo}>
+            <p class="slds-p-horizontal_small">No valid collector or payment received status found.</p>
+        </template>
+    </lightning-card>
+</template>

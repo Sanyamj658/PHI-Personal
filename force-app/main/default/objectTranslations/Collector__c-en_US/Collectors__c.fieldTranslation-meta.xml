@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Employee collecting on the claim --></help>
+    <label><!-- Collectors --></label>
+    <name>Collectors__c</name>
+    <picklistValues>
+        <masterLabel>Aamir Abass</masterLabel>
+        <translation><!-- Aamir Abass --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Admin</masterLabel>
+        <translation><!-- Admin --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Danish Qadir</masterLabel>
+        <translation><!-- Danish Qadir --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Edward Lacey</masterLabel>
+        <translation><!-- Edward Lacey --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>External Collection</masterLabel>
+        <translation><!-- External Collection --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Henry Dar</masterLabel>
+        <translation><!-- Henry Dar --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Shahid Shah</masterLabel>
+        <translation><!-- Shahid Shah --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Uzaifa Qadir</masterLabel>
+        <translation><!-- Uzaifa Qadir --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

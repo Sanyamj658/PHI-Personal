@@ -1,0 +1,317 @@
+<template>
+	<template if:true={isLoading}>
+		<lightning-spinner alternative-text="Loading...">
+		</lightning-spinner>
+	</template>
+	<div class="slds-grid slds-grid_vertical-align-center slds-wrap">
+		<div
+			class="slds-grid slds-grid_reverse slds-size_1-of-2 slds-m-right_small slds-align_absolute-right">
+			<lightning-button variant="" label="Cancel" onclick={handleCancel}></lightning-button>
+		</div>
+		<div class="slds-align_absolute-left">
+			<lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+		</div>
+	</div>
+	<div class="slds-p-around_medium">
+		<h3
+			class="slds-section__title slds-theme--shade primaryPaletteBorder test-id__section-header-container">
+			<span class="slds-p-horizontal--small slds-truncate">Task Information</span>
+		</h3>
+		<div
+			class="slds-form form-horizontal slds-is-editing slds-m-horizontal_medium slds-m-top_small">
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grow">
+						<lightning-input type="checkbox" name="IsVisibleInSelfService"
+							label="Public"
+							checked={taskRecord.IsVisibleInSelfService}
+							onchange={handlePublicCheckboxChange}
+							field-level-help={isVisibleHelpText}>
+						</lightning-input>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grid_vertical-align-start slds-grow">
+						<div class="slds-grid slds-grow slds-size-1_of_1">
+							<lightning-record-picker class="slds-grow" name="User"
+								label="Assigned To"
+								object-api-name="User"
+								required="true"
+								value={taskRecord.OwnerId}
+								onchange={handleAssignedToRecordChange}>
+							</lightning-record-picker>
+						</div>
+					</div>
+				</lightning-layout-item>
+			</dl>
+
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="6" padding="around-small">
+					<div
+						class="slds-grid slds-grid_vertical slds-grid_vertical-align-start slds-grow">
+						<div class="slds-grid slds-grow slds-size_1-of-1">
+							<lightning-combobox class="slds-grow slds-size_1-of-1"
+								name="Subject" value={taskRecord.Subject}
+								label="Subject"
+								required="true"
+								field-level-help={subjectHelpText}
+								options={subjectOptions}
+								onchange={handleSubjectChange}>
+							</lightning-combobox>
+						</div>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grow slds-grid_vertical">
+						<div class="slds-grid slds-grow">
+							<lightning-combobox class="slds-grow" name="Status"
+								value={taskRecord.Status} label="Status"
+								options={statusOptions}
+								required="true"
+								onchange={handleStatusChange}>
+							</lightning-combobox>
+						</div>
+					</div>
+				</lightning-layout-item>
+			</dl>
+
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grid_vertical-align-start slds-grow">
+						<div class="slds-grid slds-grow">
+							<lightning-textarea class="slds-grow"
+								value={taskRecord.Description}
+								onchange={handleCommentInputChange}
+								label="Comments"
+								field-level-help={descriptionHelpText}>
+							</lightning-textarea>
+						</div>
+					</div>
+				</lightning-layout-item>
+
+				<template lwc:if={isAccessible}>
+					<lightning-layout-item size="6" padding="around-small">
+						<div class="slds-grid slds-grow">
+							<div class="slds-grid slds-grow">
+								<lightning-record-picker class="slds-grow"
+									name="Attorney" label="Attorney"
+									object-api-name="Attorney__c"
+									value={taskRecord.Attorney__c}
+									onchange={handleAttorneyRecordChange}>
+								</lightning-record-picker>
+							</div>
+						</div>
+					</lightning-layout-item>
+				</template>				
+			</dl>
+
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grow">
+						<div class="slds-grid slds-grow">
+							<lightning-input class="slds-grow" type="date"
+								value={taskRecord.ActivityDate} name="Due Date"
+								label="Due Date" onchange={onDueDateChange}
+								required></lightning-input>
+						</div>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grow">
+						<div class="slds-grid slds-grow">
+							<lightning-input class="slds-grow" value={startDate}
+								type="date" name="StartDate" label="Start Date"
+								onchange={onStartDateChange}></lightning-input>
+							<lightning-input class="slds-m-left_small slds-grow"
+								value={startTime} type="time" name="StartTime"
+								label="Start Time"
+								onchange={onStartTimeChange}></lightning-input>
+						</div>
+					</div>
+				</lightning-layout-item>
+			</dl>
+
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grid_vertical-align-start slds-grow">
+						<div class="slds-grid slds-grow">
+							<lightning-combobox class="slds-grow" name="Priority"
+								value={taskRecord.Priority}
+								options={priorityOptions}
+								onchange={handlePriorityChange} label="Priority"
+								field-level-help={priorityHelpText}
+								required="true">
+							</lightning-combobox>
+						</div>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grow">
+						<div class="slds-grid slds-grow">
+							<div class="slds-grid slds-grow">
+								<lightning-input class="slds-grow" type="date"
+									value={stopDate} name="StopDate"
+									label="Stop Date"
+									onchange={onStopDateChange}></lightning-input>
+								<lightning-input
+									class="slds-m-left_small slds-grow"
+									value={stopTime} type="time"
+									name="StopTime" label="Stop Time"
+									onchange={onStopTimeChange}></lightning-input>
+							</div>
+						</div>
+					</div>
+				</lightning-layout-item>
+			</dl>
+
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grid_vertical-align-start slds-grow">
+						<div class="slds-grid slds-grow">
+							<lightning-combobox class="slds-grow" name="Name"
+								value={taskRecord.Name__c} options={nameOptions}
+								onchange={handleNameChange} label="Name"
+								field-level-help={nameHelpText} required>
+							</lightning-combobox>
+						</div>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="6" padding="around-small">
+					<div class="slds-grid slds-grow">
+						<div class="slds-grid slds-grow">
+							<lightning-combobox class="slds-grow" name="Category"
+								value={taskRecord.Category__c}
+								options={categoryOptions}
+								onchange={handleCategoryChange} label="Category"
+								required>
+							</lightning-combobox>
+						</div>
+					</div>
+				</lightning-layout-item>
+			</dl>
+		</div>
+		<h3
+			class="slds-section__title slds-theme--shade primaryPaletteBorder test-id__section-header-container">
+			<span class="slds-p-horizontal--small slds-truncate">Related To</span>
+		</h3>
+		<div
+			class="slds-form form-horizontal slds-is-editing slds-m-horizontal_medium slds-m-top_small">
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="12" padding="around-small">
+					<div class="slds-grid slds-grid_vertical slds-wrap">
+						<label class="slds-size_1-of-1" for="Name">Name</label>
+						<div class="slds-grid slds-grow slds-size_1-of-1">
+							<span lwc:if={taskRecord.WhoId}></span>
+							<lightning-combobox lwc:else
+								class="slds-size_2-of-5 slds-m-right_small "
+								name="WhoID" label="WhoId" value={whoIdObject}
+								placeholder="Select WhoId"
+								options={whoIdOptions}
+								onchange={handleWhoIdObjectChange}
+								variant=" label-hidden">
+							</lightning-combobox>
+							<lightning-record-picker class="slds-grow" name="WhoId"
+								label="Name" object-api-name={whoIdObject}
+								value={taskRecord.WhoId}
+								onchange={handleWhoIdRecordChange}
+								variant="label-hidden">
+							</lightning-record-picker>
+						</div>
+					</div>
+				</lightning-layout-item>
+			</dl>
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="12" padding="around-small">
+					<div
+						class="slds-grid slds-grid_vertical slds-grid_vertical-align-start slds-wrap">
+						<div
+							class="slds-grid slds-grid_vertical-align-center slds-size_1-of-1">
+							<label>Related To</label>
+							<lightning-helptext class="slds-p-left_small"
+								content={whatIdHelpText}></lightning-helptext>
+						</div>
+						<div class="slds-grid slds-grow slds-size_1-of-1">
+							<span lwc:if={taskRecord.WhatId}></span>
+							<lightning-combobox lwc:else
+								class="slds-size_2-of-5 slds-m-right_small "
+								name="whatId" label="Status"
+								value={whatIdObject} placeholder="Select Object"
+								options={whatIdOptions}
+								onchange={handleWhatIdObjectChange}
+								variant=" label-hidden">
+							</lightning-combobox>
+							<lightning-record-picker class="slds-grow" name="WhatId"
+								label="Related To"
+								object-api-name={whatIdObject}
+								value={taskRecord.WhatId}
+								onchange={handleWhatIdRecordChange}
+								variant="label-hidden">
+							</lightning-record-picker>
+						</div>
+					</div>
+				</lightning-layout-item>
+			</dl>
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="12" padding="around-small">
+					<div
+						class="slds-grid slds-grid_vertical slds-grid_vertical-align-start slds-grow">
+						<div
+							class="slds-grid slds-grid_vertical-align-center slds-size_8-of-8">
+							<label>Claim Assigned To</label>
+							<lightning-helptext class="slds-p-left_small"
+								content={claimAssignedToHelpText}></lightning-helptext>
+						</div>
+						<div class="slds-grid slds-grow slds-size_1-of-1">
+							<lightning-combobox class="slds-size_1-of-1"
+								name="Claim Assigned To"
+								label="Claim Assigned To"
+								value={taskRecord.Claim_Assigned_To__c}
+								placeholder="Select Claim Assigned To"
+								options={claimAssignedToOption}
+								onchange={handleClaimAssignToChange}
+								variant=" label-hidden"
+								required="true">
+							</lightning-combobox>
+						</div>
+					</div>
+				</lightning-layout-item>
+			</dl>
+			<dl class="slds-grid slds-gutters_small">
+				<lightning-layout-item size="12" padding="around-small">
+					<div
+						class="slds-grid slds-grid_vertical slds-grid_vertical-align-start slds-grow">
+						<div
+							class="slds-grid slds-grid_vertical-align-center slds-size_1-of-1">
+							<label>Related To Complaints</label>
+							<lightning-helptext class="slds-p-left_small"
+								content={realtedToComplaintHelpText}></lightning-helptext>
+						</div>
+						<lightning-record-picker class="slds-grow slds-size_1-of-1"
+							name="Complaints" label="Complaints"
+							object-api-name="Lead"
+							value={taskRecord.Related_to_Complaints__c}
+							onchange={handleComplaintIdRecordChange}
+							variant="label-hidden">
+						</lightning-record-picker>
+					</div>
+				</lightning-layout-item>
+			</dl>
+		</div>
+
+		<!-- Save Button -->
+	</div>
+	<div class="slds-grid slds-border_top slds-grid_vertical-align-center slds-wrap">
+		<div
+			class="slds-m-top_medium slds-grid slds-grid_reverse slds-size_1-of-2 slds-m-right_small slds-align_absolute-right">
+			<lightning-button variant="" label="Cancel" onclick={handleCancel}></lightning-button>
+		</div>
+		<div class="slds-m-top_medium slds-align_absolute-left">
+			<lightning-button variant="brand" label="Save" onclick={handleSave}></lightning-button>
+		</div>
+	</div>
+</template>

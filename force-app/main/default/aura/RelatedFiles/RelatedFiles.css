@@ -1,0 +1,22 @@
+.THIS .bottomMargin {
+    margin-bottom: 10px;
+    margin-top: 0px;
+}
+
+.THIS .slds-card__body {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.THIS .slds-card__header{
+    margin: 0px !important;
+    padding: 1rem 1rem;
+    border-bottom: 1px solid #d4d4d4;
+    background-color: #fafaf9;
+
+}
+                
+.THIS .listView{
+	max-height: 160px;
+	overflow: auto;                    
+}

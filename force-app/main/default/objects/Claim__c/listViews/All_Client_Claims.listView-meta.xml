@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Client_Claims</fullName>
+    <booleanFilter>1</booleanFilter>
+    <columns>NAME</columns>
+    <columns>Patient__c</columns>
+    <columns>Insurance_Company__c</columns>
+    <columns>Invoice_Number__c</columns>
+    <columns>Total_Charge__c</columns>
+    <columns>Patient_Downpayment_del__c</columns>
+    <columns>Insurance_Payment__c</columns>
+    <columns>Network_Discount_del__c</columns>
+    <columns>Claim_Balance_Due__c</columns>
+    <columns>Pending_Status__c</columns>
+    <columns>Collector__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>LAST_UPDATE</field>
+        <operation>lessThan</operation>
+        <value>NEXT_N_DAYS:45</value>
+    </filters>
+    <label>All Client Claims</label>
+</ListView>

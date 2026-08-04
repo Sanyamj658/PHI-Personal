@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Collectors at a Claim Payment Level --></help>
+    <label><!-- Collector --></label>
+    <name>Collector__c</name>
+    <picklistValues>
+        <masterLabel>Admin</masterLabel>
+        <translation><!-- Admin --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Administrator</masterLabel>
+        <translation><!-- Administrator --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Andrea Greenblatt</masterLabel>
+        <translation><!-- Andrea Greenblatt --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Ashton Kanhere</masterLabel>
+        <translation><!-- Ashton Kanhere --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Edward Lacey</masterLabel>
+        <translation><!-- Edward Lacey --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>External Collection</masterLabel>
+        <translation><!-- External Collection --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Giselle Ortez</masterLabel>
+        <translation><!-- Giselle Ortez --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Hilal Dar</masterLabel>
+        <translation><!-- Hilal Dar --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Joanne Sierra</masterLabel>
+        <translation><!-- Joanne Sierra --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Jose Reyes</masterLabel>
+        <translation><!-- Jose Reyes --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Karl Daskar</masterLabel>
+        <translation><!-- Karl Daskar --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Marc Gelb</masterLabel>
+        <translation><!-- Marc Gelb --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Moe Shannon</masterLabel>
+        <translation><!-- Moe Shannon --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Mohammad Musaib</masterLabel>
+        <translation><!-- Mohammad Musaib --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Mursaleen Nissar</masterLabel>
+        <translation><!-- Mursaleen Nissar --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Mursalin Mir</masterLabel>
+        <translation><!-- Mursalin Mir --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Nancy Shay</masterLabel>
+        <translation><!-- Nancy Shay --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Peter Freeman</masterLabel>
+        <translation><!-- Peter Freeman --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Shahid Shah</masterLabel>
+        <translation><!-- Shahid Shah --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Sharif Mohi</masterLabel>
+        <translation><!-- Sharif Mohi --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Steve Thomson</masterLabel>
+        <translation><!-- Steve Thomson --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Ubaldo Young</masterLabel>
+        <translation><!-- Ubaldo Young --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Uzaifa Qadir</masterLabel>
+        <translation><!-- Uzaifa Qadir --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Valerie Sheregar</masterLabel>
+        <translation><!-- Valerie Sheregar --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Vanessa Ambar</masterLabel>
+        <translation><!-- Vanessa Ambar --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

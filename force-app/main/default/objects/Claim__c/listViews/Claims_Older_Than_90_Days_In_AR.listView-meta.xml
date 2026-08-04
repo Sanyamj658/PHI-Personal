@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Claims_Older_Than_90_Days_In_AR</fullName>
+    <columns>NAME</columns>
+    <columns>Patient__c</columns>
+    <columns>Medical_Provider__c</columns>
+    <columns>Days_in_AR__c</columns>
+    <columns>Collector__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Days_in_AR__c</field>
+        <operation>greaterOrEqual</operation>
+        <value>90</value>
+    </filters>
+    <filters>
+        <field>Collector__c</field>
+        <operation>equals</operation>
+        <value>Administrator</value>
+    </filters>
+    <filters>
+        <field>Account_Status__c</field>
+        <operation>notEqual</operation>
+        <value>Closed</value>
+    </filters>
+    <label>Claims Older Than 90 Days In AR</label>
+</ListView>

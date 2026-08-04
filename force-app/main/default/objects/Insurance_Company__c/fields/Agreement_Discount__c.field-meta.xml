@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Agreement_Discount__c</fullName>
+    <description>Insurance, cost containment discounts, or Collection fees</description>
+    <inlineHelpText>Discounts Provided to Insurances or  Fees Charged by Collection Agency</inlineHelpText>
+    <label>Agreement Discount</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>All Medical Providers 10%</fullName>
+                <default>false</default>
+                <label>All Medical Providers 10%</label>
+            </value>
+            <value>
+                <fullName>All Medical Providers 15%</fullName>
+                <default>false</default>
+                <label>All Medical Providers 15%</label>
+            </value>
+            <value>
+                <fullName>ALS1 - Life $2,000</fullName>
+                <default>false</default>
+                <label>ALS1 - Life $2,000</label>
+            </value>
+            <value>
+                <fullName>ALS2 - Life $2,300</fullName>
+                <default>false</default>
+                <label>ALS2 - Life $2,300</label>
+            </value>
+            <value>
+                <fullName>AMC 10%</fullName>
+                <default>false</default>
+                <label>AMC 10%</label>
+            </value>
+            <value>
+                <fullName>AMC 15%</fullName>
+                <default>false</default>
+                <label>AMC 15%</label>
+            </value>
+            <value>
+                <fullName>AMC 5%</fullName>
+                <default>false</default>
+                <label>AMC 5%</label>
+            </value>
+            <value>
+                <fullName>Balboa - 10%</fullName>
+                <default>false</default>
+                <label>Balboa - 10%</label>
+            </value>
+            <value>
+                <fullName>Belize 10%</fullName>
+                <default>false</default>
+                <label>Belize 10%</label>
+            </value>
+            <value>
+                <fullName>Belize 15%</fullName>
+                <default>false</default>
+                <label>Belize 15%</label>
+            </value>
+            <value>
+                <fullName>BLS - Life $1,000</fullName>
+                <default>false</default>
+                <label>BLS - Life $1,000</label>
+            </value>
+            <value>
+                <fullName>BLS - Life $1,400</fullName>
+                <default>false</default>
+                <label>BLS - Life $1,400</label>
+            </value>
+            <value>
+                <fullName>Blue Net 10%</fullName>
+                <default>false</default>
+                <label>Blue Net 10%</label>
+            </value>
+            <value>
+                <fullName>Blue Net 15%</fullName>
+                <default>false</default>
+                <label>Blue Net 15%</label>
+            </value>
+            <value>
+                <fullName>Case by Case Only</fullName>
+                <default>false</default>
+                <label>Case by Case Only</label>
+            </value>
+            <value>
+                <fullName>CCI 15% Fee UK</fullName>
+                <default>false</default>
+                <label>CCI 15% Fee UK</label>
+            </value>
+            <value>
+                <fullName>CCI 20% Fee Europe</fullName>
+                <default>false</default>
+                <label>CCI 20% Fee Europe</label>
+            </value>
+            <value>
+                <fullName>CCI 30% Fee Rest of the World</fullName>
+                <default>false</default>
+                <label>CCI 30% Fee Rest of the World</label>
+            </value>
+            <value>
+                <fullName>Cliscap 10%</fullName>
+                <default>false</default>
+                <label>Cliscap 10%</label>
+            </value>
+            <value>
+                <fullName>Costamed 10%</fullName>
+                <default>false</default>
+                <label>Costamed 10%</label>
+            </value>
+            <value>
+                <fullName>Costamed 15%</fullName>
+                <default>false</default>
+                <label>Costamed 15%</label>
+            </value>
+            <value>
+                <fullName>Costamed 20%</fullName>
+                <default>false</default>
+                <label>Costamed 20%</label>
+            </value>
+            <value>
+                <fullName>Costamed 5%</fullName>
+                <default>false</default>
+                <label>Costamed 5%</label>
+            </value>
+            <value>
+                <fullName>CSG 35% Fee Above 12 month</fullName>
+                <default>false</default>
+                <label>CSG 35% Fee Above 12 month</label>
+            </value>
+            <value>
+                <fullName>Especialidades 10%</fullName>
+                <default>false</default>
+                <label>Especialidades 10%</label>
+            </value>
+            <value>
+                <fullName>Especialidades 15%</fullName>
+                <default>false</default>
+                <label>Especialidades 15%</label>
+            </value>
+            <value>
+                <fullName>GSC 25% Fee Below 12 month</fullName>
+                <default>false</default>
+                <label>GSC 25% Fee Below 12 month</label>
+            </value>
+            <value>
+                <fullName>Hospital H+ 10%</fullName>
+                <default>false</default>
+                <label>Hospital H+ 10%</label>
+            </value>
+            <value>
+                <fullName>Hospital H+ 15%</fullName>
+                <default>false</default>
+                <label>Hospital H+ 15%</label>
+            </value>
+            <value>
+                <fullName>HTH - Life $2,700</fullName>
+                <default>false</default>
+                <label>HTH - Life $2,700</label>
+            </value>
+            <value>
+                <fullName>IC System 20% Fee Below 12 month</fullName>
+                <default>false</default>
+                <label>IC System 20% Fee Below 12 month</label>
+            </value>
+            <value>
+                <fullName>IC System 40% Fee Above 12 month</fullName>
+                <default>false</default>
+                <label>IC System 40% Fee Above 12 month</label>
+            </value>
+            <value>
+                <fullName>Life 15%</fullName>
+                <default>false</default>
+                <label>Life 15%</label>
+            </value>
+            <value>
+                <fullName>Life 18%</fullName>
+                <default>false</default>
+                <label>Life 18%</label>
+            </value>
+            <value>
+                <fullName>Life 20%</fullName>
+                <default>false</default>
+                <label>Life 20%</label>
+            </value>
+            <value>
+                <fullName>Life 22%</fullName>
+                <default>false</default>
+                <label>Life 22%</label>
+            </value>
+            <value>
+                <fullName>Life 25%</fullName>
+                <default>false</default>
+                <label>Life 25%</label>
+            </value>
+            <value>
+                <fullName>Life 30%</fullName>
+                <default>false</default>
+                <label>Life 30%</label>
+            </value>
+            <value>
+                <fullName>Life - ALS1 / ALS2 2K</fullName>
+                <default>false</default>
+                <label>Life - ALS1 / ALS2 2K</label>
+            </value>
+            <value>
+                <fullName>Life - BLS1 $1K</fullName>
+                <default>false</default>
+                <label>Life - BLS1 $1K</label>
+            </value>
+            <value>
+                <fullName>Life - BLS2 $1400</fullName>
+                <default>false</default>
+                <label>Life - BLS2 $1400</label>
+            </value>
+            <value>
+                <fullName>Life - Desembark $2500</fullName>
+                <default>false</default>
+                <label>Life - Desembark $2500</label>
+            </value>
+            <value>
+                <fullName>Life - Mahahual $3500</fullName>
+                <default>false</default>
+                <label>Life - Mahahual $3500</label>
+            </value>
+            <value>
+                <fullName>Life - Med.Van $455</fullName>
+                <default>false</default>
+                <label>Life - Med.Van $455</label>
+            </value>
+            <value>
+                <fullName>Life - SCT $2200</fullName>
+                <default>false</default>
+                <label>Life - SCT $2200</label>
+            </value>
+            <value>
+                <fullName>MH - Life $7,500</fullName>
+                <default>false</default>
+                <label>MH - Life $7,500</label>
+            </value>
+            <value>
+                <fullName>Quirurgica 15%</fullName>
+                <default>false</default>
+                <label>Quirurgica 15%</label>
+            </value>
+            <value>
+                <fullName>Saint Luke 10%</fullName>
+                <default>false</default>
+                <label>Saint Luke 10%</label>
+            </value>
+            <value>
+                <fullName>Saint Luke 15%</fullName>
+                <default>false</default>
+                <label>Saint Luke 15%</label>
+            </value>
+            <value>
+                <fullName>Saint Luke 5%</fullName>
+                <default>false</default>
+                <label>Saint Luke 5%</label>
+            </value>
+            <value>
+                <fullName>SCT Cancun - Life $4,500</fullName>
+                <default>false</default>
+                <label>SCT Cancun - Life $4,500</label>
+            </value>
+            <value>
+                <fullName>SCT Riviera - Life $5,500</fullName>
+                <default>false</default>
+                <label>SCT Riviera - Life $5,500</label>
+            </value>
+            <value>
+                <fullName>Semetur 15%</fullName>
+                <default>false</default>
+                <label>Semetur 15%</label>
+            </value>
+            <value>
+                <fullName>Semetur 15 % Physician</fullName>
+                <default>false</default>
+                <label>Semetur 15 % Physician</label>
+            </value>
+            <value>
+                <fullName>Semetur 20%</fullName>
+                <default>false</default>
+                <label>Semetur 20%</label>
+            </value>
+            <value>
+                <fullName>Semetur 20 % Drugs</fullName>
+                <default>false</default>
+                <label>Semetur 20 % Drugs</label>
+            </value>
+            <value>
+                <fullName>Semetur 25%</fullName>
+                <default>false</default>
+                <label>Semetur 25%</label>
+            </value>
+            <value>
+                <fullName>Semetur 30%</fullName>
+                <default>false</default>
+                <label>Semetur 30%</label>
+            </value>
+            <value>
+                <fullName>Semetur 30% Physicians</fullName>
+                <default>false</default>
+                <label>Semetur 30% Physicians</label>
+            </value>
+            <value>
+                <fullName>Semetur 35% Drugs</fullName>
+                <default>false</default>
+                <label>Semetur 35% Drugs</label>
+            </value>
+            <value>
+                <fullName>Summit Collections -</fullName>
+                <default>false</default>
+                <label>Summit Collections -</label>
+            </value>
+            <value>
+                <fullName>TNT - Life $1,000</fullName>
+                <default>false</default>
+                <label>TNT - Life $1,000</label>
+            </value>
+            <value>
+                <fullName>Transword 30% USA, 50% Rest of the World</fullName>
+                <default>false</default>
+                <label>Transword 30% USA, 50% Rest of the World</label>
+            </value>
+            <value>
+                <fullName>Transworld $12 Fee Pre-collection</fullName>
+                <default>false</default>
+                <label>Transworld $12 Fee Pre-collection</label>
+            </value>
+            <value>
+                <fullName>Victoria 10%</fullName>
+                <default>false</default>
+                <label>Victoria 10%</label>
+            </value>
+            <value>
+                <fullName>Victoria 15%</fullName>
+                <default>false</default>
+                <label>Victoria 15%</label>
+            </value>
+            <value>
+                <fullName>Victoria 20%</fullName>
+                <default>false</default>
+                <label>Victoria 20%</label>
+            </value>
+            <value>
+                <fullName>Victoria 25%</fullName>
+                <default>false</default>
+                <label>Victoria 25%</label>
+            </value>
+            <value>
+                <fullName>Victoria 30%</fullName>
+                <default>false</default>
+                <label>Victoria 30%</label>
+            </value>
+            <value>
+                <fullName>Wood Medical - 10%</fullName>
+                <default>false</default>
+                <label>Wood Medical - 10%</label>
+            </value>
+            <value>
+                <fullName>Life -  CanAssist Agreed BLS $1K - ALS $2K - Med. Van $455</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Life -  CanAssist Agreed BLS $1K - ALS $2K - Med. Van $455</label>
+            </value>
+            <value>
+                <fullName>Semetur 10%</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Semetur 10%</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

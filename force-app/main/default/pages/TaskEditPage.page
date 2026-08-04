@@ -1,0 +1,73 @@
+<apex:page standardController="Task" extensions="TaskEditPageCtrl" title="Task: {!taskSubject}" action="{!init}">
+    <style>
+        .pbSubsection .labelCol,
+        .pbSubsection .dataCol {
+            border-top: none !important;
+            border-bottom: none !important;
+        }
+    </style>
+    <apex:outputPanel id="sectionheader">
+        <apex:sectionHeader title="Task" subtitle="{!taskSubject}" />
+    </apex:outputPanel>
+    <apex:form id="editPageForm">
+        <apex:pageMessages />
+        <apex:pageBlock id="editPageBlockId" title="Task Edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}" />
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection id="pbsecId" title="Task Information" columns="2" collapsible="false">
+                <apex:inputField value="{!Task.IsVisibleInSelfService}" />
+                <apex:inputField value="{!Task.OwnerId}" required="true" />
+                <apex:inputField value="{!Task.Subject}" required="true" id="subjectField"/>
+                <apex:inputField value="{!Task.Status}" required="true" />
+                <apex:inputField value="{!Task.Description}" />
+                <apex:inputField value="{!Task.Attorney__c}" />
+                <apex:inputField value="{!Task.ActivityDate}" required="true" />
+                <apex:inputField value="{!Task.Start_Time__c}" />
+                <apex:inputField value="{!Task.Priority}" required="true" />
+                <apex:inputField value="{!Task.Stop_Time__c}" />
+                <apex:inputField value="{!Task.Name__c}" required="true" />
+                <apex:inputField value="{!Task.Category__c}" required="true" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Related To" columns="2" collapsible="false">
+                <apex:inputField value="{!Task.WhoId}" />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Related To" for="selectedObject" style="display: inline-block; margin-right: 10px; vertical-align: middle;"/>                
+                    <apex:outputPanel style="display: inline-block; vertical-align: middle;">
+                        <apex:selectList id="selectedObject" value="{!objectAPIName}" size="1" style="display: inline-block; vertical-align: middle;">							
+                            <apex:selectOptions value="{!objectList}"></apex:selectOptions>
+                        </apex:selectList>
+                        <apex:outputPanel layout="block" style="display: inline-block; vertical-align: middle;">
+                            <apex:inputHidden id="parentRecordId" value="{!parentRecordIdValue}" />  
+                            <apex:inputText id="parentRecordName" value="{!parentRecordNameValue}" style="display: inline-block;" />
+                            <a href="javascript: openCustomGeneralLookup('{!$Component.parentRecordId}', '{!$Component.parentRecordName}', '{!$Component.selectedObject}', '{!$Component.parentRecordName}');" onclick="setLastMousePosition(event)" tabindex="6" title="Custom Lookup">
+                                <img src="/s.gif" alt="RelatedTo Template Lookup" class="lookupIcon" onfocus="this.className = 'lookupIconOn';" onblur="this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';" />
+                            </a>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!Task.Claim_Assigned_To__c}" required="true" />
+                <apex:inputField value="{!Task.Related_to_Complaints__c}" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    <script>
+    window.onload = function() {
+            var subjectInput = document.getElementById("j_id0:editPageForm:editPageBlockId:pbsecId:subjectField");
+            subjectInput.focus();
+        }
+       function openCustomGeneralLookup(parentRecordId, parentRecordName, selectedObject, selectedText){
+            let objectAPIName = document.getElementById(selectedObject).value;
+            let searchText = document.getElementById(selectedText).value;
+            let objectLabel = '';
+            if (objectAPIName == "Account") {
+                objectLabel = 'Medical Provider'
+            } else if (objectAPIName == "Insurance_Company__c") {
+                objectLabel = 'Insurance Company';  
+            } 
+            let url= '/apex/GeneralLookup?object=' + encodeURIComponent(objectAPIName) + '&lknm=' + encodeURIComponent(parentRecordName) + '&lkid=' + encodeURIComponent(parentRecordId) + '&label=' + objectLabel + '&lksrch='+searchText;
+            window.open(url, 'lookupWindow', 'width=800,height=600');
+        }
+    </script>
+</apex:page>

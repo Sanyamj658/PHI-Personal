@@ -1,0 +1,8 @@
+<apex:page action="{!if($User.Alias !='EKhan', null, urlFor($Action.Account.Delete, $CurrentPage.Parameters.id, [retURL='/a01/o'], true))}" standardController="Account">
+     <apex:pageBlock >
+        <apex:PageMessage summary="You are not allowed to delete Claims"
+            severity="Warning"
+            strength="3"/>
+        <apex:pageMessages />
+    </apex:pageBlock>
+</apex:page>

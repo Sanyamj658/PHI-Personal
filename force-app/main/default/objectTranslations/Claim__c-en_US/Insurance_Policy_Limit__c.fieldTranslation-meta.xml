@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Enter the maximum insurance policy limit for all insurance. If no limit, enter &quot;unlimited&quot;. If self-pay enters &quot;zero&quot;. If the policy limit is unknown then put &quot;zero&quot; until it is confirmed.Ex. $50,000 MAX --></help>
+    <label><!-- Insurance Policy Limit --></label>
+    <name>Insurance_Policy_Limit__c</name>
+</CustomFieldTranslation>

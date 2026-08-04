@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Claim_Payment_View</fullName>
+    <columns>NAME</columns>
+    <columns>Payment_Type__c</columns>
+    <columns>Amount__c</columns>
+    <columns>Collector__c</columns>
+    <columns>Payment_Date__c</columns>
+    <columns>Insurance_Payment__c</columns>
+    <columns>Insurance_Company_Name__c</columns>
+    <filterScope>Everything</filterScope>
+    <label>Claim Payment View</label>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

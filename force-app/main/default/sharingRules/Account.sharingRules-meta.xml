@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Aruba</fullName>
+        <accessLevel>Read</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>Read</caseAccessLevel>
+            <contactAccessLevel>Read</contactAccessLevel>
+            <opportunityAccessLevel>Read</opportunityAccessLevel>
+        </accountSettings>
+        <label>Aruba</label>
+        <sharedTo>
+            <group>Aruba</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Aruba Hospital</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Passage_3002</fullName>
+        <accessLevel>Read</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>Read</caseAccessLevel>
+            <contactAccessLevel>Read</contactAccessLevel>
+            <opportunityAccessLevel>Read</opportunityAccessLevel>
+        </accountSettings>
+        <label>Passage 3002</label>
+        <sharedTo>
+            <group>Passage_300</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>SEMETUR S.A. De C.V.</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Share_Record_to_Life_Mex_P100</fullName>
+        <accessLevel>Read</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>Read</caseAccessLevel>
+            <contactAccessLevel>Read</contactAccessLevel>
+            <opportunityAccessLevel>None</opportunityAccessLevel>
+        </accountSettings>
+        <description>This sharing rule is used to share records with below Medical Providers :</description>
+        <label>Share Record to Life Mex / P100</label>
+        <sharedTo>
+            <group>Life_Mex_P100</group>
+        </sharedTo>
+        <booleanFilter>1 OR 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8 or 9 or 10</booleanFilter>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>FarmaPronto</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances Cabo</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances Vallarta</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Medical Care Group S.C.</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>SEMETUR S.A. De C.V.</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Victoria Medical Cancun</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Hospital Quirurgica Del Sur</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Hospital Ixchel</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances Mahahual</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Share_Records_to_247_Group</fullName>
+        <accessLevel>Edit</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>Edit</caseAccessLevel>
+            <contactAccessLevel>Edit</contactAccessLevel>
+            <opportunityAccessLevel>Edit</opportunityAccessLevel>
+        </accountSettings>
+        <label>Share Records to 247 Group</label>
+        <sharedTo>
+            <group>X247_Group</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Medical Associates Ltd,Belize Medical Associates Ltd,Clinica Medica Monte Alban,Clinica Virgen de Guadalupe,Negril Lifecall</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Share_records_to_FWS</fullName>
+        <accessLevel>Edit</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>Edit</caseAccessLevel>
+            <contactAccessLevel>Edit</contactAccessLevel>
+            <opportunityAccessLevel>Edit</opportunityAccessLevel>
+        </accountSettings>
+        <description>This sharing rule is used to share records with below Medical Providers :</description>
+        <label>Share records to FWS</label>
+        <sharedTo>
+            <group>FWS</group>
+        </sharedTo>
+        <booleanFilter>1 OR 2 OR 3 OR 4 OR 5</booleanFilter>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances Cabo</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances Vallarta</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>SEMETUR S.A. De C.V.</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances Mahahual</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Share_records_to_Passage_200</fullName>
+        <accessLevel>Read</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>Read</caseAccessLevel>
+            <contactAccessLevel>Read</contactAccessLevel>
+            <opportunityAccessLevel>None</opportunityAccessLevel>
+        </accountSettings>
+        <description>This sharing rule is used to share records with below Medical Providers :</description>
+        <label>Share records to Passage 200</label>
+        <sharedTo>
+            <group>Passage_200</group>
+        </sharedTo>
+        <booleanFilter>1 AND 2</booleanFilter>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>contains</operation>
+            <value>Costamed</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>notContain</operation>
+            <value>Old</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Share_records_to_Passage_400</fullName>
+        <accessLevel>Read</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>Read</caseAccessLevel>
+            <contactAccessLevel>Read</contactAccessLevel>
+            <opportunityAccessLevel>None</opportunityAccessLevel>
+        </accountSettings>
+        <description>This sharing rule is used to share records with below Medical Providers :</description>
+        <label>Share records to Passage 400</label>
+        <sharedTo>
+            <group>Passage_400</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>AMC Hospitals</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Share_to_247_Group</fullName>
+        <accessLevel>Edit</accessLevel>
+        <accountSettings>
+            <caseAccessLevel>Edit</caseAccessLevel>
+            <contactAccessLevel>Edit</contactAccessLevel>
+            <opportunityAccessLevel>Edit</opportunityAccessLevel>
+        </accountSettings>
+        <label>Share to 247 Group</label>
+        <sharedTo>
+            <group>X247_Group</group>
+        </sharedTo>
+        <booleanFilter>1 OR 2 OR 3 OR 4 OR 4 OR 5 OR 6 OR 7 OR 8 OR 9 OR 10 OR 11 OR 12 OR 13 OR 14 OR 15 OR 16 OR 17 OR 18 OR 19 OR 20 OR 21 OR 22 OR 23 OR 24 OR 25</booleanFilter>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>contains</operation>
+            <value>AMC Hospitals</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Belize Healthcare Partners</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Blue Net Hospitals,SEMETUR S.A. De C.V.</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Victoria Medical Cancun - DIRECT</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Clinique Specialisée du Cap-Haitien</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>CMC Costamed-Cozumel</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>CMC Costamed-Playa Del Carmen</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>CMC Costamed-Puerto Morelos</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>CMC Costamed-Tulum</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Hospital de Especialidades</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Hospital H+</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Hospital Ixchel</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Hospital Quirurgica Del Sur</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>International Medical Center - Dominican Republic</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>International Medical Center - Mexico</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances Cabo</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances Mahahual</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Life Support Ambulances Vallarta</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Medica San Miguel de Cozumel</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Victoria Medical Cancun</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Saint Lukes Hospitals (Cabo San Lucas)</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Saint Lukes Hospitals (San Jose del Cabo)</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>Saint Lukes Hospitals (Sayulita Nayarit Vallarta)</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Name</field>
+            <operation>equals</operation>
+            <value>SOS Medical Group S.R.L.</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>false</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

@@ -1,0 +1,120 @@
+<template>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-button_icon-inverse slds-modal__close slds-button_icon slds-button_icon-inverse" onclick={closeModal} title="Close" aria-label="Close">
+                    <lightning-icon icon-name="utility:close" size="small" alternative-text="close" class="slds-button__icon slds-button__icon_large"></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 class="slds-text-heading_medium">{modalTitle}</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium">
+                <template if:true={isViewMode}>
+                    <div class="slds-box slds-theme_default">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <!-- Owner -->
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Attachment Owner</label>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">{attachment.ownerName}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Related To -->
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Related To</label>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">{attachment.parentName}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Private -->
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Private</label>
+                                    <div class="slds-form-element__control">
+                                        <lightning-input type="checkbox" checked={attachment.isPrivate} disabled class="view-checkbox"></lightning-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- File Name -->
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">File Name</label>
+                                    <div class="slds-form-element__control" style="word-wrap: break-word;">
+                                        <a href={viewAttachmentURL} target="_blank" class="slds-text-link slds-text-link_reset">
+                                            {attachment.name}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Description -->
+                            <div class="slds-col slds-size_1-of-1">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Description</label>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">{attachment.description}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- File Size -->
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Size</label>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">{attachment.fileSize}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Created By and Created Date -->
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Created By</label>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {attachment.createdByName},&nbsp;{attachment.createdDate}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Last Modified By and Last Modified Date -->
+                            <div class="slds-col slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label">Modified By</label>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {attachment.lastModifiedByName},&nbsp;{attachment.lastModifiedDate}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={isEditMode}>
+                    <lightning-input type="checkbox" label="Private" checked={editedAttachment.isPrivate} onchange={handlePrivateChange}></lightning-input>
+                    <lightning-input type="text" label="File Name" value={editedAttachment.name} onchange={handleNameChange} required></lightning-input>
+                    <lightning-textarea label="Description" value={editedAttachment.description} onchange={handleDescriptionChange}></lightning-textarea>
+                    <lightning-input type="text" label="File Size" value={editedAttachment.fileSize} disabled></lightning-input>
+                </template>
+            </div>
+            <footer class="slds-modal__footer">
+                <template if:true={isViewMode}>
+                    <div class="slds-grid slds-grid_align-end">
+                        <lightning-button variant="neutral" label="Edit" onclick={switchToEdit} class="slds-m-right_small"></lightning-button>
+                        <lightning-button variant="destructive" label="Delete" onclick={deleteHandler}></lightning-button>
+                    </div>
+                </template>
+                <template if:true={isEditMode}>
+                    <div class="slds-grid slds-grid_align-end">
+                        <lightning-button variant="neutral" label="Cancel" onclick={closeModal} class="slds-m-right_small"></lightning-button>
+                        <lightning-button variant="brand" label="Save" onclick={saveChanges}></lightning-button>
+                    </div>
+                </template>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" onclick={closeModal}></div>
+</template>

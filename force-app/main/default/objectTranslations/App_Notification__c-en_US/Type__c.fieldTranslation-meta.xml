@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Type --></label>
+    <name>Type__c</name>
+    <picklistValues>
+        <masterLabel>Claim Update</masterLabel>
+        <translation><!-- Claim Update --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Document Shared</masterLabel>
+        <translation><!-- Document Shared --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>General</masterLabel>
+        <translation><!-- General --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Payment Received</masterLabel>
+        <translation><!-- Payment Received --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Registration Approved</masterLabel>
+        <translation><!-- Registration Approved --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

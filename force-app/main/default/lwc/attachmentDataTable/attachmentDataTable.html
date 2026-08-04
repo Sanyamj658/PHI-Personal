@@ -1,0 +1,78 @@
+<template>
+    <div class="slds-card slds-card_boundary">
+        <!-- Header -->
+        <header class="slds-card__header slds-grid slds-theme_shade slds-border_bottom slds-m-bottom_none">
+            <div class="slds-media slds-m-bottom_medium slds-m-bottom_small slds-m-top_x-small slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="doctype:attachment" size="small"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span class="slds-truncate" title="Attachments">
+                            {attachmentTitle}
+                        </span>
+                    </h2>
+                </div>
+            </div>
+
+             <!-- Refresh Button -->
+             <div class="slds-no-flex" role="group">
+                <lightning-button-icon
+                    icon-name="utility:refresh"
+                    alternative-text="Refresh"
+                    title="Refresh Attachments"
+                    variant="border-filled"
+                    onclick={refreshAttachments}>
+                </lightning-button-icon>
+            </div>
+        </header>
+
+        <!-- Body -->
+        <div class="slds-p-bottom_small">  
+             <!-- Spinner -->
+             <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading..." size="medium" variant="brand"></lightning-spinner>
+            </template>
+
+            <template if:true={attachmentData}>
+                <template if:true={attachmentData.length}>
+                    <lightning-layout>
+                        <lightning-layout-item  style="max-height: 30rem;" >
+                            <lightning-datatable
+                                key-field="Id"
+                                data={attachmentData}
+                                columns={columns}
+                                hide-checkbox-column
+                                show-row-number-column
+                                onrowaction={handleRowAction}>
+                            </lightning-datatable>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+                
+                <template if:false={attachmentData.length}>
+                    <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-center slds-p-around_medium">
+                        <lightning-icon 
+                            icon-name="doctype:attachment"
+                            size="small"
+                            class="slds-m-right_small">
+                        </lightning-icon>
+                        <span class="slds-text-body_regular slds-text-color_weak">
+                            No Attachments to Display
+                        </span>
+                    </div>
+                </template>
+            </template>
+
+            <template if:true={isModalOpen}>
+                <c-attachment-modal 
+                    attachment={selectedAttachment} 
+                    mode={mode}
+                    onclose={closeModal}
+                    onsave={handleSave}
+                    ondelete={handleDelete}>
+                </c-attachment-modal>
+            </template>
+        </div>
+    </div>
+</template>

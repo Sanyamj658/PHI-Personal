@@ -1,0 +1,54 @@
+<template>
+	<lightning-card title="Patient Claim Report">
+		<template if:true={isLoading}>
+                        <lightning-spinner alternative-text="Loading...">
+                        </lightning-spinner>
+                </template>
+		<lightning-layout>
+			<lightning-accordion allow-multiple-sections-open="true" active-section-name={activeTabs} style="width: 100%;">
+                                <lightning-accordion-section label="Activity Due Date" name="Activity_Due_Date">
+					<lightning-layout>
+						<lightning-layout-item size="6" class="slds-align_absolute-center">
+							<lightning-input type="date" name="fromDate" label="From Date"
+								value={fromDate} onchange={handleDateChange} style="width: 65%;">
+							</lightning-input>
+						</lightning-layout-item>
+						<lightning-layout-item size="6" class="slds-align_absolute-center">
+							<lightning-input type="date" name="toDate" label="To Date"
+							value={toDate} onchange={handleDateChange} style="width: 65%;">
+						</lightning-input>
+						</lightning-layout-item>
+					</lightning-layout>
+				</lightning-accordion-section>
+				<lightning-accordion-section label="Advanced Search Filter" name="Advanced_Search_Filter">
+					<lightning-layout>
+						<lightning-layout-item size="6" class="slds-align_absolute-center">
+							<lightning-dual-listbox name="Collector"
+								label="Collector"
+								source-label="Available Collectors"
+								selected-label="Selected Collectors"
+								options={collectorOptions}
+								disable-reordering="true"
+								onchange={onCollectorDualListBoxChange}
+								style="width: 65%;"></lightning-dual-listbox>
+						</lightning-layout-item>
+						<lightning-layout-item size="6" class="slds-align_absolute-center">
+							<lightning-dual-listbox name="Medical Provider"
+								label="Medical Provider"
+								source-label="Available Providers"
+								selected-label="Selected Providers"
+								options={medicalProviderOptions}
+								disable-reordering="true"
+								onchange={onMedicalProviderDualListBoxChange}
+								style="width: 65%;"></lightning-dual-listbox>
+						</lightning-layout-item>
+					</lightning-layout>
+				</lightning-accordion-section>
+			</lightning-accordion>
+		</lightning-layout>
+		<lightning-layout class="slds-align_absolute-center slds-p-bottom_medium">
+			<lightning-button icon-name="utility:download" variant="brand" label="Export Report" onclick={onExportReport}>
+                        </lightning-button>
+		</lightning-layout>
+	</lightning-card>
+</template>

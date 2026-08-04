@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- The Collector must be selected from patient main page. A collector is not allow to change this tab. Ask Your Administrator. --></help>
+    <label><!-- Collector --></label>
+    <name>Collector__c</name>
+    <picklistValues>
+        <masterLabel>24 7</masterLabel>
+        <translation><!-- 24 7 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>A Greenblatt</masterLabel>
+        <translation><!-- A Greenblatt --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>A Kanhere</masterLabel>
+        <translation><!-- A Kanhere --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Admin</masterLabel>
+        <translation><!-- Admin --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Administrator</masterLabel>
+        <translation><!-- Administrator --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>E Lacey</masterLabel>
+        <translation><!-- E Lacey --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>External Collection</masterLabel>
+        <translation><!-- External Collection --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>G Ortez</masterLabel>
+        <translation><!-- G Ortez --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>H Dar</masterLabel>
+        <translation><!-- H Dar --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>J Reyes</masterLabel>
+        <translation><!-- J Reyes --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>J Sierra</masterLabel>
+        <translation><!-- J Sierra --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>K Daskar</masterLabel>
+        <translation><!-- K Daskar --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>M Mir</masterLabel>
+        <translation><!-- M Mir --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>M Musaib</masterLabel>
+        <translation><!-- M Musaib --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>M Nissar</masterLabel>
+        <translation><!-- M Nissar --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>M Shannon</masterLabel>
+        <translation><!-- M Shannon --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>N Shay</masterLabel>
+        <translation><!-- N Shay --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>P Freeman</masterLabel>
+        <translation><!-- P Freeman --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>S Mohi</masterLabel>
+        <translation><!-- S Mohi --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>S Shah</masterLabel>
+        <translation><!-- S Shah --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>S Thomson</masterLabel>
+        <translation><!-- S Thomson --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>U Qadir</masterLabel>
+        <translation><!-- U Qadir --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>U Young</masterLabel>
+        <translation><!-- U Young --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>V Ambar</masterLabel>
+        <translation><!-- V Ambar --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

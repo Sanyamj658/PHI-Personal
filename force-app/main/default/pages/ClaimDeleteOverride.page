@@ -1,0 +1,13 @@
+<apex:page standardcontroller="Claim__c" extensions="CheckDelete" action="{!checkDelete}">
+<style>
+h1
+{
+text-align:center;
+color:red;
+font-size:18px;
+}
+</style>
+<h1>
+Claim Cannot Be Deleted. 
+Click <apex:outputLink value="/{!Claim__c.id}">here</apex:outputLink> to return to the Claim page </h1>
+</apex:page>

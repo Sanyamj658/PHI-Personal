@@ -1,0 +1,60 @@
+<template>
+	<lightning-card title="Schedule Report">
+		<template if:true={isLoading}>
+                        <lightning-spinner alternative-text="Loading...">
+                        </lightning-spinner>
+                </template>
+		<lightning-layout multiple-rows="true">
+			<lightning-layout style="width: 100%;" class="slds-m-top_small slds-m-bottom_small">
+				<lightning-layout-item size="6" class="slds-align_absolute-center">
+					<lightning-combobox
+						required="true"
+						name="selectReport"
+						label="Select the Desired Report"
+						value={selectReport}
+						options={selectReportOptions}
+						onchange={handleDataChange}
+						style="width: 65%;"
+					></lightning-combobox>
+				</lightning-layout-item>
+				<lightning-layout-item size="6" class="slds-align_absolute-center">
+					<lightning-combobox
+						required="true"
+						name="selectContacts"
+						label="Select the Receipents/Contacts"
+						value={selectContacts}
+						options={selectContactOptions}
+						onchange={handleDataChange}
+						style="width: 65%;"
+					></lightning-combobox>
+				</lightning-layout-item>
+			</lightning-layout>
+			<lightning-layout style="width: 100%;" class="slds-m-top_small slds-m-bottom_small">
+				<lightning-layout-item size="6" class="slds-align_absolute-center">
+					<lightning-combobox
+						required="true"
+						name="selectReportFormat"
+						label="Select the Report Format"
+						value={selectReportFormat}
+						options={selectReportFormatOptions}
+						onchange={handleDataChange}
+						style="width: 65%;"
+					></lightning-combobox>
+				</lightning-layout-item>
+				<lightning-layout-item size="6" class="slds-align_absolute-center">
+					<lightning-textarea name="reportSubject" 
+						required="true"
+						label="Enter Mail Information/Subject" 
+						value={reportSubject} 
+						onchange={handleDataChange} 
+						style="width: 65%;"
+					></lightning-textarea>
+				</lightning-layout-item>
+			</lightning-layout>
+		</lightning-layout>
+		<lightning-layout class="slds-m-top_small slds-m-bottom_small slds-align_absolute-center slds-p-bottom_medium">
+			<lightning-button variant="brand" label="Save Report" onclick={onSaveReport}>
+                        </lightning-button>
+		</lightning-layout>
+	</lightning-card>
+</template>

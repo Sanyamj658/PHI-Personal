@@ -1,0 +1,16 @@
+.THIS .contentPanel:before,
+.THIS .contentPanel:after {
+    content: " ";
+    display: table;
+}
+.THIS .contentPanel:after {
+    clear: both;
+}
+.THIS .left {
+    float: left;
+    width: 66%;
+}
+.THIS .right {
+    float: right;
+    width: 33.33%;
+}

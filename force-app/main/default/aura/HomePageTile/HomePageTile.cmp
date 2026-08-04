@@ -1,0 +1,126 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <!--link rel="stylesheet" id="mediaelement-css" href="https://passagehi.com/wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css?ver=4.2.6-78496d1" type="text/css" media="all"/>
+    <link rel="stylesheet" id="avia-merged-styles-css" href="https://passagehi.com/wp-content/uploads/dynamic_avia/avia-merged-styles-797fea3db702b70e894c213c5c9fae57.css" type="text/css" media="all"/>
+    <link rel="stylesheet" id="wp-mediaelement-css" href="https://passagehi.com/wp-includes/js/mediaelement/wp-mediaelement.min.css?ver=5.2.7" type="text/css" media="all"/>
+    <link rel="stylesheet" id="parent-style-css" href="https://passagehi.com/wp-content/themes/enfold/style.css?ver=5.2.7" type="text/css" media="all"/>
+    <link rel="stylesheet" id="fv_flowplayer-css" href="https://passagehi.com/wp-content/fv-flowplayer-custom/style-1.css?ver=1569380579" type="text/css" media="all"/>
+    <link rel="stylesheet" id="wp-block-library-css" href="https://passagehi.com/wp-includes/css/dist/block-library/style.min.css?ver=5.2.7" type="text/css" media="all"/>
+    <link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,600" id="avia-google-webfont"/-->
+    
+    <div id="av_section_1" class="main_color avia-section-default avia-no-border-styling avia-full-stretch avia-bg-style-scroll  avia-builder-el-0  el_before_av_section  avia-builder-el-first   av-small-hide av-mini-hide container_wrap fullsize" style="background-repeat: no-repeat; background-image: url(https://passagehi.com/wp-content/uploads/2019/05/gray-bg.jpg);background-attachment: scroll; background-position: center center; " data-section-bg-repeat="stretch">
+        <video controls="controls" 
+               poster="https://passagehi.com/wp-content/uploads/2019/06/splash-screen.jpg">
+            
+            <source src="https://passagehi.com/PHiX-720p.mp4" type="video/mp4" />
+        </video>
+    </div>
+    
+    <!--div id="av-layout-grid-1" class="av-layout-grid-container entry-content-wrapper main_color av-fixed-cells    avia-builder-el-4  el_after_av_section  el_before_av_section  submenu-not-first container_wrap fullsize">
+        <div class="flex_cell no_margin av_one_half  avia-builder-el-5  el_before_av_cell_one_half  avia-builder-el-first" style ="vertical-align:top; padding:9px 0px 0px 0px ; background-color:#2388c2; ">
+            <div class="flex_cell_inner">
+            </div>
+        </div>
+        <div class="flex_cell no_margin av_one_half  avia-builder-el-6  el_after_av_cell_one_half  avia-builder-el-last   " style="vertical-align:top; padding:9px 0px 0px 0px ; background-color:#5fb4e4; ">
+            <div class="flex_cell_inner">
+            </div>
+        </div>
+    </div-->
+    
+    <!--div id="av_section_3" class="avia-section-huge avia-no-border-styling avia-bg-style-scroll  avia-builder-el-7  el_after_av_layout_row  el_before_av_section   container_wrap fullsize" style="background-color: #f4f4f4; background-image: ">
+        <div class="container">
+            <div class="template-page content  av-content-full alpha units">
+                <div class="post-entry post-entry-type-page post-entry-330">
+                    <div class="entry-content-wrapper clearfix">
+                        <div class="flex_column_table av-equal-height-column-flextable -flextable" style="margin-top:-155px; margin-bottom:-5%; ">
+                            <div class="flex_column av_one_third  no_margin flex_column_table_cell av-equal-height-column av-align-top first  avia-builder-el-8  el_before_av_one_third  avia-builder-el-first  " style="background: #2388c2; padding:40px; background-color:#2388c2; border-radius:0px; ">
+                                <span class="av_font_icon avia_animate_when_visible  av-icon-style-  avia-icon-pos-center  avia_start_animation avia_start_delayed_animation" style="color:#ffffff; border-color:#ffffff;">
+                                    <span class="av-icon-char" style="font-size:60px;line-height:60px;" aria-hidden="true" data-av_icon="" data-av_iconfont="entypo-fontello"></span>
+                                </span>
+                                <div style="height:20px" class="hr hr-invisible   avia-builder-el-10  el_after_av_font_icon  el_before_av_textblock ">
+                                    <span class="hr-inner ">
+                                        <span class="hr-inner-style"></span>
+                                    </span>
+                                </div>
+                                <section class="av_textblock_section " itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+                                    <div class="avia_textblock  av_inherit_color " style="color:#ffffff; " itemprop="text">
+                                        <h4 style="text-align: center;font-size:1.75em;">BENEFIT &amp; ELIGIBILITY SCREENING</h4>
+                                        <p style="text-align: center;">We are your first line of defense against unpaid medical accounts.</p>
+                                    </div>
+                                </section>
+                                <div style="height:8px" class="hr hr-invisible   avia-builder-el-12  el_after_av_textblock  el_before_av_button ">
+                                    <span class="hr-inner ">
+                                        <span class="hr-inner-style"></span>
+                                    </span>
+                                </div>
+                                <div class="avia-button-wrap avia-button-center  avia-builder-el-13  el_after_av_hr  avia-builder-el-last ">
+                                    <a style = "color: #fff;border: 3px solid #fff;background: transparent;" 
+                                       href="https://passagehi.com/benefit-and-eligibility-screening/" class="avia-button   avia-icon_select-no avia-color-light avia-size-medium avia-position-center ">
+                                        <span class="avia_iconbox_title">LEARN MORE</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="flex_column av_one_third  no_margin flex_column_table_cell av-equal-height-column av-align-top   avia-builder-el-14  el_after_av_one_third  el_before_av_one_third  " style="padding-bottom: 44px !important;padding:40px; background-color:#379cd6; border-radius:0px; ">
+                                <span class="av_font_icon avia_animate_when_visible  av-icon-style-  avia-icon-pos-center  avia_start_animation avia_start_delayed_animation" style="color:#ffffff; border-color:#ffffff;">
+                                    <span class="av-icon-char" style="font-size:60px;line-height:60px;" aria-hidden="true" data-av_icon="" data-av_iconfont="entypo-fontello"></span>
+                                </span>
+                                <div style="height:20px" class="hr hr-invisible   avia-builder-el-16  el_after_av_font_icon  el_before_av_textblock ">
+                                    <span class="hr-inner ">
+                                        <span class="hr-inner-style"></span>
+                                    </span>
+                                </div>
+                                <section class="av_textblock_section " itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+                                    <div class="avia_textblock  av_inherit_color " style="color:#ffffff; " itemprop="text">
+                                        <h4 style="text-align: center;font-size:1.75em;">MEDICAL BILL AUDITS</h4>
+                                        <p style="text-align: center;">Processing errors often result in delayed or denied payments. We fix that.</p>
+                                    </div>
+                                </section>
+                                <div style="height:8px" class="hr hr-invisible   avia-builder-el-18  el_after_av_textblock  el_before_av_button ">
+                                    <span class="hr-inner ">
+                                        <span class="hr-inner-style"></span>
+                                    </span>
+                                </div>
+                                <div class="avia-button-wrap avia-button-center  avia-builder-el-19  el_after_av_hr  avia-builder-el-last ">
+                                    <a style = "color: #fff;border: 3px solid #fff;background: transparent;" 
+                                       href="https://passagehi.com/medical-bill-reviews-and-audits/" class="avia-button   avia-icon_select-no avia-color-light avia-size-medium avia-position-center ">
+                                        <span class="avia_iconbox_title">LEARN MORE</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="flex_column av_one_third  no_margin flex_column_table_cell av-equal-height-column av-align-top   avia-builder-el-20  el_after_av_one_third  avia-builder-el-last  " style="padding-bottom: 44px !important;padding:40px; background-color:#5fb4e4; border-radius:0px; ">
+                                <span class="av_font_icon avia_animate_when_visible  av-icon-style-  avia-icon-pos-center  avia_start_animation avia_start_delayed_animation" style="color:#ffffff; border-color:#ffffff;">
+                                    <span class="av-icon-char" style="font-size:60px;line-height:60px;" aria-hidden="true" data-av_icon="" data-av_iconfont="entypo-fontello"></span>
+                                </span>
+                                <div style="height:20px" class="hr hr-invisible   avia-builder-el-22  el_after_av_font_icon  el_before_av_textblock ">
+                                    <span class="hr-inner ">
+                                        <span class="hr-inner-style"></span>
+                                    </span>
+                                </div>
+                                <section class="av_textblock_section " itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+                                    <div class="avia_textblock  av_inherit_color " style="color:#ffffff; " itemprop="text">
+                                        <h4 style="text-align: center; font-size: 1.75em;">RECEIVABLES MANAGEMENT</h4>
+                                        <p style="text-align: center;">Our team gets international patients the care they need when they need it.</p>
+                                    </div>
+                                </section>
+                                <div style="height:8px" class="hr hr-invisible   avia-builder-el-24  el_after_av_textblock  el_before_av_button ">
+                                    <span class="hr-inner ">
+                                        <span class="hr-inner-style"></span>
+                                    </span>
+                                </div>
+                                <div class="avia-button-wrap avia-button-center  avia-builder-el-25  el_after_av_hr  avia-builder-el-last ">
+                                    <a style = "color: #fff;border: 3px solid #fff;background: transparent;" 
+                                       href="https://passagehi.com/benefit-and-eligibility-screening/" class="avia-button   avia-icon_select-no avia-color-light avia-size-medium avia-position-center ">
+                                        <span class="avia_iconbox_title">LEARN MORE</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div-->
+    
+    
+</aura:component>

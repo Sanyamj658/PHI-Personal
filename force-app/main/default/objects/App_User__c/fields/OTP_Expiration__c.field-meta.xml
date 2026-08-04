@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OTP_Expiration__c</fullName>
+    <description>Stores the expiration time for the one-time password.</description>
+    <inlineHelpText>Enter the time when the OTP expires.</inlineHelpText>
+    <label>OTP Expiration</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

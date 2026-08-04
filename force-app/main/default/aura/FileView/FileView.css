@@ -1,0 +1,16 @@
+.THIS div.pointer {
+    cursor: pointer;
+}
+
+.THIS .link{
+	color: rgb(85, 158, 222);
+}
+
+.THIS .fontSize{
+    font-size: 12px;
+    color: rgb(90, 90, 90);
+}
+
+.THIS .cardHeader{
+   	padding: 0.5rem 1rem 0.5rem 1rem;
+}

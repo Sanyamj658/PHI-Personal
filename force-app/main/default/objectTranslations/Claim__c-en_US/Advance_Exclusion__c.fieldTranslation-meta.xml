@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>
+        <!-- 1- Client cash advance program minus insurance maximum policy. 
+2- Claims that no longer qualify for the advance program. -->
+    </help>
+    <label><!-- Advance Exclusion --></label>
+    <name>Advance_Exclusion__c</name>
+</CustomFieldTranslation>

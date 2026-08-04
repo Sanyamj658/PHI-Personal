@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Authorization department phone number. Call this number to request hospitalization approval from Ins. Co. --></help>
+    <label><!-- Pre Cert. - Auth. Phone --></label>
+    <name>Pre_Cert_Auth_Phone__c</name>
+</CustomFieldTranslation>

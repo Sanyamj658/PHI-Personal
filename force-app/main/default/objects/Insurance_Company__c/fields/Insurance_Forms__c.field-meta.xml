@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Insurance_Forms__c</fullName>
+    <inlineHelpText>Claim form must be send with each VOB to the provider if required  by Insurance.</inlineHelpText>
+    <label>Insurance Forms Required</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Yes, scroll down to Notes &amp; Attachments to find form(s)</fullName>
+                <color>#33FFFF</color>
+                <default>false</default>
+                <label>Yes, scroll down to Notes &amp; Attachments to find form(s)</label>
+            </value>
+            <value>
+                <fullName>No</fullName>
+                <color>#FF6666</color>
+                <default>false</default>
+                <label>No</label>
+            </value>
+            <value>
+                <fullName>Ask Insurance Co.</fullName>
+                <color>#FFFF66</color>
+                <default>false</default>
+                <label>Ask Insurance Co.</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

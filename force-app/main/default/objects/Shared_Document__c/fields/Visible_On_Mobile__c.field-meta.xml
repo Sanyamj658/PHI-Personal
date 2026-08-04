@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Visible_On_Mobile__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>When true, this document is visible to the App User on the mobile application.</description>
+    <inlineHelpText>Enable this to make the shared document visible in the mobile app.</inlineHelpText>
+    <label>Visible On Mobile</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

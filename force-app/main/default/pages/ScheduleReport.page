@@ -1,0 +1,31 @@
+<apex:page controller="ScheduleReportController">
+<apex:pageMessages ></apex:pageMessages>
+<apex:form id="form1">
+<apex:pageBlock >
+<apex:pageBlockSection id="pbs" title="Select the Desired Report" columns="2">
+<apex:selectList label="Select Report" multiselect="false" size="1" value="{!selectedReport}">
+<apex:SelectOptions value="{!reportList}"></apex:SelectOptions>
+</apex:selectList>
+</apex:pageBlockSection>
+<apex:pageBlockSection id="pbs2" title="Select the Receipents" columns="2">
+<apex:selectList label="Select Clients" multiselect="false" value="{!selectedContact}" size="1">
+<apex:SelectOptions value="{!contactList}"></apex:SelectOptions>
+</apex:selectList>
+</apex:pageBlockSection>
+<apex:pageBlockSection id="pbs3" title="Select the Report Format" columns="2">
+<apex:selectList label="Select Report Format" multiselect="false" value="{!selectedReportFormat}" size="1">
+<apex:SelectOptions value="{!reportFormats}"></apex:SelectOptions>
+</apex:selectList>
+</apex:pageBlockSection>
+<apex:pageBlockSection id="pbs4" title="Select Mail Information" columns="1">
+<apex:inputTextArea label="Enter the Subject" value="{!subject}" />
+</apex:pageBlockSection>
+</apex:pageBlock>
+<apex:pageBlock >
+<apex:pageBlockButtons location="bottom">
+<apex:commandButton value="Save" action="{!Save}"/>
+<apex:commandButton value="Cancel" action="{!Cancel}"/>
+</apex:pageBlockButtons>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

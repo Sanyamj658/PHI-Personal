@@ -1,0 +1,29 @@
+<template>
+    <div class="slds-p-around_medium slds-text-align_center">
+        
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+
+        <div class="slds-m-bottom_large slds-text-heading_small">
+            {statusMessage}
+        </div>
+
+        <div class="slds-m-top_medium">
+            <lightning-button 
+                label="Cancel" 
+                onclick={handleCancel} 
+                class="slds-m-right_x-small">
+            </lightning-button>
+            
+            <lightning-button 
+                variant="brand" 
+                label="Send Invite" 
+                icon-name="utility:send" 
+                disabled={buttonDisabled} 
+                onclick={handleSendInvitation}>
+            </lightning-button>
+        </div>
+
+    </div>
+</template>

@@ -1,0 +1,18 @@
+<aura:component implements="forceCommunity:layout" description="Custom Content Layout" access="global">
+    
+    <aura:attribute name="leftVal" type="Aura.Component[]" required="false"></aura:attribute>
+    <aura:attribute name="rightVal" type="Aura.Component[]" required="false"></aura:attribute>
+    
+    <div class="container">
+        <div class="contentPanel">
+            <div class="row">
+                <div class="left">
+                    {!v.leftVal}
+                </div>
+                <div class="right">
+                    {!v.rightVal}
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

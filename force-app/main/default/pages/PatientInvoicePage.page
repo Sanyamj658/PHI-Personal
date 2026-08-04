@@ -1,0 +1,179 @@
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    * Author: Techila Global Services Pvt Ltd. (Gaurav Agrawal)
+    * VF Page Name: PatientInvoice
+    * Created Date: 09-January-2017
+    * Description: Page to show Invoices on Button 
+    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
+    <apex:page standardController="Contact" extensions="PatientInvoiceControllerX" cache="true" standardStylesheets="false" sidebar="false" showHeader="false">
+    
+        <style>
+            table {
+                border: 1px solid black;
+                width: 60%;
+            }
+        </style>
+        <center>
+            <br/>
+            <br/>
+            <table rules="cols" style="height: 470px;">
+                <tr>
+                    <td style="padding-left: 46px;"> <b> {!objAccount.Name}</b> </td>
+                    <td style="width: 590px;"></td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 46px;"> 5900 N ANDREWS AVE. STE 802 </td>
+                    <td style="padding-left: 30px;"><b>PATIENT STATEMENT</b></td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 46px;"> FORT LAUDERDALE FL. 33309 </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="height: 18px;"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="height: 18px;"></td>
+                    <td></td>
+                </tr>
+    
+                <tr>
+                    <td style="padding-left: 46px; background-color: #808080;"><b> TO:</b></td>
+                    <td style="padding-left: 30px;"><b>PATIENT </b>&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{!objContact.Name}</td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 46px;">{!objContact.Name}</td>
+                    <td style="padding-left: 30px;"> <b>DOB</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;
+                        <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                            <apex:param value="{!contact.Date_of_Birth__c}" />
+                        </apex:outputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 46px;">{!objContact.MailingStreet}</td>
+                    <td style="padding-left: 30px;"><b>CLAIM No</b> &nbsp;:&nbsp;{!ClaimList[0].Name}</td>
+                </tr>
+    
+                <tr>
+                     <td style="padding-left: 46px;">{!objContact.MailingCity}&nbsp;{!objContact.MailingState}&nbsp;{!objContact.MailingPostalcode}&nbsp;{!objContact.MailingCountry}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="height: 18px;"></td>
+                    <td></td>
+                </tr>
+    
+                <tr>
+                    <td style="padding-left: 46px; background-color: #808080;"><b>Pay By Credit Card at:</b></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 46px;"><a href="https://pay.instamed.com/PASSHEALTH">https://pay.instamed.com/PASSHEALTH</a></td>
+                    <td></td>
+                </tr>
+    
+                <tr>
+                    <td style="height: 18px;"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="height: 18px;"></td>
+                    <td></td>
+                </tr>
+    
+                <tr>
+                    <td style="padding-left: 46px; background-color: #808080;"><b>Submit Payment By Check To:</b></td>
+                    <td style="padding-left: 30px; background-color: #808080;"><b>By Wire Transfer to </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp; BANK OF AMERICA</td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 46px;">{!objAccount.Name}</td>
+                    <td style="padding-left: 30px;"><b>Account Name </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp; Passage Health International</td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 46px;"> Attn: International Billing Office</td>
+                    <td style="padding-left: 30px;"> <b>Account Number</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp; 229047101905</td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 46px;"> 5900 N ANDREWS AVE. STE 802 </td>
+                    <td style="padding-left: 30px;"> <b>ABA</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp; 063100277</td>   
+                </tr>
+                <tr>
+                    <td style="padding-left: 46px;"> FORT LAUDERDALE FL. 33309 </td>
+                    <td style="padding-left: 30px;"><b> Bank Address </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp; 1745 E Sunrise Blvd Ft. Lauderdale FL 33304</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="padding-left: 30px;"> <b>Swift Code from USA </b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp; BOFAUS 3 N</td>
+                </tr>
+                <tr>                   
+                    <td></td>
+                    <td style="padding-left: 30px;"> <b>Swift Code from Overseas </b>&nbsp;:&nbsp; BOFAUS 6 N</td>
+                </tr>
+            </table>
+    
+        </center>
+        <center>
+        <table>
+            <tr>
+                <td>
+                    FOR BILLING INQUIRIES CALL: 1 (954) 526 9751 FAX: 1 (954) 376 6163 EMAIL: INFO@INTERNATIONALBILLINGOFFICE.COM
+                </td>
+            </tr>
+        </table>
+        </center>
+        <center>
+            <table rules="all" style="text-align: center;">
+    
+                <tr style="background-color: #808080;">
+                    <th style="width: 395px;">DATE OF SERVICE</th>
+                    <th>DESCRIPTION</th>
+                    <th style="width: 212px;">BALANCE DUE IN USD</th>
+                </tr>
+                <apex:repeat value="{!ClaimList}" var="CList">
+                    <tr>
+                        <td>
+                            <apex:outputText value="{0, date, MM'/' dd'/'  yyyy}">
+                                <apex:param value="{!CList.From_DOS__c}" />
+                            </apex:outputText> TO
+                            <apex:outputText value="{0, date, MM'/' dd'/'  yyyy}">
+                                <apex:param value="{!CList.To_DOS__c}" />
+                            </apex:outputText>
+                        </td>
+                        <td>Medical or Ambulance Services</td>
+                        <td><span>$</span><span>{!balanceDue}</span></td>                                          
+                    </tr>
+                </apex:repeat>                                     
+            </table>
+            <apex:outputpanel rendered="{!if(ClaimList.size>0,true,false)}">
+            <table rules="cols">        
+              <!--  <tr>                                        
+                    <td><span></span><span></span></td>
+                    <th style="text-align: left; width: 212px;">TOTAL CHARGES</th>
+                    <td style="width: 110px;"><span>$</span><span>{!totalCharge}</span></td>
+                </tr>
+                <tr>                            
+                    <td><span></span><span></span></td>
+                    <th style="text-align: left; width: 212px;"><span>SUM OF PAYMENTS</span></th>
+                    <td style="width: 110px;"><span>$</span><span>{!totalPayments}</span></td>
+                </tr> -->
+                <tr>                            
+                </tr>           
+            </table>
+                <tr>
+                <td>
+                         **Please pay before 30 days from this notice date to avoid collection activity**  
+                 </td>  
+                 </tr>      
+            </apex:outputpanel>
+        </center>
+        <br/>
+        <br/>
+        <center>
+            <apex:form >
+                <apex:commandButton value="Export To Excel" action="{!downloadExcel}" style="margin-right:16px;" />
+                <apex:commandButton value="Back" action="{!cancel}" style="margin-right:49px;" />
+            </apex:form>
+        </center>
+    
+    </apex:page>

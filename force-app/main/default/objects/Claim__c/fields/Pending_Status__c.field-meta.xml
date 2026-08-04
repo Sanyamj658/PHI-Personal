@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pending_Status__c</fullName>
+    <description>The reason why the claim is pending</description>
+    <inlineHelpText>Claim status</inlineHelpText>
+    <label>Pending Status</label>
+    <required>true</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Advance Paid To Provider</fullName>
+                <default>false</default>
+                <label>Advance Paid To Provider</label>
+            </value>
+            <value>
+                <fullName>Cash On Hold</fullName>
+                <default>false</default>
+                <label>Cash On Hold</label>
+            </value>
+            <value>
+                <fullName>Claim in Process</fullName>
+                <default>true</default>
+                <label>Claim in Process</label>
+            </value>
+            <value>
+                <fullName>Client Received Partial Payment</fullName>
+                <default>false</default>
+                <label>Client Received Partial Payment</label>
+            </value>
+            <value>
+                <fullName>Client Received Partial Payment ( Legal)</fullName>
+                <default>false</default>
+                <label>Client Received Partial Payment ( Legal)</label>
+            </value>
+            <value>
+                <fullName>Client Received Payment</fullName>
+                <default>false</default>
+                <label>Client Received Payment</label>
+            </value>
+            <value>
+                <fullName>Courtesy Write Off / Ambulance</fullName>
+                <default>false</default>
+                <label>Courtesy Write Off / Ambulance</label>
+            </value>
+            <value>
+                <fullName>Credit Revenue</fullName>
+                <default>false</default>
+                <label>Credit Revenue</label>
+            </value>
+            <value>
+                <fullName>Duplicate Claim / Error</fullName>
+                <default>false</default>
+                <label>Duplicate Claim / Error</label>
+            </value>
+            <value>
+                <fullName>Insurance refund processed paid</fullName>
+                <default>false</default>
+                <label>Insurance refund processed paid</label>
+            </value>
+            <value>
+                <fullName>Patient refund processed paid</fullName>
+                <default>false</default>
+                <label>Patient refund processed paid</label>
+            </value>
+            <value>
+                <fullName>Payment Plan</fullName>
+                <default>false</default>
+                <label>Payment Plan</label>
+            </value>
+            <value>
+                <fullName>Payment Plan (Legal)</fullName>
+                <default>false</default>
+                <label>Payment Plan (Legal)</label>
+            </value>
+            <value>
+                <fullName>Payment Received</fullName>
+                <default>false</default>
+                <label>Payment Received</label>
+            </value>
+            <value>
+                <fullName>Payment Received Partial</fullName>
+                <default>false</default>
+                <label>Payment Received Partial</label>
+            </value>
+            <value>
+                <fullName>Payment Received Partial ( Legal)</fullName>
+                <default>false</default>
+                <label>Payment Received Partial ( Legal)</label>
+            </value>
+            <value>
+                <fullName>Pending Balance from Patient</fullName>
+                <default>false</default>
+                <label>Pending Balance from Patient</label>
+            </value>
+            <value>
+                <fullName>Pending Balance from Patient (Legal)</fullName>
+                <default>false</default>
+                <label>Pending Balance from Patient (Legal)</label>
+            </value>
+            <value>
+                <fullName>Pending Payment from Insurance</fullName>
+                <default>false</default>
+                <label>Pending Payment from Insurance</label>
+            </value>
+            <value>
+                <fullName>Pending Payment from Insurance (Legal)</fullName>
+                <default>false</default>
+                <label>Pending Payment from Insurance (Legal)</label>
+            </value>
+            <value>
+                <fullName>Pending Payment from Patient</fullName>
+                <default>false</default>
+                <label>Pending Payment from Patient</label>
+            </value>
+            <value>
+                <fullName>Pending Payment from Patient (Legal)</fullName>
+                <default>false</default>
+                <label>Pending Payment from Patient (Legal)</label>
+            </value>
+            <value>
+                <fullName>Pending Payment from Secondary Insurance</fullName>
+                <default>false</default>
+                <label>Pending Payment from Secondary Insurance</label>
+            </value>
+            <value>
+                <fullName>PHIR</fullName>
+                <default>false</default>
+                <label>PHIR</label>
+            </value>
+            <value>
+                <fullName>Probate</fullName>
+                <default>false</default>
+                <label>Probate</label>
+            </value>
+            <value>
+                <fullName>Refund Due Patient On HOLD</fullName>
+                <default>false</default>
+                <label>Refund Due Patient On HOLD</label>
+            </value>
+            <value>
+                <fullName>Refund Processed &amp; Paid</fullName>
+                <default>false</default>
+                <label>Refund Processed &amp; Paid</label>
+            </value>
+            <value>
+                <fullName>Refund Returned</fullName>
+                <default>false</default>
+                <label>Refund Returned</label>
+            </value>
+            <value>
+                <fullName>Refund To Be Processed Insurance</fullName>
+                <default>false</default>
+                <label>Refund To Be Processed Insurance</label>
+            </value>
+            <value>
+                <fullName>Refund To Be Processed Patient</fullName>
+                <default>false</default>
+                <label>Refund To Be Processed Patient</label>
+            </value>
+            <value>
+                <fullName>Suspended</fullName>
+                <default>false</default>
+                <label>Suspended</label>
+            </value>
+            <value>
+                <fullName>Uncollectible</fullName>
+                <default>false</default>
+                <label>Uncollectible</label>
+            </value>
+            <value>
+                <fullName>Uncollectible / Partial Payment Received</fullName>
+                <default>false</default>
+                <label>Uncollectible / Partial Payment Received</label>
+            </value>
+            <value>
+                <fullName>Wire Deposit</fullName>
+                <default>false</default>
+                <label>Wire Deposit</label>
+            </value>
+            <value>
+                <fullName>Write-Off</fullName>
+                <default>false</default>
+                <label>Write-Off</label>
+            </value>
+            <value>
+                <fullName>Write Off / Partial Payment Received</fullName>
+                <default>false</default>
+                <label>Write Off / Partial Payment Received</label>
+            </value>
+            <value>
+                <fullName>•	Contract Active</fullName>
+                <default>false</default>
+                <label>•	Contract Active</label>
+            </value>
+            <value>
+                <fullName>•	Contract Review</fullName>
+                <default>false</default>
+                <label>•	Contract Review</label>
+            </value>
+            <value>
+                <fullName>•	Contract Signed</fullName>
+                <default>false</default>
+                <label>•	Contract Signed</label>
+            </value>
+            <value>
+                <fullName>•	Implementation</fullName>
+                <default>false</default>
+                <label>•	Implementation</label>
+            </value>
+            <value>
+                <fullName>•	Proposal Under Review</fullName>
+                <default>false</default>
+                <label>•	Proposal Under Review</label>
+            </value>
+            <value>
+                <fullName>Claim Completed</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Claim Completed</label>
+            </value>
+            <value>
+                <fullName>New Invoice from Client</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>New Invoice from Client</label>
+            </value>
+            <value>
+                <fullName>Off-Site Deposit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Off-Site Deposit</label>
+            </value>
+            <value>
+                <fullName>On-Site Deposit</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>On-Site Deposit</label>
+            </value>
+            <value>
+                <fullName>Pending Additional Payment from Insurance</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pending Additional Payment from Insurance</label>
+            </value>
+            <value>
+                <fullName>Pending Adjustment Approval</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pending Adjustment Approval</label>
+            </value>
+            <value>
+                <fullName>Pending DX Review</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pending DX Review</label>
+            </value>
+            <value>
+                <fullName>Pending Info from Client</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pending Info from Client</label>
+            </value>
+            <value>
+                <fullName>Pending Info from GP</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pending Info from GP</label>
+            </value>
+            <value>
+                <fullName>Pending Info from Patient</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pending Info from Patient</label>
+            </value>
+            <value>
+                <fullName>Pending Insurance Information</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pending Insurance Information</label>
+            </value>
+            <value>
+                <fullName>Pending Medical Notes</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pending Medical Notes</label>
+            </value>
+            <value>
+                <fullName>Pending Repricing</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Pending Repricing</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

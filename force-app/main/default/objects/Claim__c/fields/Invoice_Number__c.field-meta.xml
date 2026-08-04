@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Invoice_Number__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <externalId>true</externalId>
+    <inlineHelpText>If provider do not assigned an Invoice No. Please use the auto-generated &quot;Case No.&quot; from the system as the Invoice No.You will have to go back to patient profile to retrieve this number.</inlineHelpText>
+    <label>Invoice Number</label>
+    <length>20</length>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

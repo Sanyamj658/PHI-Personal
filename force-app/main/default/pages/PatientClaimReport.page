@@ -1,0 +1,150 @@
+<!-------------------------------------------------------------------------------
+
+Author          |Date       | Comments
+Vinod           |22/06/2018 | Controller to display patient and claim report
+--------------------------------------------------------------------------------->
+<apex:page controller="PatientClaimReportController" readOnly="true" standardStylesheets="false" sidebar="false" showheader="false" contentType="application/vnd.ms-excel#SalesForceExport.xls" cache="true">    
+    <apex:form >
+        <table id="contacttable" border="2" width="100%">
+            <tr>
+                <th colspan="5">Patient</th>
+                <th colspan="15">Claim</th>
+            </tr>
+            <tr>
+                <th>Patient Name</th>
+                <th>Primary Insurance Company</th>
+                <th>Primary Assistance Company</th>
+                <th>Patient Activity</th>
+                <th>Patient Activity DueDate</th>
+                <th>Claim Number</th>
+                <th>Medical Provider</th>
+                <th>Collector</th>
+                <th>Pending Status</th>
+                <th>Date Received</th>
+                <th>Date Sent to Insurance Company</th>
+                <th>From DOS</th>
+                <th>To DOS</th>
+                <th>Days in AR</th>
+                <th>Facility Charges</th>
+                <th>Professional Charges</th>
+                <th>Claim Balance</th>
+                <th>total charges</th>
+                <th>Claim Activity</th>
+                <th>Claim Activity DueDate</th>
+            </tr>
+            
+            <apex:repeat value="{!limitWrapperList}" var="block">
+                <apex:repeat value="{!block.PatientClaimWrapperCountList}" var="P">
+                    <tr>
+                        <td rowspan="{!P.claimList.size}">{!P.objPatient.Name}</td>
+                        <td rowspan="{!P.claimList.size}">{!P.objPatient.Primary_Insurance__r.Name}</td>
+                        <td rowspan="{!P.claimList.size}">{!P.objPatient.Primary_Assistance_Co__r.Name}</td>
+                        <td rowspan="{!P.claimList.size}">
+                            <table class="slds-table">
+                                <apex:repeat value="{!P.objPatient.Events}" var="Pe">
+                                    <tr>
+                                        <td>{!Pe.Subject}</td>
+                                    </tr>
+                                </apex:repeat>
+                            
+                                <apex:repeat value="{!P.objPatient.Tasks}" var="Pt">
+                                    <tr>
+                                        <td>{!Pt.Subject}</td>
+                                    </tr>
+                                    
+                                </apex:repeat>
+                            </table>
+                        </td>
+                        <td rowspan="{!P.claimList.size}">
+                            <table class="slds-table">
+                                <apex:repeat value="{!P.objPatient.Events}" var="Pe">
+                                    <tr>
+                                        <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                    		<apex:param value="{!Pe.EndDateTime}"/> 
+                                		</apex:outputText>
+                                    </tr>
+                                </apex:repeat>
+                            
+                                <apex:repeat value="{!P.objPatient.Tasks}" var="Pt">
+                                    <tr>
+                                        <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                    		<apex:param value="{!Pt.ActivityDate}"/> 
+                                		</apex:outputText>
+                                    </tr>
+                                    
+                                </apex:repeat>
+                            </table>
+                        </td>
+                        <apex:variable value="{!If(P.claimList.size != null,P.claimList.size,'0')}" var="counter"/>
+                        <apex:repeat value="{!P.claimList}" var="Pc">
+                            <apex:variable var="counter" value="{!counter - 1}"/>
+                            <td>{!Pc.Name}</td>
+                            <td>{!Pc.Medical_Provider__r.Name}</td>
+                            <td>{!Pc.Collector__c}</td>
+                            <td>{!Pc.Pending_Status__c}</td>
+                            <td>
+                                <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                    <apex:param value="{!Pc.Date_Received__c}"/> 
+                                </apex:outputText>
+                            </td>
+                            <td>
+                                <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                    <apex:param value="{!Pc.Date_Sent_to_Ins_Co__c}"/> 
+                                </apex:outputText>
+                            </td>
+                            <td>
+                                <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                    <apex:param value="{!Pc.From_DOS__c}"/> 
+                                </apex:outputText>
+                            </td>
+                            <td>
+                                <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                    <apex:param value="{!Pc.To_DOS__c}"/> 
+                                </apex:outputText>
+                            </td>
+                            <td>{!Pc.Days_in_AR__c}</td>
+                            <td>{!Pc.Facility_Charges__c}</td>
+                            <td>{!Pc.Professional_Charges__c}</td>
+                            <td>{!Pc.Claim_Balance_del__c}</td>
+                            <td>{!Pc.Total_Charge__c}</td>
+                            <td>
+                                <table>
+                                    <apex:repeat value="{!Pc.Events}" var="Pce">
+                                        <tr>
+                                            <td>{!Pce.Subject}</td>
+                                        </tr>
+                                    </apex:repeat>
+                                    <apex:repeat value="{!Pc.Tasks}" var="Pct">
+                                        <tr>
+                                            <td>{!Pct.Subject}</td>
+                                        </tr>
+                                    </apex:repeat>
+                                </table>
+                            </td>
+                            <td>
+                                <table>
+                                    <apex:repeat value="{!Pc.Events}" var="Pce">
+                                        <tr>
+                                            <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                    			<apex:param value="{!Pce.EndDateTime}"/> 
+                                			</apex:outputText>
+                                        </tr>
+                                    </apex:repeat>
+                                    <apex:repeat value="{!Pc.Tasks}" var="Pct">
+                                        <tr>
+                                            <apex:outputText value="{0,date,MM/dd/yy}"> 
+                                    			<apex:param value="{!Pct.ActivityDate}"/> 
+                                			</apex:outputText>
+                                        </tr>
+                                    </apex:repeat>
+                                </table>
+                            </td>
+                            
+                            <apex:outputText rendered="{!(counter > 0)}" value="</tr><tr>"/>
+                        </apex:repeat>
+                    </tr>
+                </apex:repeat>
+            </apex:repeat>
+        </table>
+    </apex:form>
+</apex:page>

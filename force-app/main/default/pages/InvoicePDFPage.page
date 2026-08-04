@@ -1,0 +1,157 @@
+<apex:page controller="ContactPdfController"
+           doctype="html-5.0" renderAs="PDF"
+           applyBodyTag="false" applyHtmlTag="false" showHeader="false">
+<html>
+    
+    
+    <head>
+        <style> 
+            @page{
+                size: A4 landscape;
+            }   
+            body {
+            	box-sizing: border-box; 
+            } 
+            th, td, p {font-size: 9px}
+                     
+        </style>
+    </head>
+    <body>
+        <center>
+            <apex:image url="https://passagehi--c.documentforce.com/servlet/servlet.ImageServer?id=0154p000001bO3s&amp;oid=00DG0000000iX4G&amp;lastMod=1643038868000" styleClass="imageStyle"/>
+            <br/>
+            <p>
+                <apex:outputText value="{0, date, medium}">
+                    <apex:param value="{!Today()}" /> 
+                </apex:outputText>
+            </p>
+        </center>
+        
+        <table style="width:100%;">
+            <tr>
+                <td style="width:20%;"></td>
+                <td style="width:40%;">
+                    <div style="float:left">
+                        <p>
+                            Phone : {!Contact.Phone}
+                        </p>
+                        <p style="text-transform:uppercase;font-size:10px;">
+                            {!Contact.Account.Name}<br/>
+                            <apex:outputpanel rendered="{!Contact.Account.billingstreet != null}">
+                                {!Contact.Account.billingstreet},<br/>
+                            </apex:outputpanel>
+                            <apex:outputpanel rendered="{!Contact.Account.billingcity != null}">
+                                {!Contact.Account.billingcity},
+                            </apex:outputpanel>
+                            <apex:outputpanel rendered="{!Contact.Account.billingstate != null}">
+                                {!Contact.Account.billingstate},<br/>
+                            </apex:outputpanel>
+                            <apex:outputpanel rendered="{!Contact.Account.billingstatecode != null}">
+                                {!Contact.Account.billingstatecode},
+                            </apex:outputpanel>
+                            <apex:outputpanel rendered="{!Contact.Account.billingcountrycode != null}">
+                                {!Contact.Account.billingcountrycode}
+                            </apex:outputpanel>
+                        </p>  
+                        <p>Accounting Department</p>
+                        <p style="text-transform:uppercase;">
+                            RE : <span style="font-weight:500">{!Contact.name}</span>
+                        </p>
+                    </div>
+                </td>
+                <td style="width:40%;">
+                    <div>
+                        <p>
+                            Fax : {!Contact.Account.Fax}    
+                        </p>
+                        <p>
+                            File : {!Contact.Primary_Claim_No__c}
+                            <br/>
+                            Inv :  {!invoiceNo}   
+                        </p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br/><br/>
+        <apex:form >
+            <apex:pageBlock >
+                <apex:outputpanel rendered="{!wrapTaskList.size > 0}">
+                    <table width="100%">
+                        <tr style="font-weight:bold;">
+                            <th>DATE</th>
+                            <th>ATTY</th>
+                            <th>DESCRIPTION</th>
+                            <th>HOURS</th>
+                            <th>RATE</th>
+                            <th>Amount</th>                   
+                        </tr>                 
+                        <apex:repeat value="{!wrapTaskList}" var="Task" >
+                            <tr>
+                                <td>
+                                    <apex:outputText value="{0,date,dd'-'MM'-'yyyy}">
+                                        <apex:param value="{!Task.TaskObj.Start_Time__c}" /> 
+                                    </apex:outputText>
+                                </td>
+                                <td><apex:outputText value="{!Task.TaskObj.Attorney__r.Name}" /></td>
+                                <td>
+                                    <apex:outputText value="{!Task.TaskObj.description}" />
+                                </td>
+                                <td> 
+                                    <apex:outputText value="{!Task.totalHours}" />
+                                </td>
+                                <td>
+                                    <apex:outputText value="${0,number,###.##}">
+                                        <apex:param value="{!Task.TaskObj.Attorney__r.BillingHourRate__c}"/>
+                                    </apex:outputText> 
+                                </td>
+                                <td>
+                                    <apex:outputText value="{0,number,###.##}">
+                                        <apex:param value="{!Task.amount}"/>
+                                    </apex:outputText> 
+                                </td>
+                            </tr>
+                        </apex:repeat>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><p>TOTAL HOURS/FEES</p></td>
+                            <td><apex:outputText value="{0,number,##.##}">
+                                <apex:param value="{!totaltime}"/>
+                                </apex:outputText> 
+                            </td>
+                            <td></td>
+                            <td><apex:outputText value="${0,number,###,###.##}">
+                                <apex:param value="{!totalamount}"/>
+                                </apex:outputText> 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><p>{!discDesc}</p></td>
+                            <td><apex:outputText value="{0,number,###.##}">
+                                <apex:param value="{!discAmt}"/>
+                                </apex:outputText> 
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><p>TOTAL FEES</p></td>
+                            <td></td>
+                            <td></td>
+                            <td><apex:outputText value="${0,number,###,###.##}">
+                                <apex:param value="{!netAmt}"/>
+                                </apex:outputText>
+                            </td>
+                        </tr>
+                    </table>  
+                </apex:outputpanel>
+            </apex:pageBlock>     
+        </apex:form> 
+    </body> 
+</html>
+</apex:page>

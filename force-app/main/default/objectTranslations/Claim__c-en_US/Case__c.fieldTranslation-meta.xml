@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Please select Patient and Medical Provider first before selecting a related active case. --></help>
+    <label><!-- Case --></label>
+    <lookupFilter>
+        <errorMessage><!-- Value does not exist or does not match filter criteria of active case related to this Patient and Medical Provider. --></errorMessage>
+        <informationalMessage><!-- This window will be able to select the active case of the related Patient and Medical Provider. --></informationalMessage>
+    </lookupFilter>
+    <name>Case__c</name>
+    <relationshipLabel><!-- Claims --></relationshipLabel>
+</CustomFieldTranslation>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- The person submitting the claim for Collection --></help>
+    <label><!-- Biller --></label>
+    <name>Biller__c</name>
+    <picklistValues>
+        <masterLabel>Admin</masterLabel>
+        <translation><!-- Admin --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Ingrid</masterLabel>
+        <translation><!-- Ingrid --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Juan</masterLabel>
+        <translation><!-- Juan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Lesly</masterLabel>
+        <translation><!-- Lesly --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Patricia</masterLabel>
+        <translation><!-- Patricia --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Rebecca</masterLabel>
+        <translation><!-- Rebecca --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Valentina</masterLabel>
+        <translation><!-- Valentina --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Vander</masterLabel>
+        <translation><!-- Vander --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

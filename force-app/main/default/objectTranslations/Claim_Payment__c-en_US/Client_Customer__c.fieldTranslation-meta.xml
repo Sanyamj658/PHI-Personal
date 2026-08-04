@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Payment Origin --></label>
+    <name>Client_Customer__c</name>
+    <picklistValues>
+        <masterLabel>Client Payment</masterLabel>
+        <translation><!-- Client Payment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Payments</masterLabel>
+        <translation><!-- Payments --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

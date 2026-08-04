@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assigning_Value_In_Pending_Balance_Payment_Date_Field</name>
+        <label>Assigning Value In Pending Balance/Payment Date Field</label>
+        <locationX>176</locationX>
+        <locationY>311</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Pending_Balance_Payment_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>Flow to update the pending balance/payment date whenever the status changed to &apos;Pending Payment from Patient&apos; or &apos;Pending Balance from Patient&quot; for the first time.</description>
+    <environments>Default</environments>
+    <interviewLabel>Flow To Update Pending Balance/Payment Date {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Flow To Update Pending Balance/Payment Date</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Assigning_Value_In_Pending_Balance_Payment_Date_Field</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>(1 OR 2) AND 3</filterLogic>
+        <filters>
+            <field>Pending_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Pending Payment from Patient</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Pending_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Pending Balance from Patient</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Pending_Balance_Payment_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Claim__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Projected_Payment_Date</fullName>
+    <active>true</active>
+    <description>Projected Payment Date should be greater than today</description>
+    <errorConditionFormula>Projected_Payment_Date__c  &lt;=  TODAY()</errorConditionFormula>
+    <errorMessage>Projected Payment Date should be greater than today</errorMessage>
+</ValidationRule>

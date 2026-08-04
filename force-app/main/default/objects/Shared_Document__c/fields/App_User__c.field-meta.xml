@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>App_User__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The App User this document is shared with.</description>
+    <inlineHelpText>Select the app user who should receive this shared document.</inlineHelpText>
+    <label>App User</label>
+    <referenceTo>App_User__c</referenceTo>
+    <relationshipLabel>Shared Documents</relationshipLabel>
+    <relationshipName>Shared_Documents</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

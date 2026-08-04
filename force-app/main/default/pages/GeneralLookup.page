@@ -1,0 +1,53 @@
+<apex:page showHeader="false" sidebar="false" controller="GeneralLookupCtrl">
+    <apex:sectionHeader Title="{!objectLabel}" subtitle="Lookup"/>
+    <apex:form id="thisForm">
+        <apex:pageBlock id="searchBlock">
+            <apex:pageBlockSection columns="1" >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel for="lksrch" value="Search"/> 
+                    <apex:outputPanel >
+                        <apex:inputText id="lksrch" maxlength="80" value="{!lkSearch}" />   
+                        <apex:commandButton style="margin-left:5px;" value=" Go! " action="{!onGo}" status="goStatus" /> 
+                        <apex:actionstatus id="goStatus" stopText="" >
+                        <apex:facet name="start">
+                            <apex:outputpanel >
+                                <apex:image style="margin-left:10px" height="15" value="/img/loading.gif"/>  Please wait...
+                            </apex:outputpanel>
+                        </apex:facet>
+                    </apex:actionstatus>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:pageMessages id="msg"/>
+            <apex:pageBlockSection id="SearchRecord" columns="1">            
+                <apex:outputPanel >
+                    <apex:outputPanel rendered="{!relatedRecordList.size > 0}" >
+                        <apex:outputLabel value="Result viewed" rendered="{!lkSearch==''}"/>
+                        <apex:outputPanel layout="block" style="max-height:350px; overflow:scroll" >
+                                <table class="list" border="0" cellspacing="0" cellpadding="0" >
+                                        <tbody>
+                                            <tr class="headerRow">
+                                                <th class="headerRow">Name</th>
+                                            </tr>
+                                        <apex:repeat value="{!relatedRecordList}" var="record">
+                                            <tr class="dataRow even first"  style="cursor:default;"  
+                                                onclick="window.opener.document.getElementById('{!lkId}').value = '{!record['Id']}' ;
+                                                        window.opener.document.getElementById('{!lkName}').value = '{!record['Name']}'; window.self.close();"
+                                                onmouseover="if (window.hiOn){hiOn(this);}" 
+                                                onmouseout="if (window.hiOff){hiOff(this);}" >
+                                                <td class="dataCell"> {!record['Name']} </td>
+                                            </tr>
+                                        </apex:repeat>
+                                        </tbody>
+                                </table>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!relatedRecordList.size == 0}">
+                        <apex:outputLabel value="No Record Found" />
+                    </apex:outputPanel>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

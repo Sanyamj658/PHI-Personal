@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Acct_w_Outside_Collection_or_Law_Firm__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>Outside Collection Agency or Outside Law Firm</description>
+    <inlineHelpText>*This field is mandatory if the account is sent to an outside collection agency or to a law firm</inlineHelpText>
+    <label>Acct w/ Outside Collection or Law Firm</label>
+    <referenceTo>Insurance_Company__c</referenceTo>
+    <relationshipLabel>Claims (Collection Company)</relationshipLabel>
+    <relationshipName>Claims</relationshipName>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

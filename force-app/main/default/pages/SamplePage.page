@@ -1,0 +1,3 @@
+<apex:page standardController="Schedule_Report__c" standardStylesheets="false" sidebar="false" contentType="application/vnd.ms-excel">
+	<c:ReportExport reportId1="{!Schedule_Report__c.Select_Report__c}" format1="{!Schedule_Report__c.Report_Format__c}"></c:ReportExport>
+</apex:page>

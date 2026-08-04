@@ -1,0 +1,109 @@
+<!-- <apex:page lightningStyleSheets="true" standardController="Contact" extensions="ManageAttachmentsController" showHeader="true" title="Manage Attachments">
+        <script>
+                function showLoading() {
+                        var laoding = document.getElementById('{!$Component.thisForm.waitStatus}.start');
+                        laoding.style.display = 'block';
+                }
+        </script>
+    <apex:form id="thisForm">
+        <apex:outputpanel id="waitPanel">
+                <apex:actionstatus id="waitStatus">
+                        <apex:facet name="start">
+                                <div class="waitingSearchDiv" id="el_loading" style="background-color: rgba(251, 251, 251, 0.44);
+                                height: 100%;width:100%; height:100%;position: fixed;z-index: 200">
+                                        <div class="waitingHolder" style="top: 40%; width: 91px;">
+                                                <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                                                <span class="waitingDescription">Working...</span>
+                                        </div>
+                                </div>
+                        </apex:facet>
+                </apex:actionstatus>
+        </apex:outputpanel>
+
+        <apex:pageBlock id="thisBlock" title="Attachments">
+                <apex:pageMessages id="pgMsg" escape="false" />
+                <div style="text-align:center; margin-bottom: 20px;">
+                        <apex:commandButton value="Back" action="{!URLFOR($Action.Contact.View, Contact.Id)}" />
+                        &nbsp;
+                        <apex:commandButton value="Make it Public" action="{!makeAttachmentsPublic}" onclick="showLoading();" rerender="thisBlock" status="waitStatus"/>
+                        &nbsp;
+                        <apex:commandButton value="Make it Private" action="{!makeAttachmentsPrivate}" onclick="showLoading();" rerender="thisBlock" status="waitStatus"/>
+                </div>
+            <apex:pageBlockTable value="{!attachments}" var="att">
+                <apex:column >
+                    <apex:inputCheckbox value="{!att.Selected}" />
+                </apex:column>
+                <apex:column value="{!att.attachment.Name}" headerValue="Name" />
+                <apex:column value="{!att.attachment.IsPrivate}" headerValue="IsPrivate" />
+                <apex:column value="{!att.attachment.CreatedDate}" headerValue="Created Date" />
+                <apex:column value="{!att.attachment.CreatedById}" headerValue="Created By" />
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page> -->
+<apex:page lightningStyleSheets="true" standardController="Contact" extensions="ManageAttachmentsController" showHeader="true" title="Manage Attachments">
+        <script>
+                function showLoading() {
+                        var laoding = document.getElementById('{!$Component.thisForm.waitStatus}.start');
+                        laoding.style.display = 'block';
+                }
+                function selectAllAttachments(masterCheckbox) {
+                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        for (var i = 0; i < checkboxes.length; i++) {
+                                checkboxes[i].checked = masterCheckbox.checked;
+                        }
+                }
+                function checkSalectAllAttachments() {
+                        var allChecked = true;
+                        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                        for (var i = 0; i < checkboxes.length; i++) {
+                                if (!checkboxes[i].id.includes('selectAll')) {
+                                        if (!checkboxes[i].checked){
+                                                allChecked = false;
+                                                break;
+                                        }
+                                }
+                        }
+                        var masterCheckboxes = document.getElementsByClassName('selectAll');
+                        masterCheckboxes[0].checked = allChecked;
+                }
+        </script>
+    <apex:form id="thisForm">
+        <apex:outputpanel id="waitPanel">
+                <apex:actionstatus id="waitStatus">
+                        <apex:facet name="start">
+                                <div class="waitingSearchDiv" id="el_loading" style="background-color: rgba(251, 251, 251, 0.44);
+                                height: 100%;width:100%; height:100%;position: fixed;z-index: 200">
+                                        <div class="waitingHolder" style="top: 40%; width: 91px;">
+                                                <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                                                <span class="waitingDescription">Working...</span>
+                                        </div>
+                                </div>
+                        </apex:facet>
+                </apex:actionstatus>
+        </apex:outputpanel>
+
+        <apex:pageBlock id="thisBlock" title="Attachments">
+                <apex:pageMessages id="pgMsg" escape="false" />
+                <div style="text-align:center; margin-bottom: 20px;">
+                        <apex:commandButton value="Back" action="{!URLFOR($Action.Contact.View, Contact.Id)}" />
+                        &nbsp;
+                        <apex:commandButton value="Make it Public" action="{!makeAttachmentsPublic}" onclick="showLoading();" rerender="thisBlock" status="waitStatus"/>
+                        &nbsp;
+                        <apex:commandButton value="Make it Private" action="{!makeAttachmentsPrivate}" onclick="showLoading();" rerender="thisBlock" status="waitStatus"/>
+                </div>
+            <apex:pageBlockTable value="{!attachments}" var="att">
+                <apex:column >
+                        <apex:facet name="header">
+                        <apex:inputCheckbox value="{!att.Selected}" onchange="selectAllAttachments(this)" styleClass="selectAll" id="selectAll"/>
+                </apex:facet>
+                    <apex:inputCheckbox value="{!att.Selected}" onchange="checkSalectAllAttachments();"/>
+                </apex:column>
+                <apex:column value="{!att.attachment.Name}" headerValue="Name" />
+                <apex:column value="{!att.attachment.IsPrivate}" headerValue="IsPrivate" />
+                <apex:column value="{!att.attachment.CreatedDate}" headerValue="Created Date" />
+                <apex:column value="{!att.attachment.CreatedById}" headerValue="Created By" />
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
