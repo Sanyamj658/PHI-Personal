@@ -262,4 +262,68 @@ private class FirebaseNotificationQueueable_Test {
         System.assertNotEquals(null, jobId1,
             'First job should be enqueued successfully');
     }
+    
+    // Mock for both OAuth token and FCM send call
+    private class FirebaseMock implements HttpCalloutMock {
+
+        public HTTPResponse respond(HTTPRequest req) {
+
+            HttpResponse res = new HttpResponse();
+            res.setStatusCode(200);
+
+            // Access Token request
+            if (req.getEndpoint().contains('oauth2')) {
+                res.setBody('{"access_token":"dummy_access_token","expires_in":3600}');
+            }
+            // FCM Send request
+            else {
+                res.setBody('{"name":"projects/test/messages/123"}');
+            }
+
+            return res;
+        }
+    }
+    
+   @IsTest
+    static void testSendNotification() {
+
+        // Register mock
+        Test.setMock(HttpCalloutMock.class, new FirebaseMock());
+
+        // Execute future method
+        Test.startTest();
+        FirebaseService.sendNotification(
+            'dummyDeviceToken',
+            'Test Title',
+            'Test Body'
+        );
+        Test.stopTest();
+
+        // If no exception occurs, test passes.
+        System.assert(true);
+    }
+    
+    @IsTest
+static void testSendBulkNotifications() {
+
+    // Sample payload
+    String payload = '[{"deviceToken":"dummyToken","title":"Test Title","body":"Test Body"}]';
+
+    // Mock HTTP callouts if the Queueable performs callouts
+    Test.setMock(HttpCalloutMock.class, new FirebaseMock());
+
+    Test.startTest();
+    FirebaseService.sendBulkNotifications(payload);
+    Test.stopTest();
+
+    // Verify that a Queueable job was created
+    AsyncApexJob job = [
+        SELECT Id, Status, JobType
+        FROM AsyncApexJob
+        WHERE JobType = 'Queueable'
+        LIMIT 1
+    ];
+
+    System.assertEquals('Completed', job.Status);
+}
 }

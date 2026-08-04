@@ -2,7 +2,7 @@ public with sharing class AppUserInvitationController {
 
     // Constants
     private static final String Invitation_Template = 'App_Invitation_Template';
-    private static final String VERIFIED_EMAIL = 'aabhargupta2310@gmail.com';
+    // private static final String VERIFIED_EMAIL = 'aabhargupta2310@gmail.com';
 
     /**
      * Checks whether a Contact is eligible to receive an invitation email.
@@ -24,6 +24,10 @@ public with sharing class AppUserInvitationController {
             }
 
             Boolean userExists = isAppUserExists(contactRecord.Email, contactRecord.Date_of_Birth__c);
+            System.debug('Contact Email: ' + contactRecord.Email);
+System.debug('Contact DOB: ' + contactRecord.Date_of_Birth__c);
+System.debug('User Exists: ' + userExists);
+
             if (userExists) {
                 return buildResponse(
                     false,
@@ -108,6 +112,10 @@ public with sharing class AppUserInvitationController {
             WHERE Id = :contactId
             LIMIT 1
         ];
+        System.debug('Fetched Contact with Id: ' + contactId + ', Records found: ' + contacts.size());
+        System.debug('Contact Query Result: ' + contacts);
+        System.debug('Contact Email: ' + (contacts.isEmpty() ? 'No Contact Found' : contacts[0].Email));
+        System.debug('Contact DOB: ' + 'No Contact Found     :   ' +  contacts[0].Date_of_Birth__c);
         return contacts.isEmpty() ? null : contacts[0];
     }
 
@@ -125,6 +133,10 @@ public with sharing class AppUserInvitationController {
     // }
 
     private static Boolean isAppUserExists(String emailAddress, Date dob) {
+
+    System.debug('Email = ' + emailAddress);
+    System.debug('DOB = ' + dob);
+
     Integer countUsers = [
         SELECT COUNT()
         FROM App_User__c

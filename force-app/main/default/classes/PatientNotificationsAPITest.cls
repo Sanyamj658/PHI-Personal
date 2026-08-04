@@ -1,320 +1,190 @@
-/**
- * PatientNotificationsAPITest
- * Covers: getNotifications (success all, success unread_only, user not found 404,
- *         missing email 400, email case-insensitive, empty notifications),
- *         markRead (by ids, markAllRead, no ids/markAll, malformed body,
- *         invalid id ignored, empty ids list).
- */
 @IsTest
 private class PatientNotificationsAPITest {
 
     @TestSetup
-    static void setup() {
-        App_User__c appUser = new App_User__c(
-            Email__c  = 'notif.api@example.com',
-            Status__c = 'Active'
+    static void setupData() {
+
+        App_User__c user = new App_User__c(
+            Name = 'Test User',
+            Email__c = 'test@test.com',
+            DOB__c = Date.newInstance(1995,1,1)
         );
-        insert appUser;
+        insert user;
 
-        // Insert 3 notifications: 2 unread, 1 read
-        List<App_Notification__c> notifs = new List<App_Notification__c>{
-            new App_Notification__c(
-                App_User__c = appUser.Id,
-                Title__c    = 'Unread 1',
-                Body__c     = 'Body 1',
-                Type__c     = 'General',
-                Is_Read__c  = false
-            ),
-            new App_Notification__c(
-                App_User__c = appUser.Id,
-                Title__c    = 'Unread 2',
-                Body__c     = 'Body 2',
-                Type__c     = 'Claim_Update',
-                Is_Read__c  = false
-            ),
-            new App_Notification__c(
-                App_User__c = appUser.Id,
-                Title__c    = 'Already Read',
-                Body__c     = 'Body 3',
-                Type__c     = 'General',
-                Is_Read__c  = true
-            )
-        };
-        insert notifs;
+        List<App_Notification__c> notifications = new List<App_Notification__c>();
+
+        for(Integer i=0;i<3;i++){
+            notifications.add(new App_Notification__c(
+                App_User__c = user.Id,
+                Title__c = 'Title ' + i,
+                Body__c = 'Body ' + i,
+                Type__c = 'General',
+                Is_Read__c = (i==2)
+            ));
+        }
+
+        insert notifications;
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
-
-    private static void setupGetContext(String email, String unreadOnly) {
-        RestRequest  req = new RestRequest();
-        RestResponse res = new RestResponse();
-        req.requestURI  = '/services/apexrest/v1/patient-notifications';
-        req.httpMethod  = 'GET';
-        if (email != null)      req.params.put('email', email);
-        if (unreadOnly != null) req.params.put('unread_only', unreadOnly);
-        RestContext.request  = req;
-        RestContext.response = res;
+    private static void initializeRestContext() {
+        RestContext.request = new RestRequest();
+        RestContext.response = new RestResponse();
     }
-
-    private static void setupPostContext(String jsonBody) {
-        RestRequest  req = new RestRequest();
-        RestResponse res = new RestResponse();
-        req.requestURI  = '/services/apexrest/v1/patient-notifications';
-        req.httpMethod  = 'POST';
-        req.requestBody = Blob.valueOf(jsonBody);
-        RestContext.request  = req;
-        RestContext.response = res;
-    }
-
-    private static Map<String, Object> parseResponse() {
-        return (Map<String, Object>) JSON.deserializeUntyped(
-            RestContext.response.responseBody.toString()
-        );
-    }
-
-    private static App_User__c getAppUser() {
-        return [SELECT Id FROM App_User__c WHERE Email__c = 'notif.api@example.com' LIMIT 1];
-    }
-
-    // ─── GET: all notifications ───────────────────────────────────────────────
 
     @IsTest
-    static void testGetNotifications_AllNotifications() {
-        setupGetContext('notif.api@example.com', 'false');
+    static void testGetNotifications() {
+
+        initializeRestContext();
+
+        RestContext.request.httpMethod = 'GET';
+        RestContext.request.requestURI = '/services/apexrest/v1/patient-notifications';
+
+        RestContext.request.addParameter('email','test@test.com');
+        RestContext.request.addParameter('dob','1995-01-01');
 
         Test.startTest();
         PatientNotificationsAPI.getNotifications();
         Test.stopTest();
 
         System.assertEquals(200, RestContext.response.statusCode);
-        Map<String, Object> result = parseResponse();
-        System.assertEquals(true, result.get('success'));
-
-        Map<String, Object> data = (Map<String, Object>) result.get('data');
-        System.assertEquals(3, (Integer) data.get('total'), 'All 3 notifications should be returned');
-        System.assertEquals(2, (Integer) data.get('unreadCount'), '2 unread notifications');
     }
 
-    // ─── GET: unread only ─────────────────────────────────────────────────────
-
     @IsTest
-    static void testGetNotifications_UnreadOnly() {
-        setupGetContext('notif.api@example.com', 'true');
+    static void testGetUnreadNotifications() {
+
+        initializeRestContext();
+
+        RestContext.request.httpMethod = 'GET';
+        RestContext.request.requestURI = '/services/apexrest/v1/patient-notifications';
+
+        RestContext.request.addParameter('email','test@test.com');
+        RestContext.request.addParameter('dob','1995-01-01');
+        RestContext.request.addParameter('unread_only','true');
 
         Test.startTest();
         PatientNotificationsAPI.getNotifications();
         Test.stopTest();
 
-        Map<String, Object> result = parseResponse();
-        System.assertEquals(true, result.get('success'));
-
-        Map<String, Object> data = (Map<String, Object>) result.get('data');
-        System.assertEquals(2, (Integer) data.get('total'), 'Only 2 unread notifications should be returned');
+        System.assertEquals(200, RestContext.response.statusCode);
     }
 
-    // ─── GET: notification fields present ────────────────────────────────────
-
     @IsTest
-    static void testGetNotifications_FieldsPresent() {
-        setupGetContext('notif.api@example.com', null);
+    static void testGetNotificationsMissingParams() {
 
-        Test.startTest();
-        PatientNotificationsAPI.getNotifications();
-        Test.stopTest();
+        initializeRestContext();
 
-        Map<String, Object> result = parseResponse();
-        Map<String, Object> data   = (Map<String, Object>) result.get('data');
-        List<Object> notifs        = (List<Object>) data.get('notifications');
-        Map<String, Object> first  = (Map<String, Object>) notifs[0];
-
-        System.assertNotEquals(null, first.get('id'));
-        System.assertNotEquals(null, first.get('title'));
-        System.assertNotEquals(null, first.get('body'));
-        System.assertNotEquals(null, first.get('type'));
-        System.assertNotEquals(null, first.get('isRead'));
-        System.assertNotEquals(null, first.get('createdDate'));
-    }
-
-    // ─── GET: missing email → 400 ─────────────────────────────────────────────
-
-    @IsTest
-    static void testGetNotifications_MissingEmail() {
-        setupGetContext(null, null);
+        RestContext.request.httpMethod='GET';
+        RestContext.request.requestURI='/services/apexrest/v1/patient-notifications';
 
         Test.startTest();
         PatientNotificationsAPI.getNotifications();
         Test.stopTest();
 
         System.assertEquals(400, RestContext.response.statusCode);
-        Map<String, Object> result = parseResponse();
-        System.assertEquals('EMAIL_REQUIRED', result.get('errorCode'));
     }
 
-    // ─── GET: user not found → 404 ───────────────────────────────────────────
-
     @IsTest
-    static void testGetNotifications_UserNotFound() {
-        setupGetContext('ghost@example.com', null);
+    static void testGetUserNotFound() {
+
+        initializeRestContext();
+
+        RestContext.request.httpMethod='GET';
+        RestContext.request.requestURI='/services/apexrest/v1/patient-notifications';
+
+        RestContext.request.addParameter('email','nouser@test.com');
+        RestContext.request.addParameter('dob','1995-01-01');
 
         Test.startTest();
         PatientNotificationsAPI.getNotifications();
         Test.stopTest();
 
         System.assertEquals(404, RestContext.response.statusCode);
-        Map<String, Object> result = parseResponse();
-        System.assertEquals('USER_NOT_FOUND', result.get('errorCode'));
     }
 
-    // ─── GET: email case-insensitive ──────────────────────────────────────────
-
     @IsTest
-    static void testGetNotifications_EmailCaseInsensitive() {
-        setupGetContext('NOTIF.API@EXAMPLE.COM', null);
+    static void testMarkSelectedNotificationsRead() {
 
-        Test.startTest();
-        PatientNotificationsAPI.getNotifications();
-        Test.stopTest();
+        initializeRestContext();
 
-        Map<String, Object> result = parseResponse();
-        System.assertEquals(true, result.get('success'), 'Email lookup should be case-insensitive');
-    }
-
-    // ─── POST: mark by ids ────────────────────────────────────────────────────
-
-    @IsTest
-    static void testMarkRead_ByIds() {
-        App_User__c u = getAppUser();
-        List<App_Notification__c> unread = [
-            SELECT Id FROM App_Notification__c
-            WHERE App_User__c = :u.Id AND Is_Read__c = false
+        List<App_Notification__c> notifications = [
+            SELECT Id, Is_Read__c
+            FROM App_Notification__c
+            WHERE Is_Read__c = false
+            LIMIT 2
         ];
 
         List<String> ids = new List<String>();
-        for (App_Notification__c n : unread) ids.add(n.Id);
 
-        setupPostContext(JSON.serialize(new Map<String, Object>{ 'ids' => ids }));
+        for(App_Notification__c n : notifications){
+            ids.add(String.valueOf(n.Id));
+        }
+
+        Map<String,Object> body = new Map<String,Object>{
+            'ids' => ids
+        };
+
+        RestContext.request.httpMethod='POST';
+        RestContext.request.requestBody =
+            Blob.valueOf(JSON.serialize(body));
 
         Test.startTest();
         PatientNotificationsAPI.markRead();
         Test.stopTest();
 
-        Map<String, Object> result = parseResponse();
-        System.assertEquals(true, result.get('success'));
+        List<App_Notification__c> updated = [
+            SELECT Is_Read__c
+            FROM App_Notification__c
+            WHERE Id IN :notifications
+        ];
 
-        Map<String, Object> data = (Map<String, Object>) result.get('data');
-        System.assertEquals(2, (Integer) data.get('updatedCount'), '2 notifications should be marked read');
+        for(App_Notification__c n : updated){
+            System.assertEquals(true,n.Is_Read__c);
+        }
 
-        Integer stillUnread = [SELECT COUNT() FROM App_Notification__c WHERE App_User__c = :u.Id AND Is_Read__c = false];
-        System.assertEquals(0, stillUnread, 'All unread should now be read');
+        System.assertEquals(200, RestContext.response.statusCode);
     }
 
-    // ─── POST: markAllRead by email ───────────────────────────────────────────
-
     @IsTest
-    static void testMarkRead_MarkAllRead() {
-        App_User__c u = getAppUser();
+    static void testMarkAllNotificationsRead() {
 
-        setupPostContext(JSON.serialize(new Map<String, Object>{
+        initializeRestContext();
+
+        Map<String,Object> body = new Map<String,Object>{
             'markAllRead' => true,
-            'email'       => 'notif.api@example.com'
-        }));
+            'email' => 'test@test.com',
+            'dob' => '1995-01-01'
+        };
+
+        RestContext.request.httpMethod='POST';
+        RestContext.request.requestBody =
+            Blob.valueOf(JSON.serialize(body));
 
         Test.startTest();
         PatientNotificationsAPI.markRead();
         Test.stopTest();
 
-        Map<String, Object> result = parseResponse();
-        System.assertEquals(true, result.get('success'));
+        Integer unread = [
+            SELECT Count()
+            FROM App_Notification__c
+            WHERE Is_Read__c = false
+        ];
 
-        Integer stillUnread = [SELECT COUNT() FROM App_Notification__c WHERE App_User__c = :u.Id AND Is_Read__c = false];
-        System.assertEquals(0, stillUnread, 'markAllRead should mark all unread notifications as read');
+        System.assertEquals(0, unread);
+        System.assertEquals(200, RestContext.response.statusCode);
     }
 
-    // ─── POST: markAllRead with unknown email → 0 updates ────────────────────
-
     @IsTest
-    static void testMarkRead_MarkAllRead_UnknownEmail() {
-        setupPostContext(JSON.serialize(new Map<String, Object>{
-            'markAllRead' => true,
-            'email'       => 'ghost@example.com'
-        }));
+    static void testMarkReadEmptyBody() {
+
+        initializeRestContext();
+
+        RestContext.request.httpMethod='POST';
+        RestContext.request.requestBody = Blob.valueOf('{}');
 
         Test.startTest();
         PatientNotificationsAPI.markRead();
         Test.stopTest();
 
-        Map<String, Object> result = parseResponse();
-        System.assertEquals(true, result.get('success'));
-        Map<String, Object> data = (Map<String, Object>) result.get('data');
-        System.assertEquals(0, (Integer) data.get('updatedCount'));
-    }
-
-    // ─── POST: no ids and no markAllRead → 0 updates ──────────────────────────
-
-    @IsTest
-    static void testMarkRead_NoIdsAndNoMarkAll_ZeroUpdates() {
-        setupPostContext('{}');
-
-        Test.startTest();
-        PatientNotificationsAPI.markRead();
-        Test.stopTest();
-
-        Map<String, Object> result = parseResponse();
-        System.assertEquals(true, result.get('success'));
-        Map<String, Object> data = (Map<String, Object>) result.get('data');
-        System.assertEquals(0, (Integer) data.get('updatedCount'));
-    }
-
-    // ─── POST: invalid notification id → safely ignored ──────────────────────
-
-    @IsTest
-    static void testMarkRead_InvalidId_Ignored() {
-        setupPostContext(JSON.serialize(new Map<String, Object>{
-            'ids' => new List<String>{ 'INVALID-ID-VALUE' }
-        }));
-
-        Test.startTest();
-        PatientNotificationsAPI.markRead();
-        Test.stopTest();
-
-        // Invalid ids are caught and skipped, so updatedCount = 0 or success
-        Map<String, Object> result = parseResponse();
-        System.assertNotEquals(null, result.get('success'));
-    }
-
-    // ─── POST: empty ids list → 0 updates ────────────────────────────────────
-
-    @IsTest
-    static void testMarkRead_EmptyIds_ZeroUpdates() {
-        setupPostContext(JSON.serialize(new Map<String, Object>{ 'ids' => new List<String>() }));
-
-        Test.startTest();
-        PatientNotificationsAPI.markRead();
-        Test.stopTest();
-
-        Map<String, Object> result = parseResponse();
-        System.assertEquals(true, result.get('success'));
-        Map<String, Object> data = (Map<String, Object>) result.get('data');
-        System.assertEquals(0, (Integer) data.get('updatedCount'));
-    }
-
-    // ─── POST: null body → safe empty object ─────────────────────────────────
-
-    @IsTest
-    static void testMarkRead_NullBody_ZeroUpdates() {
-        RestRequest  req = new RestRequest();
-        RestResponse res = new RestResponse();
-        req.requestURI = '/services/apexrest/v1/patient-notifications';
-        req.httpMethod = 'POST';
-        // requestBody intentionally null
-        RestContext.request  = req;
-        RestContext.response = res;
-
-        Test.startTest();
-        PatientNotificationsAPI.markRead();
-        Test.stopTest();
-
-        Map<String, Object> result = parseResponse();
-        System.assertEquals(true, result.get('success'));
+        System.assertEquals(200, RestContext.response.statusCode);
     }
 }

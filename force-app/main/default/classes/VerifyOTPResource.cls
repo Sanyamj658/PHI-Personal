@@ -39,7 +39,6 @@ global with sharing class VerifyOTPResource {
 
     @HttpPost
     global static void handlePost() {
-        System.debug('🔍 Received OTP verification request: ' + RestContext.request.requestBody.toString());
         Savepoint sp = Database.setSavepoint();
 
         try {

@@ -57,12 +57,9 @@ private class AppUserInvitationControllerTest {
     static void testCheckEligibility_NullId() {
 
         Test.startTest();
-
         Map<String,Object> result =
             AppUserInvitationController.checkInvitationEligibility(null);
-
         Test.stopTest();
-
         System.assertEquals(false, result.get('isEligible'));
         System.assertEquals(
             'Invalid Contact Id.',

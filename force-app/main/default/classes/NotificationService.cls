@@ -83,9 +83,7 @@ public class NotificationService {
                 App_User__c            = u.Id,
                 Title__c               = r.title,
                 Body__c                = r.body,
-                Type__c                = String.isBlank(r.type) ? 'General' : r.type,
                 Related_Record_Id__c   = r.relatedRecordId,
-                Related_Record_Type__c = r.relatedRecordType,
                 Is_Read__c             = false
             ));
         }

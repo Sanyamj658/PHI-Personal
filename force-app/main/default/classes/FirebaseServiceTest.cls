@@ -13,7 +13,6 @@
 private class FirebaseServiceTest {
 
     // ─── Mock HTTP responder ──────────────────────────────────────────────────
-
     private class FcmMockSuccess implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             HTTPResponse res = new HTTPResponse();

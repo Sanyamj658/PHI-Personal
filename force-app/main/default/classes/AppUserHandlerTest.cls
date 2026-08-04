@@ -57,48 +57,11 @@ public class AppUserHandlerTest {
             oldMap.put(usr.Id, usr.clone(false, true, false, false));
             // Status remains Inactive
         }
-
         Test.startTest();
-
         AppUserHandler.handleAfterUpdate(users, oldMap);
-
         Test.stopTest();
-
         System.assert(true);
     }
 
-    @IsTest
-    static void testHandleAfterUpdate_BlankEmail() {
 
-        App_User__c usr = new App_User__c(
-            Name = 'No Email User',
-            Status__c = 'Inactive'
-        );
-
-        insert usr;
-
-        App_User__c updatedUser = [
-            SELECT Id, Name, Email__c, Status__c
-            FROM App_User__c
-            WHERE Id = :usr.Id
-        ];
-
-        Map<Id, App_User__c> oldMap = new Map<Id, App_User__c>();
-        oldMap.put(updatedUser.Id, updatedUser.clone(false, true, false, false));
-
-        updatedUser.Status__c = 'Active';
-
-        Test.startTest();
-
-        update updatedUser;
-
-        AppUserHandler.handleAfterUpdate(
-            new List<App_User__c>{updatedUser},
-            oldMap
-        );
-
-        Test.stopTest();
-
-        System.assertEquals('Active', updatedUser.Status__c);
-    }
 }

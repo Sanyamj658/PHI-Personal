@@ -31,8 +31,8 @@ global with sharing class PatientNotificationsAPI {
 
             if (unreadOnly) {
                 notifications = [
-                    SELECT Id, Title__c, Body__c, Type__c, Is_Read__c,
-                           Related_Record_Id__c, Related_Record_Type__c, CreatedDate
+                    SELECT Id, Title__c, Body__c, Is_Read__c,
+                           Related_Record_Id__c, CreatedDate
                     FROM App_Notification__c
                     WHERE App_User__c = :appUser.Id
                     AND Is_Read__c = false
@@ -41,8 +41,8 @@ global with sharing class PatientNotificationsAPI {
                 ];
             } else {
                 notifications = [
-                    SELECT Id, Title__c, Body__c, Type__c, Is_Read__c,
-                           Related_Record_Id__c, Related_Record_Type__c, CreatedDate
+                    SELECT Id, Title__c, Body__c, Is_Read__c,
+                           Related_Record_Id__c, CreatedDate
                     FROM App_Notification__c
                     WHERE App_User__c = :appUser.Id
                     ORDER BY CreatedDate DESC
@@ -60,10 +60,8 @@ global with sharing class PatientNotificationsAPI {
                     'id'                => n.Id,
                     'title'             => n.Title__c,
                     'body'              => n.Body__c,
-                    'type'              => n.Type__c,
                     'isRead'            => n.Is_Read__c,
                     'relatedRecordId'   => n.Related_Record_Id__c,
-                    'relatedRecordType' => n.Related_Record_Type__c,
                     'createdDate'       => String.valueOf(n.CreatedDate)
                 });
             }

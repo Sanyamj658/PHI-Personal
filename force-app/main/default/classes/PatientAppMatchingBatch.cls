@@ -11,7 +11,7 @@ public with sharing class PatientAppMatchingBatch
         System.debug('🚀 Batch Started');
 
         return Database.getQueryLocator([
-            SELECT Id, Name, Email__c, Date_Of_Birth__c, dob__c, 
+            SELECT Id, Name, Email__c, dob__c, 
                    Street__c, City__c, State__c, Zip_Code__c,
                    Status__c, Patient__c
             FROM App_User__c
