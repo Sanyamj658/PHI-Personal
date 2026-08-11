@@ -1,6 +1,4 @@
-public class FirebaseNotificationQueueable
-    implements Queueable, Database.AllowsCallouts {
-
+public class FirebaseNotificationQueueable implements Queueable, Database.AllowsCallouts {
     private String payload;
 
     public FirebaseNotificationQueueable(String payload) {
@@ -8,6 +6,10 @@ public class FirebaseNotificationQueueable
     }
 
     public void execute(QueueableContext context) {
-        FirebaseService.sendBulkNotificationsSync(payload);
+        try {
+            FirebaseService.sendBulkNotificationsSync(payload);
+        } catch (Exception ex) {
+            System.debug(LoggingLevel.ERROR, 'FirebaseNotificationQueueable.execute failed: ' + ex.getMessage());
+        }
     }
 }

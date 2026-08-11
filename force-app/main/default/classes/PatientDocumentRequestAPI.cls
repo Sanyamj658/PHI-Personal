@@ -162,62 +162,36 @@ global with sharing class PatientDocumentRequestAPI {
 
             Case patientCase = cases[0];
 
-            // 6. Create Task Linked to Case
-            // ─────────────────────────────────────────────────────────────────
-            // String taskSubject = SUBJECT_MAP.get(requestType);
+            String taskSubject = SUBJECT_MAP.get(requestType);
 
-            // Task newTask = new Task(
-            //     Name__c     = 'Admin',
-            //     Subject     = taskSubject,
-            //     Status      = 'Open',
-            //     Priority    = 'Normal',
-            //     WhatId      = patientCase.Id,
-            //     WhoId       = patientCase.ContactId
-            // );
-            // insert newTask;
+            List<Task> existingTasks = [
+                SELECT Id
+                FROM Task
+                WHERE WhatId = :patientCase.Id
+                AND Status = 'Open'
+                AND Subject = :taskSubject
+                LIMIT 1
+            ];
 
-            // 6. Check if Task already exists (Open + Same Subject + Same Case)
-String taskSubject = SUBJECT_MAP.get(requestType);
-System.debug('🔍 Checking for existing Tasks with Subject: ' + taskSubject + ' linked to Case: ' + patientCase.Id);
+            if (!existingTasks.isEmpty()) {
+                RestContext.response.statusCode = 409;
+                Map<String, Object> responseMap = new Map<String, Object>{
+                    'success' => false,
+                    'message' => 'You have already requested for the ' + requestType
+                };
+                RestContext.response.responseBody = Blob.valueOf(JSON.serialize(responseMap));
+                return;
+            }
 
-List<Task> existingTasks = [
-    SELECT Id
-    FROM Task
-    WHERE WhatId = :patientCase.Id
-    AND Status = 'Open'
-    AND Subject = :taskSubject
-    LIMIT 1
-];
-
-System.debug('🔍 Existing Tasks found: ' + existingTasks.size());
-
-if (!existingTasks.isEmpty()) {
-    // ❌ Task already exists → return response
-   RestContext.response.statusCode = 409;
-
-Map<String, Object> responseMap = new Map<String, Object>{
-    'success' => false,
-    'message' => 'You have already requested for the ' + requestType
-};
-
-RestContext.response.responseBody = Blob.valueOf(JSON.serialize(responseMap));
-return;
-}
-
-// ✅ Create Task if not exists
-Task newTask = new Task(
-    Name__c     = 'Admin',
-    Subject     = taskSubject,
-    Status      = 'Open',
-    Priority    = 'Normal',
-    WhatId      = patientCase.Id,
-    WhoId       = patientCase.ContactId
-);
-
-insert newTask;
-System.debug('✅ Task created: ' + newTask.Id);
-
-            System.debug('✅ Task created: ' + newTask.Id + ' | Subject: ' + taskSubject);
+            Task newTask = new Task(
+                Name__c = 'Admin',
+                Subject = taskSubject,
+                Status = 'Open',
+                Priority = 'Normal',
+                WhatId = patientCase.Id,
+                WhoId = patientCase.ContactId
+            );
+            insert newTask;
 
             // 7. Send Salesforce Bell Notification to Case Owner (best-effort)
             // ─────────────────────────────────────────────────────────────────

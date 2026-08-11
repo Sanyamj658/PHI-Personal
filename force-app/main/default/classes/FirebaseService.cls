@@ -1,78 +1,80 @@
 public class FirebaseService {
-    
-    /**
-* Single notification - kept for backward compatibility.
-* For new callers, prefer sendBulkNotifications to reuse the OAuth token.
-*/
     @future(callout=true)
     public static void sendNotification(String deviceToken, String title, String body) {
-        List<Firebase_Configuration__mdt> config = [
-            SELECT Client_Email__c, Private_Key__c, Project_ID__c
-            FROM Firebase_Configuration__mdt
-            LIMIT 1
-        ];
-        
-        String accessToken = getAccessToken(config[0].Client_Email__c, config[0].Private_Key__c);
-        if (accessToken == null) {
-            System.debug('[FirebaseService] Failed to get access token');
-            return;
+        try {
+            List<Firebase_Configuration__mdt> config = [
+                SELECT Client_Email__c, Private_Key__c, Project_ID__c
+                FROM Firebase_Configuration__mdt
+                LIMIT 1
+            ];
+
+            if (config.isEmpty()) {
+                return;
+            }
+
+            String accessToken = getAccessToken(config[0].Client_Email__c, config[0].Private_Key__c);
+            if (accessToken == null) {
+                System.debug('[FirebaseService] Failed to get access token');
+                return;
+            }
+
+            sendFcmMessage(config[0].Project_ID__c, accessToken, deviceToken, title, body);
+        } catch (Exception ex) {
+            System.debug(LoggingLevel.ERROR, 'FirebaseService.sendNotification failed: ' + ex.getMessage());
         }
-        
-        sendFcmMessage(config[0].Project_ID__c, accessToken, deviceToken, title, body);
     }
     
-    /**
-* Bulk notification dispatch - accepts a JSON-serialized list of
-* { "deviceToken": "...", "title": "...", "body": "..." } objects.
-* Gets the OAuth token once and sends all messages in a single @future call,
-* keeping the callout count low and reusing the token across devices.
-*/
-    
     public static void sendBulkNotifications(String serializedPayloads) {
-        System.enqueueJob(
-            new FirebaseNotificationQueueable(serializedPayloads)
-        );
+        try {
+            System.enqueueJob(new FirebaseNotificationQueueable(serializedPayloads));
+        } catch (Exception ex) {
+            System.debug(LoggingLevel.ERROR, 'FirebaseService.sendBulkNotifications failed: ' + ex.getMessage());
+        }
     }
     
     public static void sendBulkNotificationsSync(String serializedPayloads) {
-        if (String.isBlank(serializedPayloads)) return;
-        
-        List<Firebase_Configuration__mdt> configs = [
-            SELECT Client_Email__c, Private_Key__c, Project_ID__c
-            FROM Firebase_Configuration__mdt
-            LIMIT 1
-        ];
-        Firebase_Configuration__mdt config = configs.isEmpty() ? new Firebase_Configuration__mdt() : configs[0];
-        
-        String accessToken = getAccessToken(config.Client_Email__c, config.Private_Key__c);
-        if (accessToken == null) {
-            System.debug('[FirebaseService] sendBulkNotifications: failed to get access token');
-            return;
-        }
-        
-        List<Object> payloads;
         try {
-            payloads = (List<Object>) JSON.deserializeUntyped(serializedPayloads);
-            System.debug('[FirebaseService] sendBulkNotifications: parsed ' + payloads.size() + ' payload(s)' + 
-                         ' with access token: ' + accessToken + '-------  ' + payloads);
-        } catch (Exception e) {
-            System.debug('[FirebaseService] sendBulkNotifications: payload parse error - ' + e.getMessage());
-            return;
-        }
-        
-        for (Object item : payloads) {
-            system.debug('[FirebaseService] sendBulkNotifications: processing payload item - ' + item);
-            try {
-                Map<String, Object> p = (Map<String, Object>) item;
-                String deviceToken = (String) p.get('deviceToken');
-                system.debug('[FirebaseService] sendBulkNotifications: deviceToken - ' + deviceToken);
-                String title       = (String) p.get('title');
-                String body        = (String) p.get('body');
-                if (String.isBlank(deviceToken)) continue;
-                sendFcmMessage(config.Project_ID__c, accessToken, deviceToken, title, body);
-            } catch (Exception e) {
-                System.debug('[FirebaseService] sendBulkNotifications: message send error - ' + e.getMessage());
+            if (String.isBlank(serializedPayloads)) {
+                return;
             }
+
+            List<Firebase_Configuration__mdt> configs = [
+                SELECT Client_Email__c, Private_Key__c, Project_ID__c
+                FROM Firebase_Configuration__mdt
+                LIMIT 1
+            ];
+            Firebase_Configuration__mdt config = configs.isEmpty() ? new Firebase_Configuration__mdt() : configs[0];
+
+            String accessToken = getAccessToken(config.Client_Email__c, config.Private_Key__c);
+            if (accessToken == null) {
+                System.debug('[FirebaseService] sendBulkNotifications: failed to get access token');
+                return;
+            }
+
+            List<Object> payloads;
+            try {
+                payloads = (List<Object>) JSON.deserializeUntyped(serializedPayloads);
+            } catch (Exception e) {
+                System.debug('[FirebaseService] sendBulkNotifications: payload parse error - ' + e.getMessage());
+                return;
+            }
+
+            for (Object item : payloads) {
+                try {
+                    Map<String, Object> p = (Map<String, Object>) item;
+                    String deviceToken = (String) p.get('deviceToken');
+                    String title = (String) p.get('title');
+                    String body = (String) p.get('body');
+                    if (String.isBlank(deviceToken)) {
+                        continue;
+                    }
+                    sendFcmMessage(config.Project_ID__c, accessToken, deviceToken, title, body);
+                } catch (Exception e) {
+                    System.debug('[FirebaseService] sendBulkNotifications: message send error - ' + e.getMessage());
+                }
+            }
+        } catch (Exception ex) {
+            System.debug(LoggingLevel.ERROR, 'FirebaseService.sendBulkNotificationsSync failed: ' + ex.getMessage());
         }
     }
     

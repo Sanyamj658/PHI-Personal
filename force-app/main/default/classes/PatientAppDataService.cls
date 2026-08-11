@@ -7,6 +7,10 @@ global with sharing class PatientAppDataService {
         global Date dateOfBirth;
         global List<CaseSummary> cases;
         global List<DocumentSummary> documents;
+
+         // Claim Specialist Details
+        global String claimSpecialistName;
+        global String claimSpecialistEmail;
     }
 
     global class CaseSummary {
@@ -92,6 +96,124 @@ global with sharing class PatientAppDataService {
                     BaseRestResource.errorResponse(404, 'NOT_FOUND', 'Patient record not found.')
                 );
                 return;
+            }
+
+               // =====================================================
+            // FIND CLAIM SPECIALIST FROM LATEST PATIENT CLAIM
+            // =====================================================
+
+            String claimSpecialistName;
+            String claimSpecialistEmail;
+
+
+            /*
+             * Patient -> Claim__c is a direct relationship.
+             *
+             * We get the latest claim for this patient based on
+             * CreatedDate.
+             */
+
+            List<Claim__c> latestPatientClaims = [
+                SELECT Id,
+                    Name,
+                    Patient__c,
+                    Collector__c,
+                    CreatedDate
+                FROM Claim__c
+                WHERE Patient__c = :patient.Id
+                ORDER BY CreatedDate DESC
+                LIMIT 1
+            ];
+
+            System.debug(LoggingLevel.INFO, 'Latest Patient Claims: ' + latestPatientClaims);
+
+
+            if (!latestPatientClaims.isEmpty()) {
+
+                Claim__c latestPatientClaim = latestPatientClaims[0];
+
+                System.debug(LoggingLevel.INFO, 'Latest Patient Claim: ' + latestPatientClaim);
+
+
+                // =================================================
+                // COLLECTOR -> SPECIALIST NAME MAPPING
+                // =================================================
+
+                Map<String, String> collectorNameMap =
+                    new Map<String, String>{
+                        'U Qadir' => 'Uzaifa Qadir',
+                        'H Dar' => 'Henry Dar',
+                        'M Nissar' => 'Mursaleen Nissar',
+                        'M Mir' => 'Jack Mir',
+                        'N Shay' => 'Nancy Shay',
+                        'M Shannon' => 'Moe Shannon',
+                        'I Kennedy' => 'Indhu Kennedy',
+                        'B Kumar' => 'Barry Kumar',
+                        'S Mohi' => 'Sharif Mohi',
+                        'S Shah' => 'Shahid Shah',
+                        'M Musaib' => 'Michael Musaib',
+                        'R Miles' => 'Richard Miles',
+                        'Admin' => 'Administrator',
+                        'K Obrien' => 'Kelcie O Brien'
+                    };
+
+
+                // =================================================
+                // COLLECTOR -> EMAIL MAPPING
+                // =================================================
+
+                Map<String, String> collectorEmailMap =
+                    new Map<String, String>{
+                        'U Qadir' => 'uqadir@internationalbillingoffice.com',
+                        'H Dar' => 'hdar@internationalbillingoffice.com',
+                        'M Nissar' => 'mnissar@internationalbillingoffice.com',
+                        'M Mir' => 'jmir@internationalbillingoffice.com',
+                        'N Shay' => 'nshay@internationalbillingoffice.com',
+                        'M Shannon' => 'MShannon@internationalbillingoffice.com',
+                        'I Kennedy' => 'IKennedy@internationalbillingoffice.com',
+                        'B Kumar' => 'Barry.Kumar@internationalbillingoffice.com',
+                        'S Mohi' => 'sharif@internationalbillingoffice.com',
+                        'S Shah' => 'sshah@internationalbillingoffice.com',
+                        'M Musaib' => 'michael@internationalbillingoffice.com',
+                        'R Miles' => 'Richard.Miles@internationalbillingoffice.com',
+                        'Administrator' => 'info@internationalbillingoffice.com',
+                        'K Obrien' => 'Kelcie.Obrien@passagehi.com'
+                    };
+
+
+                // =================================================
+                // GET COLLECTOR
+                // =================================================
+
+                if (!String.isBlank(latestPatientClaim.Collector__c)) {
+
+                    String collector =
+                        latestPatientClaim.Collector__c.trim();
+                        System.debug(LoggingLevel.INFO, 'Collector: ' + collector);
+
+
+
+                    // =============================================
+                    // GET SPECIALIST NAME
+                    // =============================================
+
+                    if (collectorNameMap.containsKey(collector)) {
+
+                        claimSpecialistName =
+                            collectorNameMap.get(collector);
+                    }
+
+
+                    // =============================================
+                    // GET SPECIALIST EMAIL
+                    // =============================================
+
+                    if (collectorEmailMap.containsKey(collector)) {
+
+                        claimSpecialistEmail =
+                            collectorEmailMap.get(collector);
+                    }
+                }
             }
 
             List<Case> relatedCases = [
@@ -229,6 +351,9 @@ global with sharing class PatientAppDataService {
                 caseSummaries.add(c);
             }
 
+
+
+            
             PatientResponse resp = new PatientResponse();
             resp.contactId = patient.Id;
             resp.fullName = patient.FirstName + ' ' + patient.LastName;
@@ -236,6 +361,11 @@ global with sharing class PatientAppDataService {
             resp.dateOfBirth = patient.Date_of_Birth__c;
             resp.cases = caseSummaries;
             resp.documents = documentList;
+            resp.claimSpecialistName =
+                claimSpecialistName;
+
+            resp.claimSpecialistEmail =
+                claimSpecialistEmail;
 
             BaseRestResource.sendResponse(BaseRestResource.successResponse(resp));
         } catch (QueryException qe) {

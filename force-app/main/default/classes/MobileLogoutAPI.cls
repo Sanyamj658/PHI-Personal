@@ -1,26 +1,18 @@
 @RestResource(urlMapping='/removeDeviceToken')
 global with sharing class MobileLogoutAPI {
-
     @HttpPost
     global static void removeToken() {
         try {
             RestRequest req = RestContext.request;
-            String body = req.requestBody.toString();
+            String body = req.requestBody != null ? req.requestBody.toString() : '{}';
 
-            Map<String, Object> data =
-                (Map<String, Object>) JSON.deserializeUntyped(body);
-
+            Map<String, Object> data = (Map<String, Object>) JSON.deserializeUntyped(body);
             String email = (String) data.get('email');
             String dobStr = (String) data.get('dob');
 
-
             if (String.isBlank(email) || String.isBlank(dobStr)) {
                 BaseRestResource.sendResponse(
-                    BaseRestResource.errorResponse(
-                        400,
-                        'INVALID_INPUT',
-                        'Email and DOB is required'
-                    )
+                    BaseRestResource.errorResponse(400, 'INVALID_INPUT', 'Email and DOB is required')
                 );
                 return;
             }
@@ -34,30 +26,20 @@ global with sharing class MobileLogoutAPI {
 
             if (users.isEmpty()) {
                 BaseRestResource.sendResponse(
-                    BaseRestResource.errorResponse(
-                        404,
-                        'NOT_FOUND',
-                        'User not found'
-                    )
+                    BaseRestResource.errorResponse(404, 'NOT_FOUND', 'User not found')
                 );
                 return;
             }
 
             App_User__c usr = users[0];
             usr.Device_Token__c = null;
-
             update usr;
 
             BaseRestResource.sendResponse(
-                BaseRestResource.successMessage(
-                    'Device token removed successfully.'
-                )
+                BaseRestResource.successMessage('Device token removed successfully.')
             );
-
         } catch (Exception e) {
-            BaseRestResource.sendResponse(
-                BaseRestResource.handleException(e)
-            );
+            BaseRestResource.sendResponse(BaseRestResource.handleException(e));
         }
     }
 }
