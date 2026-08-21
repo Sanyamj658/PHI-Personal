@@ -206,7 +206,7 @@ public with sharing class PatientAppMatchingBatch
 	System.debug('firstName : '+ firstName);
     String body =
         'Dear ' + firstName + ',<br/><br/>' +
-        'Your account has been approved and is now active. You can now log in to the Patient Portal using your registered email address and the password you created during registration.<br/><br/>' +
+        'Your account has been approved and is now active. You can now log in to the Patient Portal using your registered email address and the Date of Birth you created during registration.<br/><br/>' +
         'If you have any questions, please contact us at support@passagehi.com.<br/><br/>' +
         'Thank you,<br/>' +
         'Passage Health International Team<br/><br/>' +
