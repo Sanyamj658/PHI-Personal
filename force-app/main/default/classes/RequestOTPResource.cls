@@ -31,6 +31,7 @@ global with sharing class RequestOTPResource {
             // 2. Parse Date
             try {
                 String rawDate = req.dateOfBirth.trim();
+                System.debug('🔍 Raw date received: ' + rawDate);
                 List<String> dateParts = rawDate.split('/');
 
                 if (dateParts.size() == 3) {
@@ -64,6 +65,13 @@ global with sharing class RequestOTPResource {
             if (existingappUsers.isEmpty()) {
                 BaseRestResource.sendResponse(
                     BaseRestResource.errorResponse(404, 'USER_NOT_FOUND', 'No account found with this Email and Date of Birth.')
+                );
+                return;
+            }
+
+            if(existingappUsers[0].Status__c == 'Pending' ) {
+                BaseRestResource.sendResponse(
+                    BaseRestResource.errorResponse(403, 'ACCOUNT_NOT_APPROVED', 'Your account is under review. Please wait for approval.')
                 );
                 return;
             }

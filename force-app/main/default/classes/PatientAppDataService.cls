@@ -154,7 +154,8 @@ global with sharing class PatientAppDataService {
                         'M Musaib' => 'Michael Musaib',
                         'R Miles' => 'Richard Miles',
                         'Admin' => 'Administrator',
-                        'K Obrien' => 'Kelcie O Brien'
+                        'K Obrien' => 'Kelcie O Brien',
+                        'j Sierra' => 'Jorge Sierra'
                     };
 
 
@@ -177,7 +178,8 @@ global with sharing class PatientAppDataService {
                         'M Musaib' => 'michael@internationalbillingoffice.com',
                         'R Miles' => 'Richard.Miles@internationalbillingoffice.com',
                         'Administrator' => 'info@internationalbillingoffice.com',
-                        'K Obrien' => 'Kelcie.Obrien@passagehi.com'
+                        'K Obrien' => 'Kelcie.Obrien@passagehi.com',
+                        'j Sierra' => 'Jorge.Sierra@passagehi.com'
                     };
 
 
@@ -366,7 +368,7 @@ global with sharing class PatientAppDataService {
 
             resp.claimSpecialistEmail =
                 claimSpecialistEmail;
-
+            System.debug(resp.claimSpecialistName   + ' ' + resp.claimSpecialistEmail);
             BaseRestResource.sendResponse(BaseRestResource.successResponse(resp));
         } catch (QueryException qe) {
             BaseRestResource.sendResponse(BaseRestResource.errorResponse(500, 'QUERY_ERROR', qe.getMessage()));
