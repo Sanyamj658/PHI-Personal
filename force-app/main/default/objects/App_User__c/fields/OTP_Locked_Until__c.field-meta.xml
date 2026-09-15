@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OTP_Locked_Until__c</fullName>
+    <description>When set to a future datetime, OTP verification (and new OTP requests) are blocked until this time. Set after 3 consecutive incorrect OTP attempts; cleared on successful verification.</description>
+    <inlineHelpText>Account is locked out of OTP verification until this date/time.</inlineHelpText>
+    <label>OTP Locked Until</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

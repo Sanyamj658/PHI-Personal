@@ -280,4 +280,26 @@ insert insurance;
         System.assertEquals(false,           result.get('success'));
         System.assertEquals('INTERNAL_ERROR', result.get('errorCode'));
     }
+
+    // ─── Negative: account frozen from prior wrong-OTP attempts ───────────────
+
+    @IsTest
+    static void testHandlePost_AccountLocked_BlocksNewOtpRequest() {
+        App_User__c u = [SELECT Id FROM App_User__c WHERE Email__c = 'otptest@example.com'];
+        u.OTP_Locked_Until__c = System.now().addMinutes(3);
+        update u;
+
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email'       => 'otptest@example.com',
+            'dateOfBirth' => '15/03/1990'
+        }));
+
+        Test.startTest();
+        RequestOTPResource.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(403, RestContext.response.statusCode);
+        Map<String, Object> result = parseResponse();
+        System.assertEquals('ACCOUNT_LOCKED', result.get('errorCode'));
+    }
 }

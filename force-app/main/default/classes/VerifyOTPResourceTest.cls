@@ -61,7 +61,8 @@ insert patient;
     }
 
     private static App_User__c getAppUser() {
-        return [SELECT Id, OTP__c, OTP_Expiration__c, Session_Token__c
+        return [SELECT Id, OTP__c, OTP_Expiration__c, Session_Token__c,
+                        Failed_OTP_Attempts__c, OTP_Locked_Until__c
                 FROM App_User__c WHERE Email__c = 'verifyotp@example.com' LIMIT 1];
     }
 
@@ -327,5 +328,99 @@ insert patient;
         Map<String, Object> result = parseResponse();
         Map<String, Object> data   = (Map<String, Object>) result.get('data');
         System.assertEquals('VerifyOTP Patient', data.get('fullName'), 'Full name should be FirstName + LastName');
+    }
+
+    // ─── Lockout: wrong OTP increments the failed-attempt counter ─────────────
+
+    @IsTest
+    static void testHandlePost_WrongOtp_IncrementsFailedAttempts() {
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email'   => 'verifyotp@example.com',
+            'otpCode' => '999999'
+        }));
+
+        Test.startTest();
+        VerifyOTPResource.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(401, RestContext.response.statusCode);
+        App_User__c updated = getAppUser();
+        System.assertEquals(1, updated.Failed_OTP_Attempts__c, 'First wrong attempt should set counter to 1');
+        Assert.isNull(updated.OTP_Locked_Until__c, 'Account should not be locked before reaching the limit');
+    }
+
+    // ─── Lockout: 3rd consecutive wrong OTP freezes the account for 3 minutes ──
+
+    @IsTest
+    static void testHandlePost_WrongOtp_ThirdAttemptLocksAccount() {
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email'   => 'verifyotp@example.com',
+            'otpCode' => '999999'
+        }));
+
+        Test.startTest();
+        VerifyOTPResource.handlePost(); // attempt 1
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email' => 'verifyotp@example.com', 'otpCode' => '999999'
+        }));
+        VerifyOTPResource.handlePost(); // attempt 2
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email' => 'verifyotp@example.com', 'otpCode' => '999999'
+        }));
+        VerifyOTPResource.handlePost(); // attempt 3 -> locks the account
+        Test.stopTest();
+
+        System.assertEquals(403, RestContext.response.statusCode);
+        Map<String, Object> result = parseResponse();
+        System.assertEquals('ACCOUNT_LOCKED', result.get('errorCode'));
+
+        App_User__c updated = getAppUser();
+        System.assertEquals(0, updated.Failed_OTP_Attempts__c, 'Counter should reset once the account is locked');
+        Assert.isNotNull(updated.OTP_Locked_Until__c, 'Lock timestamp should be set');
+        System.assert(updated.OTP_Locked_Until__c > System.now(), 'Lock should expire in the future');
+    }
+
+    // ─── Lockout: locked account rejects even the correct OTP ─────────────────
+
+    @IsTest
+    static void testHandlePost_LockedAccount_BlocksCorrectOtp() {
+        App_User__c u = getAppUser();
+        u.OTP_Locked_Until__c = System.now().addMinutes(3);
+        update u;
+
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email'   => 'verifyotp@example.com',
+            'otpCode' => '123456' // correct code
+        }));
+
+        Test.startTest();
+        VerifyOTPResource.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(403, RestContext.response.statusCode);
+        Map<String, Object> result = parseResponse();
+        System.assertEquals('ACCOUNT_LOCKED', result.get('errorCode'));
+    }
+
+    // ─── Lockout: successful verification clears the lockout counters ─────────
+
+    @IsTest
+    static void testHandlePost_Success_ResetsFailedAttempts() {
+        App_User__c u = getAppUser();
+        u.Failed_OTP_Attempts__c = 2;
+        update u;
+
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email'   => 'verifyotp@example.com',
+            'otpCode' => '123456'
+        }));
+
+        Test.startTest();
+        VerifyOTPResource.handlePost();
+        Test.stopTest();
+
+        App_User__c updated = getAppUser();
+        System.assertEquals(0, updated.Failed_OTP_Attempts__c, 'Failed attempts should reset after success');
+        Assert.isNull(updated.OTP_Locked_Until__c, 'Lock should remain clear after success');
     }
 }

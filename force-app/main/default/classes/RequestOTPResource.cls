@@ -56,7 +56,7 @@ global with sharing class RequestOTPResource {
             // 3. Fetch User
             System.debug('🔍 Looking up user with email: ' + cleanEmail + ' and DOB: ' + dob);
             List<App_User__c> existingappUsers = [
-                SELECT Id, Status__c, Patient__c , Name 
+                SELECT Id, Status__c, Patient__c, Name, OTP_Locked_Until__c
                 FROM App_User__c
                 WHERE Email__c = :cleanEmail AND dob__c = :dob
                 LIMIT 1
@@ -78,6 +78,18 @@ global with sharing class RequestOTPResource {
 
             // ✅ Correct assignment
             App_User__c appUser = existingappUsers[0];
+
+            // Block new OTP requests while the account is frozen from too many wrong OTP attempts
+            if (appUser.OTP_Locked_Until__c != null && System.now() < appUser.OTP_Locked_Until__c) {
+                Long millisLeft = appUser.OTP_Locked_Until__c.getTime() - System.now().getTime();
+                Integer minutesLeft = (Integer) Math.max(1, Math.ceil(millisLeft / 60000.0));
+                BaseRestResource.sendResponse(
+                    BaseRestResource.errorResponse(403, 'ACCOUNT_LOCKED',
+                        'Too many attempts. Please wait ' + minutesLeft +
+                        (minutesLeft == 1 ? ' minute and try again.' : ' minutes and try again.'))
+                );
+                return;
+            }
 
             System.debug('🔍 Found user with email:  Status: ' + appUser.Status__c + '  appUser ' + appUser.patient__c);
             // 4. Check Status
