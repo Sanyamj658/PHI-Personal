@@ -1,14 +1,17 @@
 @RestResource(urlMapping='/v1/request-otp')
 global with sharing class RequestOTPResource {
 
+    // Request body containing the user's email and date of birth.
     global class OTPRequest {
         global String email;
         global String dateOfBirth; // Expected format: dd/mm/yyyy
     }
 
+    // Generates a 10-minute OTP and emails it to an active App User after status and lockout checks.
     @HttpPost
     global static void handlePost() {
 
+        // Savepoint lets changes be rolled back on error.
         Savepoint sp = Database.setSavepoint();
 
         try {
@@ -58,7 +61,7 @@ global with sharing class RequestOTPResource {
             List<App_User__c> existingappUsers = [
                 SELECT Id, Status__c, Patient__c, Name, OTP_Locked_Until__c
                 FROM App_User__c
-                WHERE Email__c = :cleanEmail AND dob__c = :dob
+                WHERE Email__c = :cleanEmail AND dob__c = :dob AND Status__c = 'Active'
                 LIMIT 1
             ];
 
@@ -69,12 +72,21 @@ global with sharing class RequestOTPResource {
                 return;
             }
 
-            if(existingappUsers[0].Status__c == 'Pending' ) {
+            /* if(existingappUsers[0].Status__c == 'Inactive') {
                 BaseRestResource.sendResponse(
                     BaseRestResource.errorResponse(403, 'ACCOUNT_NOT_APPROVED', 'Your account is under review. Please wait for approval.')
                 );
                 return;
             }
+
+            if(existingappUsers[0].Patient__c == null ) {
+                BaseRestResource.sendResponse(
+                    BaseRestResource.errorResponse(403, 'PATIENT_NOT_FOUND', 'No patient record found associated with this account.')
+                );
+                return;
+            } 
+            */
+            
 
             // ✅ Correct assignment
             App_User__c appUser = existingappUsers[0];
@@ -85,8 +97,8 @@ global with sharing class RequestOTPResource {
                 Integer minutesLeft = (Integer) Math.max(1, Math.ceil(millisLeft / 60000.0));
                 BaseRestResource.sendResponse(
                     BaseRestResource.errorResponse(403, 'ACCOUNT_LOCKED',
-                        'Too many attempts. Please wait ' + minutesLeft +
-                        (minutesLeft == 1 ? ' minute and try again.' : ' minutes and try again.'))
+                        'Login is temporarily blocked due to too many invalid OTP attempts. Please try again after ' + minutesLeft +
+                        (minutesLeft == 1 ? ' minute.' : ' minutes.'))
                 );
                 return;
             }
@@ -105,6 +117,7 @@ global with sharing class RequestOTPResource {
             // }
 
              System.debug('🔍 87 User status is valid for OTP request.');
+            // Pending accounts not yet linked to a patient cannot request an OTP.
             if (appUser.Status__c == 'Pending' &&  appUser.Patient__c == null) {
                  System.debug('🔍 89 User status is valid for OTP request.');
                 BaseRestResource.sendResponse(
@@ -117,6 +130,7 @@ global with sharing class RequestOTPResource {
                 return;
             }
             System.debug('🔍 197 User status is valid for OTP request.');
+            // Inactive accounts not linked to a patient are treated as deactivated.
             if (appUser.Status__c == 'Inactive' &&  appUser.Patient__c == null) {
                  System.debug('🔍 99  User status is valid for OTP request.');
                 BaseRestResource.sendResponse(

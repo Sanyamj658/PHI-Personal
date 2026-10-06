@@ -448,14 +448,7 @@
         <apexClass>PatientAppDataServiceTest</apexClass>
         <enabled>false</enabled>
     </classAccesses>
-    <classAccesses>
-        <apexClass>PatientAppMatchingBatch</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>PatientAppMatchingBatchTest</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
+    
     <classAccesses>
         <apexClass>PatientAppRegister</apexClass>
         <enabled>false</enabled>
@@ -690,11 +683,7 @@
         <field>App_Notification__c.Related_Record_Id__c</field>
         <readable>false</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>App_Notification__c.Related_Record_Type__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
+    
     <fieldPermissions>
         <editable>false</editable>
         <field>App_Notification__c.Type__c</field>

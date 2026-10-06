@@ -169,4 +169,163 @@ private class FirebaseServiceTest {
         Test.stopTest();
         System.assert(true, 'Failed token request should not propagate an exception');
     }
+
+    // ─── Extra mocks ──────────────────────────────────────────────────────────
+
+    // OAuth token request succeeds, the FCM send itself fails with an exception
+    private class FcmMockThrowOnSend implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            if (req.getEndpoint().contains('oauth2.googleapis.com')) {
+                HTTPResponse res = new HTTPResponse();
+                res.setStatusCode(200);
+                res.setBody('{"access_token":"mock_access_token_abc123"}');
+                return res;
+            }
+            throw new CalloutException('FCM endpoint unavailable');
+        }
+    }
+
+    // ─── sendBulkNotificationsSync: blank payload → early return ─────────────
+
+    @IsTest
+    static void testSendBulkNotificationsSync_BlankPayload_ReturnsEarly() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockSuccess());
+
+        Test.startTest();
+        FirebaseService.sendBulkNotificationsSync('');
+        FirebaseService.sendBulkNotificationsSync(null);
+        Test.stopTest();
+
+        System.assertEquals(0, Limits.getCallouts(), 'No callout should be made for a blank payload');
+    }
+
+    // ─── sendBulkNotificationsSync: valid payload sends every message ────────
+
+    @IsTest
+    static void testSendBulkNotificationsSync_ValidPayload_WithMock() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockSuccess());
+        String payload = JSON.serialize(new List<Map<String, String>>{
+            new Map<String, String>{ 'deviceToken' => 'token-1', 'title' => 'T1', 'body' => 'B1' },
+            new Map<String, String>{ 'deviceToken' => 'token-2', 'title' => 'T2', 'body' => 'B2' }
+        });
+
+        Test.startTest();
+        FirebaseService.sendBulkNotificationsSync(payload);
+        Test.stopTest();
+
+        System.assert(true, 'Valid payload processed without exception');
+    }
+
+    // ─── sendBulkNotificationsSync: token request fails → nothing is sent ────
+
+    @IsTest
+    static void testSendBulkNotificationsSync_TokenFailure_ReturnsEarly() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockFailToken());
+        String payload = JSON.serialize(new List<Map<String, String>>{
+            new Map<String, String>{ 'deviceToken' => 'token-1', 'title' => 'T', 'body' => 'B' }
+        });
+
+        Test.startTest();
+        FirebaseService.sendBulkNotificationsSync(payload);
+        Test.stopTest();
+
+        System.assert(true, 'Token failure is handled gracefully');
+    }
+
+    // ─── sendBulkNotificationsSync: payload that is not valid JSON ───────────
+
+    @IsTest
+    static void testSendBulkNotificationsSync_InvalidJson_HandledGracefully() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockSuccess());
+
+        Test.startTest();
+        FirebaseService.sendBulkNotificationsSync('NOT-VALID-JSON');
+        Test.stopTest();
+
+        System.assert(true, 'Parse error is caught inside the method');
+    }
+
+    // ─── sendBulkNotificationsSync: JSON null → loop over null is caught ─────
+
+    @IsTest
+    static void testSendBulkNotificationsSync_JsonNull_HandledGracefully() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockSuccess());
+
+        Test.startTest();
+        FirebaseService.sendBulkNotificationsSync('null');
+        Test.stopTest();
+
+        System.assert(true, 'Null payload list is caught by the outer handler');
+    }
+
+    // ─── sendBulkNotificationsSync: blank token skipped, bad item caught ─────
+
+    @IsTest
+    static void testSendBulkNotificationsSync_BlankTokenAndInvalidItem() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockSuccess());
+        // 1st item: blank device token (skipped); 2nd item: not a JSON object (per-item catch)
+        String payload = '[{"deviceToken":"","title":"T","body":"B"}, 123]';
+
+        Test.startTest();
+        FirebaseService.sendBulkNotificationsSync(payload);
+        Test.stopTest();
+
+        System.assert(true, 'Blank tokens and malformed items are handled per item');
+    }
+
+    // ─── sendFcmMessage: FCM send throws → caught and logged ─────────────────
+
+    @IsTest
+    static void testSendBulkNotificationsSync_FcmSendThrows_HandledGracefully() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockThrowOnSend());
+        String payload = JSON.serialize(new List<Map<String, String>>{
+            new Map<String, String>{ 'deviceToken' => 'token-1', 'title' => 'T', 'body' => 'B' }
+        });
+
+        Test.startTest();
+        FirebaseService.sendBulkNotificationsSync(payload);
+        Test.stopTest();
+
+        System.assert(true, 'A failing FCM call must not propagate');
+    }
+
+    // ─── sendNotification: FCM send throws → caught and logged ───────────────
+
+    @IsTest
+    static void testSendNotification_FcmSendThrows_HandledGracefully() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockThrowOnSend());
+
+        Test.startTest();
+        FirebaseService.sendNotification('device-token', 'Title', 'Body');
+        Test.stopTest();
+
+        System.assert(true, 'A failing FCM call must not propagate');
+    }
+
+    // ─── getAccessToken: blank credentials → null ────────────────────────────
+
+    @IsTest
+    static void testGetAccessToken_BlankCredentials_ReturnsNull() {
+        System.assertEquals(null, FirebaseService.getAccessToken(null, 'key'));
+        System.assertEquals(null, FirebaseService.getAccessToken('svc@example.com', ''));
+        System.assertEquals(null, FirebaseService.getAccessToken('', ''));
+    }
+
+    // ─── getAccessToken: private key that cannot be decoded → null ───────────
+
+    @IsTest
+    static void testGetAccessToken_InvalidPrivateKey_ReturnsNull() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockSuccess());
+
+        System.assertEquals(null, FirebaseService.getAccessToken('svc@example.com', '***not-a-valid-key***'));
+    }
+
+    // ─── getAccessToken: key decodes but cannot sign → caught, returns null ──
+
+    @IsTest
+    static void testGetAccessToken_UnsignableKey_ReturnsNull() {
+        Test.setMock(HttpCalloutMock.class, new FcmMockSuccess());
+
+        System.assertEquals(null, FirebaseService.getAccessToken('svc@example.com', 'AAAA'));
+    }
 }

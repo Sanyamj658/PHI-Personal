@@ -1,10 +1,12 @@
 public class DocumentShareNotificationHandler {
+    // Notifies patients when a document is shared with a Case, Contact or Claim.
     public static void handleAfterInsert(List<ContentDocumentLink> newLinks) {
         try {
             Set<Id> caseIds = new Set<Id>();
             Set<Id> contactIds = new Set<Id>();
             Set<Id> claimIds = new Set<Id>();
 
+            // Group linked record Ids by type (Case, Contact, Claim).
             for (ContentDocumentLink l : newLinks) {
                 if (l.LinkedEntityId == null) {
                     continue;
@@ -21,6 +23,7 @@ public class DocumentShareNotificationHandler {
                 }
             }
 
+            // Resolve patient emails from Cases, Contact App Users and Claim Cases.
             Set<String> patientEmails = new Set<String>();
 
             if (!caseIds.isEmpty()) {
@@ -56,6 +59,7 @@ public class DocumentShareNotificationHandler {
                 return;
             }
 
+            // Send one Document_Shared notification per unique patient email.
             List<NotificationService.Request> requests = new List<NotificationService.Request>();
             for (String email : patientEmails) {
                 NotificationService.Request r = new NotificationService.Request(

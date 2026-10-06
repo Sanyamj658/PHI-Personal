@@ -1,4 +1,5 @@
 public class ClaimNotificationHandler {
+    // Notifies the patient when a new claim is created.
     public static void handleAfterInsert(List<Claim__c> newClaims) {
         try {
             notifyForClaims(newClaims, null);
@@ -7,6 +8,7 @@ public class ClaimNotificationHandler {
         }
     }
 
+    // Notifies only for claims whose status, payments or balance changed.
     public static void handleAfterUpdate(List<Claim__c> newClaims, Map<Id, Claim__c> oldMap) {
         try {
             List<Claim__c> changed = new List<Claim__c>();
@@ -23,6 +25,7 @@ public class ClaimNotificationHandler {
         }
     }
 
+    // Returns true if the claim is new or its status/payment/balance fields changed.
     private static Boolean hasRelevantChange(Claim__c newClaim, Claim__c oldClaim) {
         if (oldClaim == null) {
             return true;
@@ -32,6 +35,7 @@ public class ClaimNotificationHandler {
             || (newClaim.Claim_Balance_Due__c != oldClaim.Claim_Balance_Due__c);
     }
 
+    // Looks up patient emails through the claim's Case and dispatches Claim_Update notifications.
     private static void notifyForClaims(List<Claim__c> claims, Map<Id, Claim__c> oldMap) {
         try {
             Set<Id> caseIds = new Set<Id>();
@@ -74,6 +78,7 @@ public class ClaimNotificationHandler {
         }
     }
 
+    // Builds the notification message based on which claim field changed.
     private static String buildBody(Claim__c c, Map<Id, Claim__c> oldMap) {
         if (oldMap == null) {
             return 'A new claim has been added to your account.';

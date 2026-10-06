@@ -16,6 +16,20 @@ private class MobileTokenAPITest {
         );
 
         insert appUser;
+
+        // AppUserTrigger (before insert) overrides Status__c and a validation rule requires a
+        // linked Patient before an App User can be Active, so link a Contact and activate after insert.
+        Insurance_Company__c insurance = new Insurance_Company__c(Name = 'Test Insurance');
+        insert insurance;
+        Contact patient = new Contact(
+            FirstName = 'Test', LastName = 'User', Email = 'test@test.com',
+            Date_of_Birth__c = Date.newInstance(1995, 5, 10), DX_s__c = 'MT01',
+            Primary_Insurance__c = insurance.Id, Plan_Type__c = 'Other Plan'
+        );
+        insert patient;
+        appUser.Patient__c = patient.Id;
+        appUser.Status__c  = 'Active';
+        update appUser;
     }
 
     private static void createRestRequest(String body) {

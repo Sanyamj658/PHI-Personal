@@ -313,4 +313,18 @@ private class DocumentShareNotificationHandlerTest {
 
         System.assert(true, 'Empty list must not throw');
     }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 10. Exception guard – a null list is caught inside the handler
+    // ─────────────────────────────────────────────────────────────────────────
+    @IsTest
+    static void testHandleAfterInsert_NullList_ExceptionIsCaught() {
+        Integer before = [SELECT COUNT() FROM App_Notification__c];
+
+        Test.startTest();
+        DocumentShareNotificationHandler.handleAfterInsert(null);
+        Test.stopTest();
+
+        System.assertEquals(before, [SELECT COUNT() FROM App_Notification__c], 'Nothing is created when processing fails');
+    }
 }

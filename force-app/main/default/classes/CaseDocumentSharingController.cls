@@ -1,10 +1,13 @@
+// LWC controller to list files on a Case and share them with the patient's mobile app account.
 public with sharing class CaseDocumentSharingController {
+    // Result of loading case files: whether sharing is allowed, why not, and the files.
     public class CaseFilesResult {
         @AuraEnabled public Boolean canShare;
         @AuraEnabled public String noShareReason;
         @AuraEnabled public List<FileWrapper> files;
     }
 
+    // One file row shown in the UI, including its shared status.
     public class FileWrapper {
         @AuraEnabled public String id;
         @AuraEnabled public String contentDocumentId;
@@ -17,6 +20,7 @@ public with sharing class CaseDocumentSharingController {
         @AuraEnabled public String sharedDocumentId;
     }
 
+    // Returns the Case's files and whether they can be shared to the linked patient's mobile app.
     @AuraEnabled(cacheable=true)
     public static CaseFilesResult getCaseFilesData(Id caseId) {
         try {
@@ -27,6 +31,7 @@ public with sharing class CaseDocumentSharingController {
             CaseFilesResult resultObj = new CaseFilesResult();
             resultObj.files = new List<FileWrapper>();
 
+            // Get the Case and its patient Contact.
             List<Case> cases = [
                 SELECT Id, ContactId
                 FROM Case
@@ -40,11 +45,13 @@ public with sharing class CaseDocumentSharingController {
 
             Id contactId = cases[0].ContactId;
 
+            // A patient Contact is needed to share documents.
             if (contactId == null) {
                 resultObj.canShare = false;
                 resultObj.noShareReason = 'No patient contact is linked to this case. Documents cannot be shared to mobile.';
             }
 
+            // Find the patient's App User; sharing is allowed only if one exists.
             Id appUserId = null;
             if (contactId != null) {
                 List<App_User__c> users = [
@@ -63,12 +70,14 @@ public with sharing class CaseDocumentSharingController {
                 }
             }
 
+            // No App User found: files are shown but cannot be shared.
             if (appUserId == null) {
                 resultObj.canShare = false;
                 resultObj.noShareReason = 'No mobile app user found for the patient linked to this case. Files are visible here but cannot be shared.';
                 return resultObj;
             }
 
+            // Get the files linked to the Case, newest first.
             List<ContentDocumentLink> contentDocumentLinks = [
                 SELECT ContentDocumentId,
                     ContentDocument.Title,
@@ -84,11 +93,13 @@ public with sharing class CaseDocumentSharingController {
                 return resultObj;
             }
 
+            // Collect the document Ids to check which are already shared.
             Set<String> docIdSet = new Set<String>();
             for (ContentDocumentLink cdl : contentDocumentLinks) {
                 docIdSet.add(String.valueOf(cdl.ContentDocumentId));
             }
 
+            // Map already-shared documents for this App User by document Id.
             Map<String, Shared_Document__c> sharedMap = new Map<String, Shared_Document__c>();
             for (Shared_Document__c sd : [
                 SELECT Id, Content_Document_Id__c, Visible_On_Mobile__c
@@ -99,6 +110,7 @@ public with sharing class CaseDocumentSharingController {
                 sharedMap.put(sd.Content_Document_Id__c, sd);
             }
 
+            // Build the file list, flagging documents already visible on mobile.
             for (ContentDocumentLink cdl : contentDocumentLinks) {
                 String docId = String.valueOf(cdl.ContentDocumentId);
                 Boolean shared = sharedMap.containsKey(docId) && sharedMap.get(docId).Visible_On_Mobile__c;
@@ -122,6 +134,7 @@ public with sharing class CaseDocumentSharingController {
         }
     }
 
+    // Makes the selected Case files visible on the patient's mobile app and notifies the patient.
     @AuraEnabled
     public static Integer shareDocuments(Id caseId, List<String> contentDocumentIds) {
         try {
@@ -129,6 +142,7 @@ public with sharing class CaseDocumentSharingController {
                 throw new AuraHandledException('Invalid parameters: Case ID and at least one document ID are required.');
             }
 
+            // Get the Case and its patient Contact.
             List<Case> cases = [
                 SELECT Id, ContactId
                 FROM Case
@@ -146,6 +160,7 @@ public with sharing class CaseDocumentSharingController {
 
             Id contactId = cases[0].ContactId;
 
+            // Find the patient's App User.
             List<App_User__c> users = [
                 SELECT Id
                 FROM App_User__c
@@ -159,6 +174,7 @@ public with sharing class CaseDocumentSharingController {
 
             Id appUserId = users[0].Id;
 
+            // Load existing shared records to avoid duplicates.
             Map<String, Shared_Document__c> existingMap = new Map<String, Shared_Document__c>();
             for (Shared_Document__c sd : [
                 SELECT Id, Content_Document_Id__c, Visible_On_Mobile__c
@@ -169,6 +185,7 @@ public with sharing class CaseDocumentSharingController {
                 existingMap.put(sd.Content_Document_Id__c, sd);
             }
 
+            // Re-enable hidden shares and create new Shared_Document__c records for the rest.
             List<Shared_Document__c> toUpsert = new List<Shared_Document__c>();
 
             for (String docId : contentDocumentIds) {
@@ -188,10 +205,12 @@ public with sharing class CaseDocumentSharingController {
                 }
             }
 
+            // Save the shared document records.
             if (!toUpsert.isEmpty()) {
                 upsert toUpsert;
             }
 
+            // Send an in-app/push notification to the App User.
             if (!toUpsert.isEmpty()) {
                 List<App_User__c> appUser = [
                     SELECT Email__c
@@ -211,8 +230,10 @@ public with sharing class CaseDocumentSharingController {
                 }
             }
 
+            // Complete the open document-request tasks for this Case.
             closeRelatedDocumentTasks(caseId);
 
+            // Email the patient that new documents are available.
             if (!toUpsert.isEmpty()) {
                 List<Contact> patient = [
                     SELECT FirstName, Email
@@ -232,6 +253,7 @@ public with sharing class CaseDocumentSharingController {
         }
     }
 
+    // Completes open document-request tasks on the Case; failures are only logged.
     private static void closeRelatedDocumentTasks(Id caseId) {
         try {
             List<Task> openTasks = [
@@ -259,6 +281,7 @@ public with sharing class CaseDocumentSharingController {
         }
     }
 
+    // Formats a byte count as B, KB, MB or GB.
     @TestVisible
     private static String formatFileSize(Long bytes) {
         if (bytes == null || bytes == 0) {
@@ -276,6 +299,7 @@ public with sharing class CaseDocumentSharingController {
         return (bytes / 1073741824.0).setScale(1) + ' GB';
     }
 
+    // Sends a plain-text email telling the patient that new documents are available.
     private static void sendShareNotificationEmail(String toEmail, String toName, Integer docCount) {
         try {
             String greeting = String.isNotBlank(toName) ? 'Hi ' + toName + ',' : 'Hello,';

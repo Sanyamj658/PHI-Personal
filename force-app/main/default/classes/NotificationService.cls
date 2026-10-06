@@ -1,4 +1,5 @@
 public class NotificationService {
+    // Notification request holding the recipient email, message and optional related record info.
     public class Request {
         public String email;
         public String title;
@@ -14,15 +15,18 @@ public class NotificationService {
         }
     }
 
+    // Tracks email+title keys already processed in this transaction to avoid duplicate notifications.
     @TestVisible
     private static Set<String> processedKeys = new Set<String>();
 
+    // Saves in-app notifications for matching App Users and pushes them to their devices via Firebase.
     public static void dispatch(List<Request> requests) {
         try {
             if (requests == null || requests.isEmpty()) {
                 return;
             }
 
+            // Drop invalid or already-processed requests, keeping one request per email.
             Map<String, Request> dedupedByEmail = new Map<String, Request>();
             for (Request r : requests) {
                 if (String.isBlank(r.email) || String.isBlank(r.title)) {
@@ -40,6 +44,7 @@ public class NotificationService {
                 return;
             }
 
+            // Find App Users for the requested emails.
             List<App_User__c> appUsers = [
                 SELECT Id, Email__c, Device_Token__c
                 FROM App_User__c
@@ -51,6 +56,7 @@ public class NotificationService {
                 return;
             }
 
+            // Create an unread in-app notification record for each App User.
             List<App_Notification__c> toInsert = new List<App_Notification__c>();
             for (App_User__c u : appUsers) {
                 String lEmail = u.Email__c.toLowerCase();
@@ -71,6 +77,7 @@ public class NotificationService {
                 insert toInsert;
             }
 
+            // Build push payloads only for users that have a device token.
             List<Map<String, String>> payloads = new List<Map<String, String>>();
             for (App_User__c u : appUsers) {
                 if (String.isBlank(u.Device_Token__c)) {
@@ -89,6 +96,7 @@ public class NotificationService {
                 });
             }
 
+            // Send the push notifications asynchronously through Firebase.
             if (!payloads.isEmpty()) {
                 FirebaseService.sendBulkNotifications(JSON.serialize(payloads));
             }
@@ -97,6 +105,7 @@ public class NotificationService {
         }
     }
 
+    // Convenience method to send a single notification to one email.
     public static void sendToEmail(String email, String title, String body) {
         dispatch(new List<Request>{ new Request(email, title, body) });
     }

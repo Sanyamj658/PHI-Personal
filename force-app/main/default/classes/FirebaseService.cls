@@ -1,7 +1,10 @@
+// Service for sending Firebase (FCM) push notifications using a service-account OAuth token.
 public class FirebaseService {
+    // Sends a single push notification; runs as a future method so callouts are allowed.
     @future(callout=true)
     public static void sendNotification(String deviceToken, String title, String body) {
         try {
+            // Read the Firebase credentials from custom metadata.
             List<Firebase_Configuration__mdt> config = [
                 SELECT Client_Email__c, Private_Key__c, Project_ID__c
                 FROM Firebase_Configuration__mdt
@@ -12,6 +15,7 @@ public class FirebaseService {
                 return;
             }
 
+            // Get an OAuth access token for FCM.
             String accessToken = getAccessToken(config[0].Client_Email__c, config[0].Private_Key__c);
             if (accessToken == null) {
                 System.debug('[FirebaseService] Failed to get access token');
@@ -24,6 +28,7 @@ public class FirebaseService {
         }
     }
     
+    // Queues the bulk notification job so the callouts run asynchronously.
     public static void sendBulkNotifications(String serializedPayloads) {
         try {
             System.enqueueJob(new FirebaseNotificationQueueable(serializedPayloads));
@@ -32,6 +37,7 @@ public class FirebaseService {
         }
     }
     
+    // Sends all queued notifications synchronously; called from the queueable job.
     public static void sendBulkNotificationsSync(String serializedPayloads) {
         try {
             if (String.isBlank(serializedPayloads)) {
@@ -59,6 +65,7 @@ public class FirebaseService {
                 return;
             }
 
+            // Send each payload individually so one failure does not stop the rest.
             for (Object item : payloads) {
                 try {
                     Map<String, Object> p = (Map<String, Object>) item;
@@ -80,6 +87,7 @@ public class FirebaseService {
     
     // ─── Private helpers ─────────────────────────────────────────────────────
     
+    // Builds the FCM v1 request and posts it to Firebase.
     private static void sendFcmMessage(String projectId, String accessToken,
                                        String deviceToken, String title, String body) {
                                            String fcmUrl = 'https://fcm.googleapis.com/v1/projects/' + projectId + '/messages:send';
@@ -113,6 +121,7 @@ public class FirebaseService {
                                            }
                                        }
     
+    // Builds a signed JWT from the service-account key and exchanges it for a Google OAuth access token.
     public static String getAccessToken(String clientEmail, String privateKey) {
         try {
             
@@ -172,6 +181,7 @@ public class FirebaseService {
         }
     }
     
+    // Converts base64 to URL-safe base64 as required for JWT segments.
     private static String base64UrlEncode(Blob input) {
         return EncodingUtil.base64Encode(input)
             .replace('+', '-')

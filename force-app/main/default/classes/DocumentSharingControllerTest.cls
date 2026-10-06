@@ -278,4 +278,64 @@ insert insurance;
         );
         Assert.areEqual('0 B',   DocumentSharingController.formatFileSize(null),       'Null input');
     }
+
+    // ─── getContactFiles: App User without a linked Contact ──────────────────
+
+    @IsTest
+    static void getContactFiles_returnsEmptyWhenAppUserHasNoPatient() {
+        App_User__c orphan = new App_User__c(Name = 'Orphan User', Email__c = 'orphan.docshare@example.com');
+        insert orphan;
+
+        Test.startTest();
+        List<DocumentSharingController.FileWrapper> result =
+            DocumentSharingController.getContactFiles(orphan.Id);
+        Test.stopTest();
+
+        System.assertEquals(0, result.size(), 'No patient linked → empty list');
+    }
+
+    // ─── getContactFiles: App User record that no longer exists ──────────────
+
+    @IsTest
+    static void getContactFiles_returnsEmptyWhenAppUserNotFound() {
+        App_User__c temp = new App_User__c(Name = 'Temp User', Email__c = 'temp.docshare@example.com');
+        insert temp;
+        Id deletedId = temp.Id;
+        delete temp;
+
+        Test.startTest();
+        List<DocumentSharingController.FileWrapper> result =
+            DocumentSharingController.getContactFiles(deletedId);
+        Test.stopTest();
+
+        System.assertEquals(0, result.size(), 'Unknown app user → empty list');
+    }
+
+    // ─── getContactFiles: linked Contact has no files ────────────────────────
+
+    @IsTest
+    static void getContactFiles_returnsEmptyWhenContactHasNoFiles() {
+        Account acc              = [SELECT Id FROM Account LIMIT 1];
+        Insurance_Company__c ins = [SELECT Id FROM Insurance_Company__c LIMIT 1];
+        Contact noFiles = new Contact(
+            LastName             = 'NoFilesPatient',
+            Email                = 'nofiles.docshare@example.com',
+            DX_s__c              = 'DS02',
+            AccountId            = acc.Id,
+            Primary_Insurance__c = ins.Id,
+            Plan_Type__c         = 'Other Plan'
+        );
+        insert noFiles;
+        App_User__c user = new App_User__c(
+            Name = 'No Files', Email__c = 'nofiles.docshare@example.com', Patient__c = noFiles.Id
+        );
+        insert user;
+
+        Test.startTest();
+        List<DocumentSharingController.FileWrapper> result =
+            DocumentSharingController.getContactFiles(user.Id);
+        Test.stopTest();
+
+        System.assertEquals(0, result.size(), 'Contact without files → empty list');
+    }
 }

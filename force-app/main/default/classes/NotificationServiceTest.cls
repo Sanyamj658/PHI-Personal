@@ -255,4 +255,18 @@ private class NotificationServiceTest {
         Integer count = [SELECT COUNT() FROM App_Notification__c WHERE App_User__c = :withToken.Id];
         System.assertEquals(1, count, 'Notification record should be persisted even when FCM is triggered');
     }
+
+    // ─── Exception guard: a null request entry is caught by dispatch ─────────
+
+    @IsTest
+    static void testDispatch_NullRequestEntry_ExceptionIsCaught() {
+        App_User__c u = getUser();
+
+        Test.startTest();
+        NotificationService.dispatch(new List<NotificationService.Request>{ null });
+        Test.stopTest();
+
+        System.assertEquals(0, [SELECT COUNT() FROM App_Notification__c WHERE App_User__c = :u.Id],
+            'Nothing is persisted when processing fails');
+    }
 }

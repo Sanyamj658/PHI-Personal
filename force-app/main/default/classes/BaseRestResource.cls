@@ -1,4 +1,6 @@
+// Base helper for REST resources providing a standard JSON response format and error handling.
 public class BaseRestResource {
+    // Standard API response wrapper serialized to JSON.
     public class ApiResponse {
         public Boolean success;
         public String message;
@@ -13,11 +15,13 @@ public class BaseRestResource {
         }
     }
 
+    // Writes the response as JSON to the REST response body.
     public static void sendResponse(ApiResponse resp) {
         RestContext.response.addHeader('Content-Type', 'application/json');
         RestContext.response.responseBody = Blob.valueOf(JSON.serialize(resp));
     }
 
+    // Builds a 200 success response with optional data and message.
     public static ApiResponse successResponse(Object data, String message) {
         RestContext.response.statusCode = 200;
         ApiResponse resp = new ApiResponse();
@@ -35,6 +39,7 @@ public class BaseRestResource {
         return successResponse(null, message);
     }
 
+    // Builds an error response with the given HTTP status code, error code and message.
     public static ApiResponse errorResponse(Integer statusCode, String errorCode, String message) {
         RestContext.response.statusCode = statusCode;
         ApiResponse resp = new ApiResponse();
@@ -48,11 +53,13 @@ public class BaseRestResource {
         return errorResponse(statusCode, errorCode, null);
     }
 
+    // Logs the exception and returns a 500 INTERNAL_ERROR response.
     public static ApiResponse handleException(Exception e) {
         System.debug(LoggingLevel.ERROR, 'REST API Error: ' + e.getMessage() + ' | ' + e.getStackTraceString());
         return errorResponse(500, 'INTERNAL_ERROR', e.getMessage());
     }
 
+    // Rolls back to the savepoint (if any) before handling the exception.
     public static ApiResponse handleException(Exception e, Savepoint sp) {
         if (sp != null) {
             Database.rollback(sp);
@@ -60,6 +67,7 @@ public class BaseRestResource {
         return handleException(e);
     }
 
+    // Extracts the Bearer token from the Authorization header, setting 401 and returning null if missing or invalid.
     public static String validateAuthorizationHeader() {
         RestRequest req = RestContext.request;
 

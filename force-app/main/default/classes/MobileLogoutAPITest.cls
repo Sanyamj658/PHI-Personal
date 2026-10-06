@@ -9,6 +9,20 @@ private class MobileLogoutAPITest {
             Device_Token__c = 'SampleDeviceToken'
         );
         insert user;
+
+        // AppUserTrigger (before insert) overrides Status__c and a validation rule requires a
+        // linked Patient before an App User can be Active, so link a Contact and activate after insert.
+        Insurance_Company__c insurance = new Insurance_Company__c(Name = 'Test Insurance');
+        insert insurance;
+        Contact patient = new Contact(
+            FirstName = 'Test', LastName = 'Logout', Email = 'test@example.com',
+            Date_of_Birth__c = Date.newInstance(1995, 5, 15), DX_s__c = 'ML01',
+            Primary_Insurance__c = insurance.Id, Plan_Type__c = 'Other Plan'
+        );
+        insert patient;
+        user.Patient__c = patient.Id;
+        user.Status__c  = 'Active';
+        update user;
     }
 
     @IsTest

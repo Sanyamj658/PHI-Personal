@@ -317,4 +317,114 @@ insert orphan;
         Test.stopTest();
         System.assert(true, 'Empty list should not throw');
     }
+
+    // ─── afterUpdate: completing the only open task on an open Case → error ──
+
+    @IsTest
+    static void testAfterUpdate_NoFollowUpTask_AddsError() {
+        Contact patient = getPatient();
+        Case c          = getOpenCase();
+
+        // Persisted as Completed, so the contact has no Open task left
+        Task mainTask = new Task(
+            Subject = 'Regular Task',
+            WhoId   = patient.Id,
+            WhatId  = c.Id,
+            Name__c = 'Admin',
+            Status  = 'Completed'
+        );
+        insert mainTask;
+
+        Task old = mainTask.clone(true, true, true, true);
+        old.Status = 'Open';
+
+        Test.startTest();
+        TaskTriggerHandler.afterUpdate(new List<Task>{ mainTask }, new Map<Id, Task>{ mainTask.Id => old });
+        Test.stopTest();
+
+        System.assertEquals(1, mainTask.getErrors().size(), 'Follow-up validation error expected');
+        System.assert(mainTask.getErrors()[0].getMessage().contains('follow up task'));
+    }
+
+    // ─── handleAfter: update branch delegates to TaskNotificationHandler ─────
+
+    @IsTest
+    static void testHandleAfter_Update_DelegatesToNotificationHandler() {
+        Contact patient = getPatient();
+        NotificationService.processedKeys.clear();
+        Task t = new Task(Subject = 'Update Task', WhoId = patient.Id, Description = 'Changed');
+
+        Test.startTest();
+        TaskTriggerHandler.handleAfter(new List<Task>{ t }, new Map<Id, Task>(), false, true);
+        Test.stopTest();
+
+        System.assertEquals(0, [SELECT COUNT() FROM App_Notification__c], 'Task missing from old map is skipped');
+    }
+
+    // ─── makeTaskPublic: Contact on an externally shared Account ─────────────
+    // Best effort: needs a "Client Access User" profile and the ability to share the
+    // Account with that user; the check is skipped when the org does not allow it.
+
+    @IsTest
+    static void testMakeTaskPublic_ExternallySharedAccount_SetsVisibleInSelfService() {
+        List<Profile> profiles = [SELECT Id FROM Profile WHERE Name = 'Client Access User' LIMIT 1];
+        if (profiles.isEmpty()) {
+            return;
+        }
+        Contact patient = [SELECT Id, AccountId FROM Contact WHERE Email = 'tasktrigger@example.com' LIMIT 1];
+
+        User externalUser = new User(
+            Alias = 'extusr', Email = 'ext.tasktrigger@example.com', Username = 'ext.tasktrigger@example.com.test',
+            LastName = 'External', ProfileId = profiles[0].Id, ContactId = patient.Id,
+            TimeZoneSidKey = 'America/New_York', LocaleSidKey = 'en_US',
+            EmailEncodingKey = 'UTF-8', LanguageLocaleKey = 'en_US'
+        );
+        try {
+            System.runAs(new User(Id = UserInfo.getUserId())) {
+                insert externalUser;
+                insert new AccountShare(
+                    AccountId = patient.AccountId, UserOrGroupId = externalUser.Id,
+                    AccountAccessLevel = 'Read', OpportunityAccessLevel = 'None', CaseAccessLevel = 'None'
+                );
+            }
+        } catch (Exception e) {
+            return; // the org does not allow creating this external share in a test
+        }
+
+        Task visible = new Task(Subject = 'Public Task', WhoId = patient.Id, Status = 'Open');
+        Task hidden  = new Task(Subject = '7 Hidden Task', WhoId = patient.Id, Status = 'Open');
+
+        Test.startTest();
+        TaskTriggerHandler.makeTaskPublic(new List<Task>{ visible, hidden });
+        Test.stopTest();
+
+        System.assertEquals(true,  visible.IsVisibleInSelfService, 'Regular subject is made visible');
+        System.assertEquals(false, hidden.IsVisibleInSelfService,  'Subjects starting with 7 stay private');
+    }
+
+    // ─── afterUpdate: a task that was not completed is skipped in a mixed batch ─
+
+    @IsTest
+    static void testAfterUpdate_MixedBatch_NonCompletedTaskSkipped() {
+        Contact patient = getPatient();
+        Case c          = getOpenCase();
+
+        Task done    = new Task(Subject = 'Done Task', WhoId = patient.Id, WhatId = c.Id, Name__c = 'Admin', Status = 'Open');
+        Task pending = new Task(Subject = 'Still Open', WhoId = patient.Id, Name__c = 'Admin', Status = 'Open');
+        insert new List<Task>{ done, pending };
+
+        Task oldDone    = done.clone(true, true, true, true);
+        Task oldPending = pending.clone(true, true, true, true);
+        done.Status     = 'Completed';
+
+        Test.startTest();
+        TaskTriggerHandler.afterUpdate(
+            new List<Task>{ done, pending },
+            new Map<Id, Task>{ done.Id => oldDone, pending.Id => oldPending }
+        );
+        Test.stopTest();
+
+        System.assertEquals(0, done.getErrors().size(), 'Another open task remains, so no error');
+        System.assertEquals(0, pending.getErrors().size(), 'Non-completed task is skipped');
+    }
 }

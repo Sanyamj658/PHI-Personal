@@ -231,4 +231,23 @@ private class BaseRestResourceTest {
 
         Assert.isNull(token, 'Should return null when RestContext.request is null');
     }
+
+    // ─── handleException with a savepoint rolls back pending DML ─────────────
+
+    @IsTest
+    static void testHandleException_WithSavepoint_RollsBack() {
+        setupRestContext();
+        Savepoint sp = Database.setSavepoint();
+        insert new Account(Name = 'Rollback Account', Account_Manager_Name__c = 'Manager');
+        System.assertEquals(1, [SELECT COUNT() FROM Account WHERE Name = 'Rollback Account']);
+
+        // No Test.startTest/stopTest here: they start a new context in which the savepoint is invalid
+        BaseRestResource.ApiResponse resp =
+            BaseRestResource.handleException(new IllegalArgumentException('boom'), sp);
+
+        System.assertEquals(0, [SELECT COUNT() FROM Account WHERE Name = 'Rollback Account'],
+            'DML after the savepoint should be rolled back');
+        System.assertEquals('INTERNAL_ERROR', resp.errorCode);
+        System.assertEquals(500, RestContext.response.statusCode);
+    }
 }

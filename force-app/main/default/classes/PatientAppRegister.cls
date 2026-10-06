@@ -1,5 +1,7 @@
+// REST API that registers a new patient App User in Pending status until it is verified.
 @RestResource(urlMapping='/v1/patient-register')
 global with sharing class PatientAppRegister {
+    // Request body for patient registration.
     global class RegistrationRequest {
         global String firstName;
         global String lastName;
@@ -12,6 +14,7 @@ global with sharing class PatientAppRegister {
         global String country;
     }
 
+    // Response data returned after a successful registration.
     global class RegistrationData {
         global String appUserId;
         global String fullName;
@@ -20,10 +23,13 @@ global with sharing class PatientAppRegister {
     }
 
     private static final String STATUS_PENDING = 'Pending';
+    // Pattern used to validate the email format.
     private static final Pattern EMAIL_PATTERN = Pattern.compile('^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$');
 
+    // Validates the input, rejects duplicates and creates a Pending App User.
     @HttpPost
     global static void handlePost() {
+        // Savepoint lets the whole registration be rolled back on error.
         Savepoint sp = Database.setSavepoint();
 
         try {
@@ -32,6 +38,7 @@ global with sharing class PatientAppRegister {
                 RegistrationRequest.class
             );
 
+            // Validate that all required fields are present.
             List<String> missingFields = new List<String>();
             if (String.isBlank(req.firstName)) missingFields.add('firstName');
             if (String.isBlank(req.lastName)) missingFields.add('lastName');
@@ -45,6 +52,7 @@ global with sharing class PatientAppRegister {
                 return;
             }
 
+            // Normalize the email and check its format.
             String cleanEmail = req.email.trim().toLowerCase();
             if (!EMAIL_PATTERN.matcher(cleanEmail).matches()) {
                 BaseRestResource.sendResponse(
@@ -53,6 +61,7 @@ global with sharing class PatientAppRegister {
                 return;
             }
 
+            // Parse the slash-separated date of birth (first part is read as day, second as month).
             Date dob;
             try {
                 String rawDate = req.dateOfBirth.trim();
@@ -68,15 +77,16 @@ global with sharing class PatientAppRegister {
                 }
             } catch (Exception e) {
                 BaseRestResource.sendResponse(
-                    BaseRestResource.errorResponse(400, 'INVALID_DATE_FORMAT', 'Invalid date of birth. Expected format: MM/dd/yyyy')
+                    BaseRestResource.errorResponse(400, 'INVALID_DATE_FORMAT', 'Invalid date of birth. Expected format: dd/MM/yyyy')
                 );
                 return;
             }
 
+            // Reject a duplicate registration with the same email, DOB and full name.
             List<App_User__c> existingUsers = [
                 SELECT Id
                 FROM App_User__c
-                WHERE Email__c = :cleanEmail AND dob__c = :dob
+                WHERE Email__c = :cleanEmail AND dob__c = :dob AND Name = :req.firstName.trim() + ' ' + req.lastName.trim()
                 LIMIT 1
             ];
 
@@ -87,6 +97,7 @@ global with sharing class PatientAppRegister {
                 return;
             }
 
+            // Create the App User in Pending status.
             App_User__c newUser = new App_User__c();
             newUser.Name = req.firstName.trim() + ' ' + req.lastName.trim();
             newUser.Email__c = cleanEmail;
@@ -99,6 +110,7 @@ global with sharing class PatientAppRegister {
             newUser.Country__c = req.country;
             insert newUser;
 
+            // Return the created user's details to the caller.
             RegistrationData data = new RegistrationData();
             data.appUserId = newUser.Id;
             data.fullName = newUser.Name;

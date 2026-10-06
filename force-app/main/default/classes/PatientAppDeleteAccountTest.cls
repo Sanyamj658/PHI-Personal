@@ -44,8 +44,7 @@ private class PatientAppDeleteAccountTest {
         insert new App_User__c(
             Name = 'Alice Register',
             Email__c = 'alice.register@example.com',
-            dob__c = Date.newInstance(1990, 2, 1),
-            Status__c = 'Approved'
+            dob__c = Date.newInstance(1990, 2, 1)
         );
 
         setupRestContext(validBody());
@@ -154,8 +153,7 @@ private class PatientAppDeleteAccountTest {
         insert new App_User__c(
             Name = 'Avi Jain',
             Email__c = 'jai.sanyam@concret.io',
-            dob__c = Date.newInstance(2026, 7, 5),
-            Status__c = 'Approved'
+            dob__c = Date.newInstance(2026, 7, 5)
         );
 
         setupRestContext(JSON.serialize(new Map<String, String>{
@@ -184,8 +182,7 @@ private class PatientAppDeleteAccountTest {
         insert new App_User__c(
             Name = 'Someone Else',
             Email__c = 'alice.register@example.com',
-            dob__c = Date.newInstance(1990, 2, 1),
-            Status__c = 'Approved'
+            dob__c = Date.newInstance(1990, 2, 1)
         );
 
         setupRestContext(validBody());

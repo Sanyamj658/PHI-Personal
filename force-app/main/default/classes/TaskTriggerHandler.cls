@@ -19,6 +19,7 @@ public class TaskTriggerHandler
             }
         }
         
+        // Find open Cases for the contacts whose tasks were just completed.
         List<Case> caseOpenList = [SELECT Id, ContactId FROM Case 
                                    WHERE ContactId IN :contactIds 
                                     AND Status NOT IN ('Closed', 'CaseClosed_WithClaim', 'CaseClosed_NoClaim')];
@@ -35,6 +36,7 @@ public class TaskTriggerHandler
             caseOpenContactIds.add(cse.ContactId);
         }
         
+        // Map each open-Case contact to their Open tasks.
         Map<Id, List<Task>> mapOfOpenTask = new Map<Id, List<Task>>();
         
         for(Task tsk : [SELECT Id, WhoId FROM Task WHERE WhoId IN :caseOpenContactIds AND Status = 'Open'])
@@ -56,6 +58,7 @@ public class TaskTriggerHandler
             'Insurance Claim Request', 'Explanation of Benefits Request'
         };
 
+        // Block completion with an error when the Case is still open and the contact has no other open task.
         for(Task tsk : newRecords)
         {
             if(tsk.Status != 'Completed' || oldTask.get(tsk.Id).Status == 'Completed')
@@ -77,6 +80,7 @@ public class TaskTriggerHandler
         }
     }
     
+    // Makes tasks visible in self service for Contacts on externally shared accounts unless the subject starts with 7.
     public static void makeTaskPublic(List<Task> newRecords)
     {
         //get all shared account ids
@@ -106,6 +110,7 @@ public class TaskTriggerHandler
     	}
     }
     
+    // Routes after insert/update events to TaskNotificationHandler.
     public static void handleAfter(List<Task> newList, Map<Id, Task> oldMap, Boolean isInsert, Boolean isUpdate) {
         if (isInsert) {
             TaskNotificationHandler.handleAfterInsert(newList);
@@ -116,6 +121,7 @@ public class TaskTriggerHandler
     }
 
     //Before Insert and Before Update
+    // Calculates the total task time from start and stop times, setting 0 if either is missing.
     public static void calculateTimeOfBilling(List<Task> taskRecords, Map<Id, Task> oldTaskMap)
     {
         for( Task tsk : taskRecords ){

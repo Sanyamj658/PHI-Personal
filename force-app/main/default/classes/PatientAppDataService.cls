@@ -1,5 +1,7 @@
+// REST API returning a patient's cases, claims, payments, shared documents and claim specialist for the mobile app.
 @RestResource(urlMapping='/v1/patient-data')
 global with sharing class PatientAppDataService {
+    // Response payload returned to the mobile app.
     global class PatientResponse {
         global String contactId;
         global String fullName;
@@ -52,6 +54,7 @@ global with sharing class PatientAppDataService {
         global String downloadUrl;
     }
 
+    // Looks up the App User by email and DOB and returns the linked patient's data.
     @HttpGet
     global static void getPatientData() {
         RestRequest req = RestContext.request;
@@ -68,6 +71,7 @@ global with sharing class PatientAppDataService {
         String cleanEmail = email.trim().toLowerCase();
 
         try {
+            // Find the App User for this email and DOB.
             List<App_User__c> appUser = [
                 SELECT Id,
                     Email__c,
@@ -82,6 +86,7 @@ global with sharing class PatientAppDataService {
                 LIMIT 1
             ];
 
+            // Reject the request if there is no App User or no linked patient.
             if (appUser.isEmpty() || appUser[0].Patient__c == null) {
                 BaseRestResource.sendResponse(
                     BaseRestResource.errorResponse(401, 'UNAUTHORIZED', 'Patient not linked.')
@@ -218,6 +223,7 @@ global with sharing class PatientAppDataService {
                 }
             }
 
+            // Get all Cases of the patient.
             List<Case> relatedCases = [
                 SELECT Id,
                     CaseNumber,
@@ -234,6 +240,7 @@ global with sharing class PatientAppDataService {
                 caseIds.add(cs.Id);
             }
 
+            // Get the claims for those Cases.
             List<Claim__c> relatedClaims = new List<Claim__c>();
             if (!caseIds.isEmpty()) {
                 relatedClaims = [
@@ -258,6 +265,7 @@ global with sharing class PatientAppDataService {
                 claimIds.add(cl.Id);
             }
 
+            // Group claim payments by claim, newest first.
             Map<Id, List<ClaimPaymentSummary>> paymentsByClaim = new Map<Id, List<ClaimPaymentSummary>>();
             if (!claimIds.isEmpty()) {
                 for (Claim_Payment__c cp : [
@@ -284,6 +292,7 @@ global with sharing class PatientAppDataService {
                 }
             }
 
+            // Get the documents shared with this App User on mobile and build their download links.
             List<DocumentSummary> documentList = new List<DocumentSummary>();
             List<Shared_Document__c> sharedDocs = [
                 SELECT Id,
@@ -320,6 +329,7 @@ global with sharing class PatientAppDataService {
                 }
             }
 
+            // Group claim details by Case.
             Map<Id, List<ClaimDetail>> claimsByCase = new Map<Id, List<ClaimDetail>>();
             for (Claim__c cl : relatedClaims) {
                 ClaimDetail cd = new ClaimDetail();
@@ -341,6 +351,7 @@ global with sharing class PatientAppDataService {
                 claimsByCase.get(cl.Case__c).add(cd);
             }
 
+            // Build the case summaries with their claims.
             List<CaseSummary> caseSummaries = new List<CaseSummary>();
             for (Case cs : relatedCases) {
                 CaseSummary c = new CaseSummary();
@@ -356,6 +367,7 @@ global with sharing class PatientAppDataService {
 
 
             
+            // Assemble the final response.
             PatientResponse resp = new PatientResponse();
             resp.contactId = patient.Id;
             resp.fullName = patient.FirstName + ' ' + patient.LastName;

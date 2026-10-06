@@ -1,148 +1,186 @@
 /**
  * AppUserNotificationHandlerTest
- * Covers: handleAfterUpdate – status transition to Active triggers notification,
- *         no notification when already Active, no notification with blank email,
- *         bulk updates, null oldMap entry guard.
+ * Covers: matchAppUserToPatients (full match → Active + patient link + welcome email,
+ *         no match → InActive + inactive email, DOB / name mismatch, blank name,
+ *         empty list, exception guard), buildWelcomeEmail, and the AppUserTrigger
+ *         (before insert) that calls the handler.
  */
 @IsTest
 private class AppUserNotificationHandlerTest {
 
+    private static final String PATIENT_EMAIL = 'john.doe@example.com';
+    private static final Date   PATIENT_DOB   = Date.newInstance(1990, 1, 1);
+
     @TestSetup
     static void setup() {
-        App_User__c pending = new App_User__c(
-            Email__c  = 'notif.handler@example.com',
-            Status__c = 'Pending',
-            Name = 'TestUser'
+        Insurance_Company__c insurance = new Insurance_Company__c(Name = 'Test Insurance');
+        insert insurance;
+
+        Contact patient = new Contact(
+            FirstName            = 'John',
+            LastName             = 'Doe',
+            Email                = PATIENT_EMAIL,
+            Date_of_Birth__c     = PATIENT_DOB,
+            DX_s__c              = 'DX01',
+            Primary_Insurance__c = insurance.Id,
+            Plan_Type__c         = 'Other Plan'
         );
-        insert pending;
+        insert patient;
     }
 
-    private static App_User__c getPendingUser() {
-        return [SELECT Id, Email__c, Status__c, Name FROM App_User__c
-                WHERE Email__c = 'notif.handler@example.com' LIMIT 1];
+    private static Contact getPatient() {
+        return [SELECT Id FROM Contact WHERE Email = :PATIENT_EMAIL LIMIT 1];
     }
 
-    // ─── Positive: Pending → Active fires notification ────────────────────────
+    private static App_User__c buildAppUser(String name, String email, Date dob) {
+        return new App_User__c(Name = name, Email__c = email, dob__c = dob, Status__c = 'Pending');
+    }
+
+    // ─── Full match: name + email + DOB → Active and linked to the Contact ───
 
     @IsTest
-    static void testHandleAfterUpdate_PendingToActive_SendsNotification() {
-        App_User__c user = getPendingUser();
-
-        // Simulate trigger old/new maps
-        App_User__c oldUser = user.clone(true, true, true, true);
-        oldUser.Status__c   = 'Pending';
-        user.Status__c      = 'Active';
-
-        Map<Id, App_User__c> oldMap = new Map<Id, App_User__c>{ user.Id => oldUser };
+    static void testMatch_FullMatch_SetsActiveAndLinksPatient() {
+        // Mixed case + spaces prove the name/email normalisation
+        App_User__c appUser = buildAppUser(' JOHN  doe ', 'John.Doe@Example.com', PATIENT_DOB);
 
         Test.startTest();
-        AppUserNotificationHandler.handleAfterUpdate(new List<App_User__c>{ user }, oldMap);
+        AppUserNotificationHandler.matchAppUserToPatients(new List<App_User__c>{ appUser });
         Test.stopTest();
 
-        // NotificationService inserts App_Notification__c records
-        // But it needs an App_User__c with matching Email__c → since we pass the same record, it should persist
-        List<App_Notification__c> notifications = [
-            SELECT Id, Title__c, Type__c FROM App_Notification__c
-            WHERE App_User__c = :user.Id
-        ];
-      
+        System.assertEquals('Active', appUser.Status__c, 'Matched user should be Active');
+        System.assertEquals(getPatient().Id, appUser.Patient__c, 'Matched user should be linked to the Contact');
     }
 
-    // ─── Negative: Already Active → Active should NOT fire ───────────────────
-
-
-
-    // ─── Negative: Blank email → skip ────────────────────────────────────────
+    // ─── No Contact with this email → InActive ───────────────────────────────
 
     @IsTest
-    static void testHandleAfterUpdate_BlankEmail_NoNotification() {
-        // Create a user with no email (won't normally pass Email__c unique+required, so simulate via direct map)
-        App_User__c user = getPendingUser();
-
-        App_User__c fakeNew = new App_User__c(
-            Id        = user.Id,
-            Email__c  = user.Email__c,
-            Status__c = 'Active'
-        );
-        // Remove email to simulate blank
-        fakeNew.Email__c = null;
-
-        App_User__c oldUser = user.clone(true, true, true, true);
-        oldUser.Status__c   = 'Pending';
-
-        Map<Id, App_User__c> oldMap = new Map<Id, App_User__c>{ user.Id => oldUser };
+    static void testMatch_NoContactForEmail_SetsInactive() {
+        App_User__c appUser = buildAppUser('John Doe', 'nobody@example.com', PATIENT_DOB);
 
         Test.startTest();
-        AppUserNotificationHandler.handleAfterUpdate(new List<App_User__c>{ fakeNew }, oldMap);
+        AppUserNotificationHandler.matchAppUserToPatients(new List<App_User__c>{ appUser });
         Test.stopTest();
 
-        List<App_Notification__c> notifications = [SELECT Id FROM App_Notification__c WHERE App_User__c = :user.Id];
-        System.assertEquals(0, notifications.size(), 'No notification when email is blank');
+        System.assertEquals('InActive', appUser.Status__c);
+        System.assertEquals(null, appUser.Patient__c);
     }
 
-    // ─── Negative: Old map entry is null → skip (guard) ──────────────────────
+    // ─── Email matches but DOB differs → InActive ────────────────────────────
 
     @IsTest
-    static void testHandleAfterUpdate_NullOldEntry_NoException() {
-        App_User__c user = getPendingUser();
-        user.Status__c = 'Active';
-
-        // Old map doesn't contain this record
-        Map<Id, App_User__c> oldMap = new Map<Id, App_User__c>();
+    static void testMatch_DobMismatch_SetsInactive() {
+        App_User__c appUser = buildAppUser('John Doe', PATIENT_EMAIL, Date.newInstance(2001, 2, 3));
 
         Test.startTest();
-        AppUserNotificationHandler.handleAfterUpdate(new List<App_User__c>{ user }, oldMap);
+        AppUserNotificationHandler.matchAppUserToPatients(new List<App_User__c>{ appUser });
         Test.stopTest();
 
-        // Should complete without exception and no notifications created
-        List<App_Notification__c> notifications = [SELECT Id FROM App_Notification__c WHERE App_User__c = :user.Id];
-        System.assertEquals(0, notifications.size(), 'No notification when old map entry is null');
+        System.assertEquals('InActive', appUser.Status__c);
+        System.assertEquals(null, appUser.Patient__c);
     }
 
-    // ─── Bulk: Multiple transitions in one call ───────────────────────────────
+    // ─── Email + DOB match but the name differs → InActive ───────────────────
 
     @IsTest
-    static void testHandleAfterUpdate_BulkTransition() {
-        List<App_User__c> users = new List<App_User__c>();
-        for (Integer i = 0; i < 10; i++) {
-            users.add(new App_User__c(
-                Email__c  = 'bulk.notif' + i + '@example.com',
-                Status__c = 'Pending'
-            ));
-        }
-        insert users;
-
-        Map<Id, App_User__c> oldMap = new Map<Id, App_User__c>();
-        List<App_User__c> newList  = new List<App_User__c>();
-        for (App_User__c u : users) {
-            App_User__c old = u.clone(true, true, true, true);
-            old.Status__c   = 'Pending';
-            oldMap.put(u.Id, old);
-            u.Status__c = 'Active';
-            newList.add(u);
-        }
+    static void testMatch_NameMismatch_SetsInactive() {
+        App_User__c appUser = buildAppUser('Jane Smith', PATIENT_EMAIL, PATIENT_DOB);
 
         Test.startTest();
-        AppUserNotificationHandler.handleAfterUpdate(newList, oldMap);
+        AppUserNotificationHandler.matchAppUserToPatients(new List<App_User__c>{ appUser });
         Test.stopTest();
 
-        List<App_Notification__c> notifications = [
-            SELECT Id FROM App_Notification__c
-            WHERE App_User__c IN :new Map<Id, App_User__c>(users).keySet()
-        ];
-        // System.assertEquals(10, notifications.size(), 'One notification per user in bulk transition');
+        System.assertEquals('InActive', appUser.Status__c);
+        System.assertEquals(null, appUser.Patient__c);
     }
 
-    // ─── Empty list guard ─────────────────────────────────────────────────────
+    // ─── Blank name is normalised to '' and never matches ────────────────────
 
     @IsTest
-    static void testHandleAfterUpdate_EmptyList_NoException() {
+    static void testMatch_BlankName_SetsInactive() {
+        App_User__c appUser = buildAppUser(null, PATIENT_EMAIL, PATIENT_DOB);
+
         Test.startTest();
-        AppUserNotificationHandler.handleAfterUpdate(
-            new List<App_User__c>(),
-            new Map<Id, App_User__c>()
-        );
+        AppUserNotificationHandler.matchAppUserToPatients(new List<App_User__c>{ appUser });
         Test.stopTest();
-        System.assert(true, 'Empty list should not throw');
+
+        System.assertEquals('InActive', appUser.Status__c);
+    }
+
+    // ─── Bulk: one matching and one non-matching user in the same call ───────
+
+    @IsTest
+    static void testMatch_Bulk_MixedResults() {
+        App_User__c matching    = buildAppUser('John Doe', PATIENT_EMAIL, PATIENT_DOB);
+        App_User__c nonMatching = buildAppUser('Someone Else', 'else@example.com', PATIENT_DOB);
+
+        Test.startTest();
+        AppUserNotificationHandler.matchAppUserToPatients(new List<App_User__c>{ matching, nonMatching });
+        Test.stopTest();
+
+        System.assertEquals('Active',   matching.Status__c);
+        System.assertEquals('InActive', nonMatching.Status__c);
+    }
+
+    // ─── Empty list: nothing to query and no email is sent ───────────────────
+
+    @IsTest
+    static void testMatch_EmptyList_NoException() {
+        Test.startTest();
+        AppUserNotificationHandler.matchAppUserToPatients(new List<App_User__c>());
+        Test.stopTest();
+
+        System.assertEquals(0, Limits.getEmailInvocations(), 'No email should be sent for an empty list');
+    }
+
+    // ─── Exception guard: null Email__c throws inside the try block ──────────
+
+    @IsTest
+    static void testMatch_NullEmail_ExceptionIsCaught() {
+        App_User__c appUser = buildAppUser('John Doe', null, PATIENT_DOB);
+
+        Test.startTest();
+        AppUserNotificationHandler.matchAppUserToPatients(new List<App_User__c>{ appUser });
+        Test.stopTest();
+
+        System.assertEquals('Pending', appUser.Status__c, 'Status is untouched when processing fails');
+    }
+
+    // ─── buildWelcomeEmail: uses the name, or "User" when the name is blank ──
+
+    @IsTest
+    static void testBuildWelcomeEmail_WithName() {
+        Messaging.SingleEmailMessage mail =
+            AppUserNotificationHandler.buildWelcomeEmail(buildAppUser('John Doe', PATIENT_EMAIL, PATIENT_DOB));
+
+        System.assertEquals(PATIENT_EMAIL, mail.getToAddresses()[0]);
+        System.assert(mail.getHtmlBody().contains('Dear John Doe'));
+    }
+
+    @IsTest
+    static void testBuildWelcomeEmail_BlankName_UsesDefault() {
+        Messaging.SingleEmailMessage mail =
+            AppUserNotificationHandler.buildWelcomeEmail(buildAppUser(null, PATIENT_EMAIL, PATIENT_DOB));
+
+        System.assert(mail.getHtmlBody().contains('Dear User'));
+    }
+
+    // ─── Trigger: before insert runs the matching automatically ──────────────
+
+    @IsTest
+    static void testTrigger_BeforeInsert_MatchesPatient() {
+        App_User__c matching = buildAppUser('John Doe', PATIENT_EMAIL, PATIENT_DOB);
+        App_User__c unmatched = buildAppUser('No Match', 'no.match@example.com', PATIENT_DOB);
+
+        Test.startTest();
+        insert new List<App_User__c>{ matching, unmatched };
+        Test.stopTest();
+
+        App_User__c savedMatch = [SELECT Status__c, Patient__c FROM App_User__c WHERE Id = :matching.Id];
+        App_User__c savedOther = [SELECT Status__c, Patient__c FROM App_User__c WHERE Id = :unmatched.Id];
+
+        System.assertEquals('Active', savedMatch.Status__c);
+        System.assertEquals(getPatient().Id, savedMatch.Patient__c);
+        System.assertEquals('Inactive', savedOther.Status__c);
+        System.assertEquals(null, savedOther.Patient__c);
     }
 }

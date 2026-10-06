@@ -42,6 +42,10 @@ insert patient;
             OTP_Expiration__c   = System.now().addMinutes(10)
         );
         insert appUser;
+
+        // AppUserTrigger (before insert) overrides Status__c, so activate the user after insert.
+        appUser.Status__c = 'Active';
+        update appUser;
     }
 
     private static void setupRestContext(String jsonBody) {
@@ -422,5 +426,26 @@ insert patient;
         App_User__c updated = getAppUser();
         System.assertEquals(0, updated.Failed_OTP_Attempts__c, 'Failed attempts should reset after success');
         Assert.isNull(updated.OTP_Locked_Until__c, 'Lock should remain clear after success');
+    }
+
+    // ─── Lockout: under a minute left → singular "minute" message ─────────────
+
+    @IsTest
+    static void testHandlePost_LockedAccount_LessThanOneMinuteLeft() {
+        App_User__c u = getAppUser();
+        u.OTP_Locked_Until__c = System.now().addSeconds(30);
+        update u;
+
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email'   => 'verifyotp@example.com',
+            'otpCode' => '123456'
+        }));
+
+        Test.startTest();
+        VerifyOTPResource.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(403, RestContext.response.statusCode);
+        System.assert(((String) parseResponse().get('message')).endsWith('1 minute.'));
     }
 }

@@ -335,4 +335,105 @@ Contact patient = new Contact(
         System.assertEquals(5, count, 'All 5 docs should be shared');
         System.assertEquals(5, [SELECT COUNT() FROM Shared_Document__c WHERE App_User__c = :u.Id AND Content_Document_Id__c IN :docIds]);
     }
+
+    // ─── Extra helpers for isolated scenarios ─────────────────────────────────
+
+    private static Contact createContact(String email) {
+        Account acc              = [SELECT Id FROM Account LIMIT 1];
+        Insurance_Company__c ins = [SELECT Id FROM Insurance_Company__c LIMIT 1];
+        Contact ct = new Contact(
+            FirstName            = 'Extra',
+            LastName             = 'Patient',
+            Email                = email,
+            DX_s__c              = 'TEST02',
+            AccountId            = acc.Id,
+            Primary_Insurance__c = ins.Id,
+            Plan_Type__c         = 'Other Plan'
+        );
+        insert ct;
+        return ct;
+    }
+
+    private static Case createCase(Id contactId) {
+        Case cs = new Case(Status = 'New', Origin = 'Phone', ContactId = contactId);
+        insert cs;
+        return cs;
+    }
+
+    // ─── getCaseFilesData: Contact exists but has no App User ────────────────
+
+    @IsTest
+    static void testGetCaseFilesData_NoAppUser_CannotShare() {
+        Contact ct = createContact('noappuser.case@example.com');
+        Case cs    = createCase(ct.Id);
+
+        Test.startTest();
+        CaseDocumentSharingController.CaseFilesResult result =
+            CaseDocumentSharingController.getCaseFilesData(cs.Id);
+        Test.stopTest();
+
+        Assert.isFalse(result.canShare, 'canShare should be false without a mobile app user');
+        System.assert(result.noShareReason.contains('mobile app user'), 'Reason should explain the missing app user');
+        System.assertEquals(0, result.files.size());
+    }
+
+    // ─── getCaseFilesData: App User exists but the Case has no files ─────────
+
+    @IsTest
+    static void testGetCaseFilesData_NoFiles_ReturnsEmptyList() {
+        Contact ct = createContact('nofiles.case@example.com');
+        insert new App_User__c(Name = 'No Files', Email__c = 'nofiles.case@example.com', Patient__c = ct.Id);
+        Case cs = createCase(ct.Id);
+
+        Test.startTest();
+        CaseDocumentSharingController.CaseFilesResult result =
+            CaseDocumentSharingController.getCaseFilesData(cs.Id);
+        Test.stopTest();
+
+        Assert.isTrue(result.canShare, 'canShare should be true when an app user exists');
+        System.assertEquals(0, result.files.size(), 'No files linked to the case');
+    }
+
+    // ─── shareDocuments: Contact exists but has no App User ──────────────────
+
+    @IsTest
+    static void testShareDocuments_NoAppUser_ThrowsException() {
+        Contact ct = createContact('noappuser.share@example.com');
+        Case cs    = createCase(ct.Id);
+
+        Boolean thrown = false;
+        Test.startTest();
+        try {
+            CaseDocumentSharingController.shareDocuments(cs.Id, new List<String>{ 'someDocId' });
+        } catch (AuraHandledException ex) {
+            thrown = true;
+        }
+        Test.stopTest();
+
+        System.assert(thrown, 'No app user should throw AuraHandledException');
+    }
+
+    // ─── shareDocuments: open document-request tasks are completed ───────────
+
+    @IsTest
+    static void testShareDocuments_ClosesOpenDocumentRequestTasks() {
+        Case c   = getCase();
+        Id docId = getContentDocumentId();
+
+        Task openTask = new Task(
+            Name__c = 'Admin',
+            Subject = 'Document Request',
+            Status  = 'Open',
+            Priority = 'Normal',
+            WhatId  = c.Id,
+            WhoId   = c.ContactId
+        );
+        insert openTask;
+
+        Test.startTest();
+        CaseDocumentSharingController.shareDocuments(c.Id, new List<String>{ String.valueOf(docId) });
+        Test.stopTest();
+
+        System.assertEquals('Completed', [SELECT Status FROM Task WHERE Id = :openTask.Id].Status);
+    }
 }

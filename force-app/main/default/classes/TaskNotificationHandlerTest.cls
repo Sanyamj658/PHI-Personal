@@ -297,4 +297,137 @@ insert insurance;
         Test.stopTest();
         System.assert(true, 'Empty lists should not throw');
     }
+
+    // ─── Helper: patient Contact that has NO App_User__c ─────────────────────
+
+    private static Contact createContactWithoutAppUser() {
+        Account acc              = [SELECT Id FROM Account LIMIT 1];
+        Insurance_Company__c ins = [SELECT Id FROM Insurance_Company__c LIMIT 1];
+        Contact ct = new Contact(
+            FirstName            = 'NoApp',
+            LastName             = 'Patient',
+            Email                = 'noapp.tasknotif@example.com',
+            DX_s__c              = 'TN02',
+            AccountId            = acc.Id,
+            Primary_Insurance__c = ins.Id,
+            Plan_Type__c         = 'Other Plan'
+        );
+        insert ct;
+        return ct;
+    }
+
+    // ─── handleAfterInsert: long description is truncated to 255 chars ───────
+
+    @IsTest
+    static void testHandleAfterInsert_LongDescription_Truncated() {
+        Contact patient = getPatient();
+        App_User__c u   = getAppUser();
+        NotificationService.processedKeys.clear();
+
+        Task t = new Task(
+            Subject     = 'Long Task',
+            WhoId       = patient.Id,
+            Description = 'A'.repeat(300),
+            Name__c     = 'Admin'
+        );
+
+        Test.startTest();
+        insert t;
+        Test.stopTest();
+
+        List<App_Notification__c> notifs = [SELECT Body__c FROM App_Notification__c WHERE App_User__c = :u.Id];
+        System.assertEquals(1, notifs.size());
+        System.assertEquals(255, notifs[0].Body__c.length(), 'Body is cut to 252 chars + "..."');
+        System.assert(notifs[0].Body__c.endsWith('...'));
+    }
+
+    // ─── handleAfterInsert: Contact has no App User → nothing to notify ──────
+
+    @IsTest
+    static void testHandleAfterInsert_ContactWithoutAppUser_NoNotification() {
+        Contact noApp = createContactWithoutAppUser();
+        NotificationService.processedKeys.clear();
+
+        Test.startTest();
+        insert new Task(Subject = 'Orphan Task', WhoId = noApp.Id, Description = 'Hello', Name__c = 'Admin');
+        Test.stopTest();
+
+        System.assertEquals(0, [SELECT COUNT() FROM App_Notification__c], 'No App User → no notification');
+    }
+
+    // ─── handleAfterInsert: Task linked to a Case sets the related record ────
+
+    @IsTest
+    static void testHandleAfterInsert_WithWhatId_SetsRelatedRecord() {
+        Contact patient = getPatient();
+        App_User__c u   = getAppUser();
+        Case relatedCase = new Case(Status = 'New', Origin = 'Phone', ContactId = patient.Id);
+        insert relatedCase;
+        NotificationService.processedKeys.clear();
+
+        Test.startTest();
+        insert new Task(
+            Subject = 'Case Task', WhoId = patient.Id, WhatId = relatedCase.Id,
+            Description = 'Case related message', Name__c = 'Admin'
+        );
+        Test.stopTest();
+
+        List<App_Notification__c> notifs = [
+            SELECT Related_Record_Id__c FROM App_Notification__c WHERE App_User__c = :u.Id
+        ];
+        System.assertEquals(1, notifs.size());
+        System.assertEquals(String.valueOf(relatedCase.Id), notifs[0].Related_Record_Id__c);
+    }
+
+    // ─── handleAfterUpdate: Contact has no App User → nothing to notify ──────
+
+    @IsTest
+    static void testHandleAfterUpdate_ContactWithoutAppUser_NoNotification() {
+        Contact noApp = createContactWithoutAppUser();
+        Task t = new Task(Subject = 'Orphan Update', WhoId = noApp.Id, Name__c = 'Admin');
+        insert t;
+        NotificationService.processedKeys.clear();
+
+        Test.startTest();
+        t.Description = 'Changed description';
+        update t;
+        Test.stopTest();
+
+        System.assertEquals(0, [SELECT COUNT() FROM App_Notification__c], 'No App User → no notification');
+    }
+
+    // ─── handleAfterUpdate: task missing from the old map is skipped ─────────
+
+    @IsTest
+    static void testHandleAfterUpdate_TaskMissingFromOldMap_Skipped() {
+        Contact patient = getPatient();
+        NotificationService.processedKeys.clear();
+
+        Task unsaved = new Task(Subject = 'Unsaved', WhoId = patient.Id, Description = 'New text');
+
+        Test.startTest();
+        TaskNotificationHandler.handleAfterUpdate(new List<Task>{ unsaved }, new Map<Id, Task>());
+        Test.stopTest();
+
+        System.assertEquals(0, [SELECT COUNT() FROM App_Notification__c], 'No old record → skipped');
+    }
+
+    // ─── Tasks without a WhoId or with a non-Contact WhoId (Lead) are skipped ─
+
+    @IsTest
+    static void testHandlers_NoWhoIdOrNonContactWho_Skipped() {
+        NotificationService.processedKeys.clear();
+        Lead lead = new Lead(LastName = 'Lead', Company = 'Lead Co');
+        insert lead;
+
+        Task noWho   = new Task(Subject = 'No Who', Description = 'text');
+        Task leadWho = new Task(Subject = 'Lead Who', Description = 'text', WhoId = lead.Id);
+
+        Test.startTest();
+        TaskNotificationHandler.handleAfterInsert(new List<Task>{ noWho, leadWho });
+        TaskNotificationHandler.handleAfterUpdate(new List<Task>{ noWho, leadWho }, new Map<Id, Task>());
+        Test.stopTest();
+
+        System.assertEquals(0, [SELECT COUNT() FROM App_Notification__c]);
+    }
 }

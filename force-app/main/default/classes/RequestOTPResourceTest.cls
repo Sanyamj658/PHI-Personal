@@ -46,6 +46,11 @@ insert insurance;
             dob__c    = Date.newInstance(1985, 1, 1)
         );
         insert pendingUser;
+
+        // AppUserTrigger (before insert) overrides Status__c, so set the statuses after insert.
+        activeUser.Status__c  = 'Active';
+        pendingUser.Status__c = 'Pending';
+        update new List<App_User__c>{ activeUser, pendingUser };
     }
 
     private static void setupRestContext(String jsonBody) {
@@ -191,24 +196,25 @@ insert insurance;
         RequestOTPResource.handlePost();
         Test.stopTest();
 
-        System.assertEquals(403, RestContext.response.statusCode);
+        // Only Active users are looked up, so a Pending user is reported as not found
+        System.assertEquals(404, RestContext.response.statusCode);
         Map<String, Object> result = parseResponse();
+        System.assertEquals('USER_NOT_FOUND', result.get('errorCode'));
     }
 
     // ─── Negative: active but no patient linked ───────────────────────────────
 
+    // An App User cannot be Active without a linked Patient (validation rule), so that
+    // scenario cannot be created; an Inactive user is simply "not found" for OTP requests.
     @IsTest
-    static void testHandlePost_ActiveButNoPatient_Blocked() {
-        App_User__c noPatient = new App_User__c(
-            Email__c  = 'nopatient.otp@example.com',
-            Status__c = 'Active',
-            dob__c    = Date.newInstance(1992, 7, 20)
-            // Patient__c intentionally not set
+    static void testHandlePost_InactiveUser_NotFound() {
+        App_User__c inactive = new App_User__c(
+            Name = 'Inactive User', Email__c = 'inactive.otp@example.com', dob__c = Date.newInstance(1992, 7, 20)
         );
-        insert noPatient;
+        insert inactive;
 
         setupRestContext(JSON.serialize(new Map<String, String>{
-            'email'       => 'nopatient.otp@example.com',
+            'email'       => 'inactive.otp@example.com',
             'dateOfBirth' => '20/07/1992'
         }));
 
@@ -216,8 +222,8 @@ insert insurance;
         RequestOTPResource.handlePost();
         Test.stopTest();
 
-        System.assertEquals(200, RestContext.response.statusCode);
-        Map<String, Object> result = parseResponse();
+        System.assertEquals(404, RestContext.response.statusCode);
+        System.assertEquals('USER_NOT_FOUND', parseResponse().get('errorCode'));
     }
 
     // ─── OTP overwritten on second request ───────────────────────────────────
@@ -301,5 +307,43 @@ insert insurance;
         System.assertEquals(403, RestContext.response.statusCode);
         Map<String, Object> result = parseResponse();
         System.assertEquals('ACCOUNT_LOCKED', result.get('errorCode'));
+    }
+
+    // ─── Negative: non-numeric / impossible date parts → caught → 400 ────────
+
+    @IsTest
+    static void testHandlePost_InvalidDateFormat_NonNumericParts() {
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email'       => 'otptest@example.com',
+            'dateOfBirth' => 'aa/bb/cccc'
+        }));
+
+        Test.startTest();
+        RequestOTPResource.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(400, RestContext.response.statusCode);
+        System.assertEquals('INVALID_DATE_FORMAT', parseResponse().get('errorCode'));
+    }
+
+    // ─── Locked account with under a minute left → singular "minute" ─────────
+
+    @IsTest
+    static void testHandlePost_AccountLocked_LessThanOneMinuteLeft() {
+        App_User__c u = [SELECT Id FROM App_User__c WHERE Email__c = 'otptest@example.com'];
+        u.OTP_Locked_Until__c = System.now().addSeconds(30);
+        update u;
+
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'email'       => 'otptest@example.com',
+            'dateOfBirth' => '15/03/1990'
+        }));
+
+        Test.startTest();
+        RequestOTPResource.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(403, RestContext.response.statusCode);
+        System.assert(((String) parseResponse().get('message')).endsWith('1 minute.'));
     }
 }

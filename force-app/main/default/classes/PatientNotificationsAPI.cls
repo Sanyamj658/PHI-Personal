@@ -1,5 +1,7 @@
+// REST API to fetch and mark as read the in-app notifications of a patient App User.
 @RestResource(urlMapping='/v1/patient-notifications')
 global with sharing class PatientNotificationsAPI {
+    // Returns the latest 200 notifications (optionally unread only) with the unread count for the App User.
     @HttpGet
     global static void getNotifications() {
         try {
@@ -7,6 +9,7 @@ global with sharing class PatientNotificationsAPI {
             String email = req.params.get('email');
             String dobStr = req.params.get('dob');
 
+            // Email and DOB are required to identify the user.
             if (String.isBlank(email) || String.isBlank(dobStr)) {
                 BaseRestResource.sendResponse(
                     BaseRestResource.errorResponse(400, 'EMAIL_DOB_REQUIRED', 'email and dob parameter is required')
@@ -14,14 +17,16 @@ global with sharing class PatientNotificationsAPI {
                 return;
             }
 
+            // Find the active App User (a QueryException here means no user was found).
             Date dob = Date.valueOf(dobStr);
             App_User__c appUser = [
                 SELECT Id
                 FROM App_User__c
-                WHERE Email__c = :email.trim().toLowerCase() AND dob__c = :dob
+                WHERE Email__c = :email.trim().toLowerCase() AND dob__c = :dob AND Status__c = 'Active'
                 LIMIT 1
             ];
 
+            // Optionally return unread notifications only.
             Boolean unreadOnly = req.params.get('unread_only') == 'true';
             List<App_Notification__c> notifications;
 
@@ -46,6 +51,7 @@ global with sharing class PatientNotificationsAPI {
                 ];
             }
 
+            // Build the response list and count unread notifications.
             List<Map<String, Object>> items = new List<Map<String, Object>>();
             Integer unreadCount = 0;
 
@@ -69,6 +75,7 @@ global with sharing class PatientNotificationsAPI {
                 })
             );
         } catch (QueryException qe) {
+            // No matching App User found for this email.
             BaseRestResource.sendResponse(
                 BaseRestResource.errorResponse(404, 'USER_NOT_FOUND', 'No app user found for this email')
             );
@@ -77,6 +84,7 @@ global with sharing class PatientNotificationsAPI {
         }
     }
 
+    // Marks notifications as read, either all unread ones for the user or the given ids.
     @HttpPost
     global static void markRead() {
         try {
@@ -84,6 +92,7 @@ global with sharing class PatientNotificationsAPI {
             Map<String, Object> payload = (Map<String, Object>) JSON.deserializeUntyped(body);
 
             List<App_Notification__c> toUpdate = new List<App_Notification__c>();
+            // markAllRead with email and DOB marks every unread notification of that user.
             Boolean markAll = payload.containsKey('markAllRead') && payload.get('markAllRead') == true;
 
             String email = (String) payload.get('email');
@@ -94,7 +103,7 @@ global with sharing class PatientNotificationsAPI {
                 List<App_User__c> users = [
                     SELECT Id
                     FROM App_User__c
-                    WHERE Email__c = :email.trim().toLowerCase() AND Dob__c = :dob
+                    WHERE Email__c = :email.trim().toLowerCase() AND Dob__c = :dob AND Status__c = 'Active'
                     LIMIT 1
                 ];
 
@@ -107,12 +116,14 @@ global with sharing class PatientNotificationsAPI {
                     ];
                 }
             } else {
+                // Otherwise mark only the notification ids sent by the app.
                 List<Object> idsRaw = (List<Object>) payload.get('ids');
 
                 if (idsRaw != null && !idsRaw.isEmpty()) {
                     List<Id> ids = new List<Id>();
                     for (Object o : idsRaw) {
                         try {
+                            // Skip values that are not valid Salesforce Ids.
                             ids.add((Id) String.valueOf(o));
                         } catch (Exception ex) {
                         }
@@ -128,6 +139,7 @@ global with sharing class PatientNotificationsAPI {
                 }
             }
 
+            // Flag all selected notifications as read and save them.
             for (App_Notification__c n : toUpdate) {
                 n.Is_Read__c = true;
             }

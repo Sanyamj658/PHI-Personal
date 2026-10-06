@@ -1,9 +1,13 @@
+// Batch that matches Pending App Users to patient Contacts by email, name and DOB, then activates or deactivates them.
 public with sharing class PatientAppMatchingBatch
     implements Database.Batchable<sObject>, Database.Stateful {
 
+    // Internal recipient of the partial match report.
     private static final String INTERNAL_EMAIL = 'aabhar.gupta@concret.io';
     private static final Integer NOTIFICATION_THRESHOLD = 0;
 
+    // Collects partial match rows for the report sent in finish().
+    @TestVisible
     private List<String> csvRows = new List<String>();
 
     // ── Start ─────────────────────────────────────────────
@@ -25,6 +29,7 @@ public with sharing class PatientAppMatchingBatch
 
         System.debug('⚙️ Execute size: ' + scope.size());
 
+        // Collect lowercased emails of the scope so Contacts are queried once.
         Set<String> emails = new Set<String>();
         for (App_User__c au : scope) {
             if (String.isNotBlank(au.Email__c)) {
@@ -32,14 +37,13 @@ public with sharing class PatientAppMatchingBatch
             }
         }
 
+        // Group Contacts with those emails by lowercase email.
         Map<String, List<Contact>> contactsByEmail = new Map<String, List<Contact>>();
 
         if (!emails.isEmpty()) {
             for (Contact c : [
                 SELECT Id, Name, FirstName, LastName, Email,
-                       Date_of_Birth__c,
-                       MailingStreet, MailingCity,
-                       MailingState, MailingPostalCode
+                       Date_of_Birth__c
                 FROM Contact
                 WHERE Email IN :emails
             ]) {
@@ -52,11 +56,14 @@ public with sharing class PatientAppMatchingBatch
             }
         }
 
+        // Lists used to save the App Users and send emails after processing.
         List<App_User__c> appusersToUpdate = new List<App_User__c>();
         List<Messaging.SingleEmailMessage> welcomeEmails = new List<Messaging.SingleEmailMessage>();
+        List<Messaging.SingleEmailMessage> mismatchEmails = new List<Messaging.SingleEmailMessage>();
 
         for (App_User__c au : scope) {
 
+            // Score each App User against Contacts with the same email: email 34% + name 33% + DOB 33%.
             Integer bestPct = 0;
             Id bestContactId;
 
@@ -89,6 +96,7 @@ public with sharing class PatientAppMatchingBatch
                     //               (dobMatch ? 50 : 0);
                                  
 
+                    // Keep the best scoring Contact and stop early on a full match.
                     if (pct > bestPct) {
                         bestPct = pct;
                         bestContactId = c.Id;
@@ -100,6 +108,7 @@ public with sharing class PatientAppMatchingBatch
 
             System.debug('📊 ' + au.Name + ' Score: ' + bestPct);
 
+            // Save the score on the App User.
             au.Matching_Percentage__c = bestPct;
 
             // ✅ 100% MATCH
@@ -115,28 +124,40 @@ public with sharing class PatientAppMatchingBatch
             else if (bestPct < 66) {
                 System.debug('❌ MATCH BELOW 64% → InActive');
                 au.Status__c = 'InActive';
-                csvRows.add(au.Name + ',' + au.Email__c + ',' + String.valueOf(bestPct) + '%');
+                // csvRows.add(au.Name + ',' + au.Email__c + ',' + String.valueOf(bestPct) + '%');
+                // Note: AppUserNotificationHandler (via AppUserTrigger after-update) already
+                // emails the user when Status__c transitions to InActive/Inactive.
             }
 
             // ✅ PARTIAL MATCH (50–99)
             else if (bestPct < 100) {
                 System.debug('📄 PARTIAL MATCH → Adding to CSV');
 
-                csvRows.add(
+              /*  csvRows.add(
                     au.Name + ',' +
                     au.Email__c + ',' +
                     String.valueOf(bestPct) + '%'
-                );
+                ); 
+
+                if (String.isNotBlank(au.Email__c)) {
+                    mismatchEmails.add(buildMismatchEmail(au));
+                } */ 
             }
             appusersToUpdate.add(au);
         }
 
+        // Save all updated App Users.
         if (!appusersToUpdate.isEmpty()) {
             update appusersToUpdate;
         }
 
+        // Send any queued emails.
         if (!welcomeEmails.isEmpty()) {
             Messaging.sendEmail(welcomeEmails);
+        }
+
+        if (!mismatchEmails.isEmpty()) {
+            Messaging.sendEmail(mismatchEmails);
         }
     }
 
@@ -145,6 +166,7 @@ public with sharing class PatientAppMatchingBatch
 
        
 
+        // Email the partial match CSV report to the internal team when there are entries.
         if (!csvRows.isEmpty()) {
 
             System.debug('📧 Sending Partial Match Report with ' + csvRows.size() + ' entries');
@@ -196,37 +218,66 @@ public with sharing class PatientAppMatchingBatch
     }
 
     // ── Helper ───────────────────────────────────────────
-    public static Messaging.SingleEmailMessage buildWelcomeEmail(App_User__c au) {
-    Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+//     public static Messaging.SingleEmailMessage buildWelcomeEmail(App_User__c au) {
+//     Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
 
-    mail.setToAddresses(new String[] { au.Email__c });
-    mail.setSubject('Your Passage Health International Patient Portal Account Is Now Active');
+//     mail.setToAddresses(new String[] { au.Email__c });
+//     mail.setSubject('Your Passage Health International Patient Portal Account Is Now Active');
 
-    String firstName = String.isBlank(au.Name) ? 'User' : au.Name;
-	System.debug('firstName : '+ firstName);
-    String body =
-        'Dear ' + firstName + ',<br/><br/>' +
-        'Your account has been approved and is now active. You can now log in to the Patient Portal using your registered email address and the Date of Birth you created during registration.<br/><br/>' +
-        'If you have any questions, please contact us at support@passagehi.com.<br/><br/>' +
-        'Thank you,<br/>' +
-        'Passage Health International Team<br/><br/>' +
+//     String firstName = String.isBlank(au.Name) ? 'User' : au.Name;
+// 	System.debug('firstName : '+ firstName);
+//     String body =
+//         'Dear ' + firstName + ',<br/><br/>' +
+//         'Your account has been approved and is now active. You can now log in to the Patient Portal using your registered email address and the Date of Birth you created during registration.<br/><br/>' +
+//         'If you have any questions, please contact us at support@passagehi.com.<br/><br/>' +
+//         'Thank you,<br/>' +
+//         'Passage Health International Team<br/><br/>' +
 
-        '<hr/>' +
+//         '<hr/>' +
 
-        'This message was sent by Passage Health International<br/>' +
-        '[INSERT PHI PHYSICAL MAILING ADDRESS]<br/>' +
-        'support@passagehi.com | [INSERT PHI SUPPORT PHONE]<br/><br/>' +
+//         'This message was sent by Passage Health International<br/>' +
+//         'PHIITDEPT@passagehi.com<br/>' +
+//         ' | [INSERT PHI SUPPORT PHONE]<br/><br/>' +
 
-        'You are receiving this message because you are a registered user of the Passage Health International Patient Portal App.<br/>' +
-        'To manage your communication preferences: [App Settings Link]<br/>' +
-        'To unsubscribe from marketing communications: [Unsubscribe Link]<br/>' +
-        'Privacy Policy: [URL] | Terms of Use: [URL]';
+//         'You are receiving this message because you are a registered user of the Passage Health International Patient Portal App.<br/>' +
+//         'To manage your communication preferences: [App Settings Link]<br/>' +
+//         'To unsubscribe from marketing communications: [Unsubscribe Link]<br/>' +
+//         'Privacy Policy: [URL] | Terms of Use: [URL]';
 
-    mail.setHtmlBody(body);
+//     mail.setHtmlBody(body);
 
-    return mail;
-}
+//     return mail;
+// }
 
+  /*  public static Messaging.SingleEmailMessage buildMismatchEmail(App_User__c au) {
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+
+        mail.setToAddresses(new String[] { au.Email__c });
+        mail.setSubject('We Could Not Verify Your Passage Health International Patient Portal Registration');
+
+        String firstName = String.isBlank(au.Name) ? 'User' : au.Name;
+        String body =
+            'Dear ' + firstName + ',<br/><br/>' +
+            'We were unable to verify the information you provided during registration against our patient records.' +
+            'Please verify that all the information you entered during registration is correct, including your Name, Date of Birth, and email address, and try registering again using the correct information.' +
+            'If you continue to experience issues after verifying and entering the correct information, please contact our support team at PHIITDEPT@passagehi.com  so we can help resolve the issue.' +
+            'Thank you,<br/>' +
+            'Passage Health International Team<br/><br/>' +
+            '<hr/>' +
+            'This message was sent by Passage Health International<br/>' +
+            '[INSERT PHI PHYSICAL MAILING ADDRESS]<br/>' +
+            'support@passagehi.com | [INSERT PHI SUPPORT PHONE]<br/><br/>' +
+            'You are receiving this message because you are a registered user of the Passage Health International Patient Portal App.<br/>' +
+            'To manage your communication preferences: [App Settings Link]<br/>' +
+            'To unsubscribe from marketing communications: [Unsubscribe Link]<br/>' +
+            'Privacy Policy: [URL] | Terms of Use: [URL]';
+
+        mail.setHtmlBody(body);
+
+        return mail;
+    }  */ 
+
+    // Lowercases and strips whitespace so names compare consistently.
     private static String normalize(String val) {
         if (String.isBlank(val)) return '';
         return val.toLowerCase().replaceAll('\\s+', '').trim();

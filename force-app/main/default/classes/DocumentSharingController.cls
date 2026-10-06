@@ -1,4 +1,6 @@
+// LWC controller to list an App User's Contact files and share them with the mobile app.
 public with sharing class DocumentSharingController {
+    // One file row shown in the UI, including its shared status.
     public class FileWrapper {
         @AuraEnabled public String id;
         @AuraEnabled public String contentDocumentId;
@@ -11,6 +13,7 @@ public with sharing class DocumentSharingController {
         @AuraEnabled public String sharedDocumentId;
     }
 
+    // Returns the files of the App User's linked Contact and whether each is already shared.
     @AuraEnabled(cacheable=true)
     public static List<FileWrapper> getContactFiles(Id appUserId) {
         try {
@@ -18,6 +21,7 @@ public with sharing class DocumentSharingController {
                 throw new AuraHandledException('App User ID is required.');
             }
 
+            // Find the App User's linked patient Contact.
             List<App_User__c> users = [
                 SELECT Id, Patient__c
                 FROM App_User__c
@@ -31,6 +35,7 @@ public with sharing class DocumentSharingController {
 
             Id contactId = users[0].Patient__c;
 
+            // Get the Contact's files, newest first.
             List<ContentDocumentLink> links = [
                 SELECT ContentDocumentId,
                     ContentDocument.Title,
@@ -46,11 +51,13 @@ public with sharing class DocumentSharingController {
                 return new List<FileWrapper>();
             }
 
+            // Collect the document Ids to check which are already shared.
             Set<String> docIdSet = new Set<String>();
             for (ContentDocumentLink cdl : links) {
                 docIdSet.add(String.valueOf(cdl.ContentDocumentId));
             }
 
+            // Map already-shared documents for this App User by document Id.
             Map<String, Shared_Document__c> sharedMap = new Map<String, Shared_Document__c>();
             for (Shared_Document__c sd : [
                 SELECT Id, Content_Document_Id__c, Visible_On_Mobile__c
@@ -61,6 +68,7 @@ public with sharing class DocumentSharingController {
                 sharedMap.put(sd.Content_Document_Id__c, sd);
             }
 
+            // Build the file list, flagging documents already visible on mobile.
             List<FileWrapper> result = new List<FileWrapper>();
             for (ContentDocumentLink cdl : links) {
                 String docId = String.valueOf(cdl.ContentDocumentId);
@@ -85,6 +93,7 @@ public with sharing class DocumentSharingController {
         }
     }
 
+    // Makes the selected files visible on the App User's mobile app and notifies them.
     @AuraEnabled
     public static Integer shareDocuments(Id appUserId, List<String> contentDocumentIds) {
         try {
@@ -92,6 +101,7 @@ public with sharing class DocumentSharingController {
                 throw new AuraHandledException('Invalid parameters: App User ID and at least one document ID are required.');
             }
 
+            // Find the App User's linked patient Contact.
             List<App_User__c> users = [
                 SELECT Id, Patient__c
                 FROM App_User__c
@@ -105,6 +115,7 @@ public with sharing class DocumentSharingController {
 
             Id contactId = users[0].Patient__c;
 
+            // Load existing shared records to avoid duplicates.
             Map<String, Shared_Document__c> existingMap = new Map<String, Shared_Document__c>();
             for (Shared_Document__c sd : [
                 SELECT Id, Content_Document_Id__c, Visible_On_Mobile__c
@@ -115,6 +126,7 @@ public with sharing class DocumentSharingController {
                 existingMap.put(sd.Content_Document_Id__c, sd);
             }
 
+            // Re-enable hidden shares and create new Shared_Document__c records for the rest.
             List<Shared_Document__c> toUpsert = new List<Shared_Document__c>();
 
             for (String docId : contentDocumentIds) {
@@ -134,10 +146,12 @@ public with sharing class DocumentSharingController {
                 }
             }
 
+            // Save the shared document records.
             if (!toUpsert.isEmpty()) {
                 upsert toUpsert;
             }
 
+            // Send an in-app/push notification to the App User.
             if (!toUpsert.isEmpty()) {
                 List<App_User__c> appUser = [
                     SELECT Email__c
@@ -163,6 +177,7 @@ public with sharing class DocumentSharingController {
         }
     }
 
+    // Formats a byte count as B, KB, MB or GB.
     @TestVisible
     private static String formatFileSize(Long bytes) {
         if (bytes == null || bytes == 0) {

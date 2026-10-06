@@ -1,5 +1,7 @@
+// REST API returning documents shared with a mobile App User.
 @RestResource(urlMapping='/mobile/documents/*')
 global with sharing class MobileDocumentsAPI {
+    // Returns mobile-visible shared documents (title, type, download URL) for the given appUserId.
     @HttpGet
     global static void getSharedDocuments() {
         RestResponse res = RestContext.response;
@@ -13,6 +15,7 @@ global with sharing class MobileDocumentsAPI {
                 return;
             }
 
+            // Get shared documents flagged visible on mobile for this App User.
             List<Shared_Document__c> sharedDocs = [
                 SELECT Id, Content_Document_Id__c
                 FROM Shared_Document__c
@@ -28,6 +31,7 @@ global with sharing class MobileDocumentsAPI {
                 }
             }
 
+            // Fetch ContentDocument details for the shared document Ids.
             Map<Id, ContentDocument> docMap = new Map<Id, ContentDocument>([
                 SELECT Id, Title, FileType
                 FROM ContentDocument
@@ -38,6 +42,7 @@ global with sharing class MobileDocumentsAPI {
 
             for (Id docId : docMap.keySet()) {
                 ContentDocument cd = docMap.get(docId);
+                // Build the file download link for the document.
                 String downloadUrl = URL.getOrgDomainUrl().toExternalForm() + '/sfc/servlet.shepherd/document/download/' + docId;
 
                 responseList.add(new Map<String, Object>{

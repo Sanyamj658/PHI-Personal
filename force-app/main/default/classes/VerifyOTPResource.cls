@@ -1,5 +1,6 @@
 
 @RestResource(urlMapping='/v1/verify-otp')
+// REST API that verifies the emailed OTP and returns a session token with the patient's details.
 global with sharing class VerifyOTPResource {
 
     // User can enter 3 incorrect OTPs.
@@ -62,9 +63,11 @@ global with sharing class VerifyOTPResource {
     // POST
     // ============================================================
 
+    // Checks lockout, OTP value and expiry, then issues a session token on success.
     @HttpPost
     global static void handlePost() {
 
+        // Savepoint lets changes be rolled back on error.
         Savepoint sp = Database.setSavepoint();
 
         try {
@@ -127,6 +130,7 @@ global with sharing class VerifyOTPResource {
                 FROM App_User__c
                 WHERE Email__c = :cleanEmail
                 AND DOB__C = :req.dateOfBirth
+                AND Status__c = 'Active'
                 LIMIT 1
             ];
 

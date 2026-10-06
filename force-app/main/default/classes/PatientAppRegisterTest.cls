@@ -55,7 +55,10 @@ private class PatientAppRegisterTest {
         System.assertNotEquals(null, data.get('appUserId'), 'appUserId should be returned');
         System.assertEquals('Alice Register', data.get('fullName'));
         System.assertEquals('alice.register@example.com', data.get('email'));
+        // The response echoes the in-memory record (Pending); AppUserTrigger (before insert) finds no
+        // matching Contact, so the saved record is marked Inactive.
         System.assertEquals('Pending', data.get('status'));
+        System.assertEquals('Inactive', [SELECT Status__c FROM App_User__c WHERE Email__c = 'alice.register@example.com'].Status__c);
 
         // Verify record was actually inserted
         List<App_User__c> users = [SELECT Id, Status__c, Email__c FROM App_User__c WHERE Email__c = 'alice.register@example.com'];
@@ -217,7 +220,8 @@ private class PatientAppRegisterTest {
 
     @IsTest
     static void testHandlePost_DuplicateUser_Conflict() {
-        insert new App_User__c(Email__c = 'alice.register@example.com', dob__c = Date.newInstance(1990, 2, 1),  Status__c = 'Pending');
+        // The duplicate check compares email + DOB + full name (firstName + ' ' + lastName)
+        insert new App_User__c(Name = 'Alice Register', Email__c = 'alice.register@example.com', dob__c = Date.newInstance(1990, 2, 1),  Status__c = 'Pending');
 
         setupRestContext(validBody());
 
@@ -285,5 +289,50 @@ private class PatientAppRegisterTest {
         Map<String, Object> result = parseResponse();
         System.assertEquals(false,           result.get('success'));
         System.assertEquals('INTERNAL_ERROR', result.get('errorCode'));
+    }
+
+    // ─── Registration that matches an existing patient is activated ──────────
+
+    @IsTest
+    static void testHandlePost_MatchingContact_ActivatedByTrigger() {
+        Insurance_Company__c insurance = new Insurance_Company__c(Name = 'Register Insurance');
+        insert insurance;
+        Contact patient = new Contact(
+            FirstName            = 'Match',
+            LastName             = 'Person',
+            Email                = 'match.register@example.com',
+            Date_of_Birth__c     = Date.newInstance(1985, 6, 15),
+            DX_s__c              = 'RG01',
+            Primary_Insurance__c = insurance.Id,
+            Plan_Type__c         = 'Other Plan'
+        );
+        insert patient;
+
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'firstName'   => 'Match',
+            'lastName'    => 'Person',
+            'email'       => 'match.register@example.com',
+            'dateOfBirth' => '15/06/1985',
+            'street'      => '1 Main St',
+            'city'        => 'Austin',
+            'state'       => 'TX',
+            'Zipcode'     => '73301',
+            'country'     => 'USA'
+        }));
+
+        Test.startTest();
+        PatientAppRegister.handlePost();
+        Test.stopTest();
+
+        Map<String, Object> result = parseResponse();
+        System.assertEquals(true, result.get('success'));
+        Map<String, Object> data = (Map<String, Object>) result.get('data');
+        System.assertEquals('Pending', data.get('status'), 'Response echoes the in-memory record');
+
+        App_User__c saved = [SELECT Status__c, Patient__c, City__c, Zip_Code__c FROM App_User__c WHERE Email__c = 'match.register@example.com'];
+        System.assertEquals('Active', saved.Status__c, 'Matching patient should be activated by the trigger');
+        System.assertEquals(patient.Id, saved.Patient__c);
+        System.assertEquals('Austin', saved.City__c);
+        System.assertEquals('73301', saved.Zip_Code__c);
     }
 }

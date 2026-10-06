@@ -213,4 +213,19 @@ static void setup() {
         );
         System.assertEquals(5, docs.size(), 'All 5 visible documents should be returned');
     }
+
+    // ─── Exception path: null request forces the catch block → 500 ───────────
+
+    @IsTest
+    static void testGetSharedDocuments_Exception_Returns500() {
+        RestContext.request  = null;
+        RestContext.response = new RestResponse();
+
+        Test.startTest();
+        MobileDocumentsAPI.getSharedDocuments();
+        Test.stopTest();
+
+        System.assertEquals(500, RestContext.response.statusCode);
+        System.assertNotEquals(null, RestContext.response.responseBody);
+    }
 }

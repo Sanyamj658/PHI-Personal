@@ -565,4 +565,143 @@ static void testGetPatientData_NoDocuments_EmptyDocumentList() {
         docs.size()
     );
 }
+
+    // ─── Helper: GET context with both email and dob ─────────────────────────
+
+    private static void setupGetContextWithDob(String email, String dob) {
+        RestRequest  req = new RestRequest();
+        req.requestURI = '/services/apexrest/v1/patient-data';
+        req.httpMethod = 'GET';
+        req.params.put('email', email);
+        req.params.put('dob', dob);
+        RestContext.request  = req;
+        RestContext.response = new RestResponse();
+    }
+
+    // ─── Success: lookup by email + dob ──────────────────────────────────────
+
+    @IsTest
+    static void testGetPatientData_WithDob_Success() {
+        Account acc              = [SELECT Id FROM Account LIMIT 1];
+        Insurance_Company__c ins = [SELECT Id FROM Insurance_Company__c LIMIT 1];
+        Contact p = new Contact(
+            FirstName = 'WithDob', LastName = 'Patient', DX_s__c = 'WD01',
+            Email = 'withdob@example.com', AccountId = acc.Id,
+            Primary_Insurance__c = ins.Id, Plan_Type__c = 'Other Plan',
+            Date_of_Birth__c = Date.newInstance(1991, 3, 4)
+        );
+        insert p;
+        insert new App_User__c(
+            Name = 'WithDob Patient', Email__c = 'withdob@example.com',
+            dob__c = Date.newInstance(1991, 3, 4), Patient__c = p.Id
+        );
+        setupGetContextWithDob('withdob@example.com', '1991-03-04');
+
+        Test.startTest();
+        PatientAppDataService.getPatientData();
+        Test.stopTest();
+
+        Map<String, Object> result = parseResponse();
+        System.assertEquals(true, result.get('success'));
+        Map<String, Object> data = (Map<String, Object>) result.get('data');
+        System.assertEquals('WithDob Patient', data.get('fullName'));
+    }
+
+    // ─── Negative: right email but wrong dob → not linked ────────────────────
+
+    @IsTest
+    static void testGetPatientData_WrongDob_Unauthorized() {
+        setupGetContextWithDob('dataservice.patient@example.com', '2000-01-01');
+
+        Test.startTest();
+        PatientAppDataService.getPatientData();
+        Test.stopTest();
+
+        System.assertEquals(401, RestContext.response.statusCode);
+        System.assertEquals('UNAUTHORIZED', parseResponse().get('errorCode'));
+    }
+
+    // ─── Claim specialist resolved from the latest claim's collector ─────────
+
+    @IsTest
+    static void testGetPatientData_ClaimSpecialistFromCollector() {
+        Contact patient          = [SELECT Id FROM Contact WHERE Email = 'dataservice.patient@example.com' LIMIT 1];
+        Insurance_Company__c ins = [SELECT Id FROM Insurance_Company__c LIMIT 1];
+        Account provider         = [SELECT Id FROM Account LIMIT 1];
+        Case cs                  = [SELECT Id FROM Case WHERE ContactId = :patient.Id LIMIT 1];
+
+        insert new Claim__c(
+            Case__c                   = cs.Id,
+            Patient__c                = patient.Id,
+            Insurance_Company__c      = ins.Id,
+            Medical_Provider__c       = provider.Id,
+            From_DOS__c               = Date.today().addDays(-10),
+            To_DOS__c                 = Date.today(),
+            Invoice_Number__c         = 'SPEC-1',
+            Insurance_Policy_Limit__c = '2',
+            Collector__c              = 'U Qadir'
+        );
+        setupGetContext('dataservice.patient@example.com');
+
+        Test.startTest();
+        PatientAppDataService.getPatientData();
+        Test.stopTest();
+
+        Map<String, Object> data = (Map<String, Object>) parseResponse().get('data');
+        System.assertEquals('Uzaifa Qadir', data.get('claimSpecialistName'));
+        System.assertEquals('uqadir@internationalbillingoffice.com', data.get('claimSpecialistEmail'));
+    }
+
+    // ─── Collector that only exists in the name map (no email mapping) ───────
+
+    @IsTest
+    static void testGetPatientData_CollectorWithoutEmailMapping() {
+        Contact patient          = [SELECT Id FROM Contact WHERE Email = 'dataservice.patient@example.com' LIMIT 1];
+        Insurance_Company__c ins = [SELECT Id FROM Insurance_Company__c LIMIT 1];
+        Account provider         = [SELECT Id FROM Account LIMIT 1];
+        Case cs                  = [SELECT Id FROM Case WHERE ContactId = :patient.Id LIMIT 1];
+
+        insert new Claim__c(
+            Case__c                   = cs.Id,
+            Patient__c                = patient.Id,
+            Insurance_Company__c      = ins.Id,
+            Medical_Provider__c       = provider.Id,
+            From_DOS__c               = Date.today().addDays(-10),
+            To_DOS__c                 = Date.today(),
+            Invoice_Number__c         = 'SPEC-2',
+            Insurance_Policy_Limit__c = '2',
+            Collector__c              = 'Admin'
+        );
+        setupGetContext('dataservice.patient@example.com');
+
+        Test.startTest();
+        PatientAppDataService.getPatientData();
+        Test.stopTest();
+
+        Map<String, Object> data = (Map<String, Object>) parseResponse().get('data');
+        System.assertEquals('Administrator', data.get('claimSpecialistName'));
+        System.assertEquals(null, data.get('claimSpecialistEmail'));
+    }
+
+    // ─── Exception path: invalid shared document id → 500 INTERNAL_ERROR ─────
+
+    @IsTest
+    static void testGetPatientData_InvalidSharedDocumentId_Returns500() {
+        Contact patient = [SELECT Id FROM Contact WHERE Email = 'dataservice.patient@example.com' LIMIT 1];
+        App_User__c user = [SELECT Id FROM App_User__c WHERE Email__c = 'dataservice.patient@example.com' LIMIT 1];
+        insert new Shared_Document__c(
+            App_User__c            = user.Id,
+            Contact__c             = patient.Id,
+            Content_Document_Id__c = 'not-a-valid-id',
+            Visible_On_Mobile__c   = true
+        );
+        setupGetContext('dataservice.patient@example.com');
+
+        Test.startTest();
+        PatientAppDataService.getPatientData();
+        Test.stopTest();
+
+        System.assertEquals(500, RestContext.response.statusCode);
+        System.assertEquals('INTERNAL_ERROR', parseResponse().get('errorCode'));
+    }
 }

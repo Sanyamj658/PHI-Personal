@@ -403,4 +403,108 @@ insert insurance;
         System.assertEquals('Insurance Claim', (String) data.get('requestType'), 'requestType should be echoed back');
         System.assertNotEquals(null, data.get('documents'),   'documents list should be present');
     }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Duplicate — an Open task with the same subject already exists → 409
+    // ─────────────────────────────────────────────────────────────────────────
+
+    @isTest
+    static void testHandlePost_DuplicateOpenTask_Returns409() {
+        Case patientCase = [SELECT Id FROM Case LIMIT 1];
+        String requestBody = JSON.serialize(new Map<String, String>{
+            'caseId'      => patientCase.Id,
+            'requestType' => 'Itemized Bill'
+        });
+
+        setupRestContext(requestBody);
+        PatientDocumentRequestAPI.handlePost();
+        System.assertEquals(200, RestContext.response.statusCode, 'First request should succeed');
+
+        setupRestContext(requestBody);
+        Test.startTest();
+        PatientDocumentRequestAPI.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(409, RestContext.response.statusCode, 'Second request should be a conflict');
+        Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(
+            RestContext.response.responseBody.toString()
+        );
+        System.assertEquals(false, (Boolean) result.get('success'));
+        System.assert(((String) result.get('message')).contains('Itemized Bill'));
+        System.assertEquals(1, [SELECT COUNT() FROM Task WHERE WhatId = :patientCase.Id], 'No second task is created');
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Exception — malformed JSON body → 500 INTERNAL_ERROR
+    // ─────────────────────────────────────────────────────────────────────────
+
+    @isTest
+    static void testHandlePost_MalformedJson_Returns500() {
+        setupRestContext('not-json-at-all');
+
+        Test.startTest();
+        PatientDocumentRequestAPI.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(500, RestContext.response.statusCode);
+        Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(
+            RestContext.response.responseBody.toString()
+        );
+        System.assertEquals('INTERNAL_ERROR', (String) result.get('errorCode'));
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Case without a Contact → generic patient name in the bell notification
+    // ─────────────────────────────────────────────────────────────────────────
+
+    @isTest
+    static void testHandlePost_CaseWithoutContact_Succeeds() {
+        Case noContactCase = new Case(Status = 'New', Origin = 'Phone', Subject = 'No contact case');
+        insert noContactCase;
+
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'caseId'      => noContactCase.Id,
+            'requestType' => 'Medical Records'
+        }));
+
+        Test.startTest();
+        PatientDocumentRequestAPI.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(200, RestContext.response.statusCode);
+        System.assertEquals(1, [SELECT COUNT() FROM Task WHERE WhatId = :noContactCase.Id]);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Contact without a first name → last name only in the notification
+    // ─────────────────────────────────────────────────────────────────────────
+
+    @isTest
+    static void testHandlePost_ContactWithoutFirstName_Succeeds() {
+        Account acc              = [SELECT Id FROM Account LIMIT 1];
+        Insurance_Company__c ins = [SELECT Id FROM Insurance_Company__c LIMIT 1];
+        Contact lastNameOnly = new Contact(
+            LastName             = 'Solo',
+            Email                = 'solo.patient@testpatient.com',
+            AccountId            = acc.Id,
+            DX_s__c              = 'TEST02',
+            Primary_Insurance__c = ins.Id,
+            Plan_Type__c         = 'Other Plan'
+        );
+        insert lastNameOnly;
+        Case soloCase = new Case(Status = 'New', Origin = 'Phone', Subject = 'Solo case', ContactId = lastNameOnly.Id);
+        insert soloCase;
+
+        setupRestContext(JSON.serialize(new Map<String, String>{
+            'caseId'      => soloCase.Id,
+            'requestType' => 'Document Request'
+        }));
+
+        Test.startTest();
+        PatientDocumentRequestAPI.handlePost();
+        Test.stopTest();
+
+        System.assertEquals(200, RestContext.response.statusCode);
+        System.assertEquals(1, [SELECT COUNT() FROM Task WHERE WhatId = :soloCase.Id]);
+    }
 }

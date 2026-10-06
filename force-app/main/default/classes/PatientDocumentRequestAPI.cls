@@ -162,8 +162,10 @@ global with sharing class PatientDocumentRequestAPI {
 
             Case patientCase = cases[0];
 
+            // Map the request type to the Task subject.
             String taskSubject = SUBJECT_MAP.get(requestType);
 
+            // Reject the request if an Open task with the same subject already exists on this Case.
             List<Task> existingTasks = [
                 SELECT Id
                 FROM Task
@@ -183,6 +185,7 @@ global with sharing class PatientDocumentRequestAPI {
                 return;
             }
 
+            // Create the Open task for the document request on the Case and its Contact.
             Task newTask = new Task(
                 Name__c = 'Admin',
                 Subject = taskSubject,
@@ -266,6 +269,7 @@ global with sharing class PatientDocumentRequestAPI {
                 return;
             }
 
+            // Build the patient's display name for the notification.
             String patientName = (patientCase.Contact != null && !String.isBlank(patientCase.Contact.FirstName))
                 ? patientCase.Contact.FirstName + ' ' + patientCase.Contact.LastName
                 : (patientCase.Contact != null ? patientCase.Contact.LastName : 'A patient');
